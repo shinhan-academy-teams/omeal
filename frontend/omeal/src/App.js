@@ -9,6 +9,8 @@ import Bottom from "./component/Bottom";
 // import SignIn from "./component/SignIn";
 import SignUp from "./component/SignUp";
 import Container from "@mui/system/Container";
+import CardInfo from "./component/CardInfo";
+import Card from "./component/Card";
 
 const Desktop = ({ children }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -35,7 +37,7 @@ function App() {
           <Header></Header>
           <div className="contentWrapper">
             <body>contents</body>
-            <SignUp></SignUp>
+            <Card></Card>
           </div>
           <Bottom></Bottom>
         </div>
