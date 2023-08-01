@@ -8,6 +8,7 @@ import Bottom from "./component/Bottom";
 // import CardInfo from "./component/CardInfo";
 // import SignIn from "./component/SignIn";
 import SignUp from "./component/SignUp";
+import Container from "@mui/system/Container";
 
 const Desktop = ({ children }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -28,21 +29,18 @@ const Default = ({ children }) => {
 
 function App() {
   return (
-    <div className="App">
-      <Desktop>Desktop or laptop</Desktop>
-      <Tablet>Tablet</Tablet>
-      <Mobile>Mobile</Mobile>
-      <Default>Not mobile (desktop or laptop or tablet)</Default>
-
-      <div className="wrapper">
-        <Header></Header>
-        <div className="contentWrapper">
-          <body>contents</body>
-          <SignUp></SignUp>
+    <Container maxWidth="sm" disableGutters>
+      <div className="App">
+        <div className="wrapper">
+          <Header></Header>
+          <div className="contentWrapper">
+            <body>contents</body>
+            <SignUp></SignUp>
+          </div>
+          <Bottom></Bottom>
         </div>
-        <Bottom></Bottom>
       </div>
-    </div>
+    </Container>
   );
 }
 
