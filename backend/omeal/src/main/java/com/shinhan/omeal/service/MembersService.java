@@ -16,7 +16,7 @@ public class MembersService {
 
     @Transactional
     public Members update(MyPageUserInfoDTO userInfo) {
-        Members mem = memRepo.findByMemberId(userInfo.getMemberId());
+        Members mem = memRepo.findById(userInfo.getMemberId()).get();
         mem.setMemberAddr(userInfo.getMemberAddr());
         mem.setMemberNick(userInfo.getMemberNick());
         mem.setMemberPwd(userInfo.getMemberPwd());
@@ -26,7 +26,7 @@ public class MembersService {
     }
 
     public ResultUserInfoDTO getInfo(String memId) {
-        Members mem = memRepo.findByMemberId(memId);
+        Members mem = memRepo.findById(memId).get();
         ResultUserInfoDTO remem = new ResultUserInfoDTO(mem);
         return remem;
     }
