@@ -9,6 +9,8 @@ import Bottom from "./component/Bottom";
 // import SignIn from "./component/SignIn";
 import SignUp from "./component/SignUp";
 import Container from "@mui/system/Container";
+import Subscription from "./component/subscription/Subscription";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const Desktop = ({ children }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -27,20 +29,35 @@ const Default = ({ children }) => {
   return isNotMobile ? children : null;
 };
 
+// 프로젝트 폰트, 메인 컬러 등
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#EA5C2B",
+      light: "#FF7F3F",
+    },
+  },
+  typography: {
+    fontFamily: "",
+  },
+});
+
 function App() {
   return (
-    <Container maxWidth="sm" disableGutters>
-      <div className="App">
-        <div className="wrapper">
-          <Header></Header>
-          <div className="contentWrapper">
-            <body>contents</body>
-            <SignUp></SignUp>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="sm" disableGutters>
+        <div className="App">
+          <div className="wrapper">
+            <Header></Header>
+            <div className="contentWrapper">
+              {/* <SignUp></SignUp> */}
+              <Subscription></Subscription>
+            </div>
+            <Bottom></Bottom>
           </div>
-          <Bottom></Bottom>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 }
 
