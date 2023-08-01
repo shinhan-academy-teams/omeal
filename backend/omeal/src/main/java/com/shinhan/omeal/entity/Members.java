@@ -2,12 +2,18 @@ package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.members.MemberRole;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="MEMBERS")
 public class Members {
 
