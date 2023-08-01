@@ -13,13 +13,11 @@ public class ResultUserInfoDTO {
     private String memberNick;
     private String memberTel;
     private String memberAddr;
-    private Card card;
 
     public ResultUserInfoDTO(Members members) {
         this.memberName = members.getMemberName();
         this.memberNick = members.getMemberNick();
         this.memberTel = members.getMemberTel();
         this.memberAddr = members.getMemberAddr();
-        this.card = members.getCard();
     }
 }
