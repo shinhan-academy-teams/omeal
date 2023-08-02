@@ -6,10 +6,7 @@ import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,10 +22,10 @@ public class MyPageController {
     }
 
     // 회원 정보 수정
-    @PostMapping("/user-info")
-    public String userInfoUpdate(MyPageUserInfoDTO dto) {
-        mypageservice.update(dto);
-        return "success";
+    @PostMapping(value = "/user-info",consumes = "application/json")
+    public String userInfoUpdate(@RequestBody MyPageUserInfoDTO dto) {
+        System.out.println(dto);
+        return mypageservice.update(dto);
     }
 
     // 회원의 구독과 알러지 정보 응답

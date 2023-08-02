@@ -3,6 +3,7 @@ package com.shinhan.omeal.dto.members;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
@@ -24,7 +25,7 @@ public class MyPageUserInfoDTO {
     private String memberAddr;
 
     @Builder
-    public MyPageUserInfoDTO(String memberId, String memberName, String memberNick,
+    public MyPageUserInfoDTO(String memberId, String memberNick,
                              String memberPwd, String memberTel, String memberAddr) {
         this.memberId = memberId;
         this.memberNick = memberNick;

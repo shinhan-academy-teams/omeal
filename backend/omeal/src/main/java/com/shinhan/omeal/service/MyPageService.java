@@ -22,14 +22,17 @@ public class MyPageService {
     final SubscriptionRepository subRepo;
 
     @Transactional
-    public Members update(MyPageUserInfoDTO userInfo) {
-        Members mem = memRepo.findById(userInfo.getMemberId()).get();
-        mem.setMemberAddr(userInfo.getMemberAddr());
-        mem.setMemberNick(userInfo.getMemberNick());
-        mem.setMemberPwd(userInfo.getMemberPwd());
-        mem.setMemberTel(userInfo.getMemberTel());
-
-        return mem;
+    public String update(MyPageUserInfoDTO userInfo) {
+        try {
+            Members mem = memRepo.findById(userInfo.getMemberId()).orElse(null);
+            mem.updateUserInfo(userInfo);
+            return "update Success";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return "update Fail";
+        }
     }
 
     public ResultUserInfoDTO getUserInfo(String memId) {

@@ -25,9 +25,8 @@ public class Card {
     private Integer cvc;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
     @Comment("카드 유효기간")
-    private Date validate;
+    private String validate;
 
     @Column(nullable = false)
     @Comment("카드 비밀번호 4자리")
