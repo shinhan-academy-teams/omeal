@@ -24,12 +24,6 @@ public class MembersController {
 
     private final MembersService membersService;
 
-//     // 회원 가입
-//     @PostMapping("/sign-up")
-//     public String signUp(@RequestBody HashMap<String, String> obj) {
-//         return membersService.signUp(obj);
-//     }
-
     // 닉네임 중복 체크
     @GetMapping("/sign-up/nick-check")
     public int isNickDuplicated(String memberNick) {
@@ -55,9 +49,7 @@ public class MembersController {
     @PostMapping(value = "/sign-up", consumes = "application/json", produces = "text/plain;charset=utf-8")
     public String signUp(@RequestBody CardDTO cardDto) {
         log.info("회원 가입 완료 클릭 : " + cardDto.toString());
-        String answer = membersService.signUp(cardDto); // 성공시 "success"
-
-        return answer;
+        return membersService.signUp(cardDto); // 성공시 "success"
     }
 
     // 회원정보 요청

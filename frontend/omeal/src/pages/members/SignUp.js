@@ -1,21 +1,13 @@
 import React from "react";
 import SignUpComp from "../../component/members/SignUpComp";
-// import img11 from "../../assets/img/test.png";
-// import { Box } from "@mui/system";
+import { Paper } from "@mui/material";
 
 function SignUp(props) {
   return (
     <>
-      <div className="App">
-        <div className="wrapper">
-          <div className="contentWrapper">
-            <SignUpComp />
-            {/* <Box sx={{ backgroundColor: "black" }}>
-              <img src={img11} alt="img" />
-            </Box> */}
-          </div>
-        </div>
-      </div>
+      <Paper elevation={8} sx={{ margin: "16px 0", height: "95vh" }}>
+        <SignUpComp />
+      </Paper>
     </>
   );
 }
