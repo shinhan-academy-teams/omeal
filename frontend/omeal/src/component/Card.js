@@ -78,7 +78,7 @@ function CardInfo(props) {
     console.log("expiryDate : " + expiryDate);
 
     axios({
-      url: `auth/signup`,
+      url: `auth/sign-up`,
       method: "post",
       data: JSON.stringify({
         serialNumber: serialNumber,
