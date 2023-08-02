@@ -47,7 +47,7 @@ public class MembersService {
     public int isNickDuplicated(String memberNick) {
         int rst = 0;
 
-        Members member = memberRepo.findByMemberNick(memberNick);
+        Members member = memRepo.findByMemberNick(memberNick);
         if(member == null) { // 아이디 중복 아님. 아이디 사용 가능.
             rst = 1;
         } else { // 아이디 중복. 아이디 사용 불가.
@@ -62,7 +62,7 @@ public class MembersService {
     public int isIdDuplicated(String memberId) {
         int rst = 0;
 
-        Members member = memberRepo.findById(memberId).orElse(null);
+        Members member = memRepo.findById(memberId).orElse(null);
         if(member == null) { // 아이디 중복 아님. 아이디 사용 가능.
             rst = 1;
         } else { // 아이디 중복. 아이디 사용 불가.
