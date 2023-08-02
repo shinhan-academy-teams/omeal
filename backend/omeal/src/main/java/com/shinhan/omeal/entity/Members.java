@@ -2,6 +2,7 @@ package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.members.MemberRole;
+import com.shinhan.omeal.dto.members.MembersDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -46,10 +47,12 @@ public class Members {
     @Comment("카드 정보")
     private Card card;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Comment("회원 등급")
     private MemberGrade memberGrade = MemberGrade.날계란;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Comment("관리자 권한")
     private MemberRole memberRole = MemberRole.USER;
@@ -59,5 +62,16 @@ public class Members {
         inverseJoinColumns = @JoinColumn(name = "ALLERGY_CODE"))
     @Comment("멤버별 알레르기 목록")
     private List<Allergy> memberAllergy;
+
+    public static Members toEntity(MembersDTO dto) {
+        return Members.builder()
+                .memberId(dto.getMemberId())
+                .memberPwd(dto.getMemberPwd())
+                .memberName(dto.getMemberName())
+                .memberNick(dto.getMemberNick())
+                .memberTel(dto.getMemberTel())
+                .memberAddr(dto.getMemberAddr())
+                .build();
+    }
 
 }
