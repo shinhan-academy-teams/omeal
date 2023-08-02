@@ -21,7 +21,7 @@ function Subscription(props) {
   const [detailStep, setDetailStep] = useState(1); //페이지
 
   const steps = ["오밀플랜", "배송 정보", "결제"];
-
+  
   const handleNext = () => {
     setDetailStep((preDetailStep) => preDetailStep + 1);
     if (detailStep === 4) {

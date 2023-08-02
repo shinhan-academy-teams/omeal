@@ -6,12 +6,8 @@ import Main from "./pages/Main";
 import CardRegister from "./pages/members/CardRegister";
 import SignUp from "./pages/members/SignUp";
 import Container from "@mui/system/Container";
-//import SubInfo from "./component/SubInfo";
-import Mypage from "./component/Mypage";
-
-import { ThemeProvider, createTheme } from "@mui/material";
-
 import Subscription from "./component/subscription/Subscription";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등

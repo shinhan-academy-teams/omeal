@@ -70,6 +70,10 @@ public class Members {
     @Comment("멤버별 알레르기 목록")
     private List<Allergy> memberAllergy;
 
+    // 회원 알레르기 정보 업데이트
+    public void updateAllergy(List<Allergy> allergyList) {
+        this.memberAllergy = allergyList;
+
     public static Members toEntity(MembersDTO dto) {
         return Members.builder()
                 .memberId(dto.getMemberId())
