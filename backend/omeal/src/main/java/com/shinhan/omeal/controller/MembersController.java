@@ -24,9 +24,9 @@ public class MembersController {
     @PostMapping(value = "/signup", consumes = "application/json", produces = "text/plain;charset=utf-8")
     public String signUp(@RequestBody CardDTO cardDto) {
         log.info("회원 가입 완료 클릭 : " + cardDto.toString());
-        membersService.signUp(cardDto);
+        String answer = membersService.signUp(cardDto); // 성공시 "success"
 
-        return null;
+        return answer;
     }
 
     // 회원정보 요청
