@@ -1,6 +1,7 @@
 package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.members.CardDTO;
+import com.shinhan.omeal.dto.members.MembersDTO;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
 import com.shinhan.omeal.entity.Card;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,30 @@ public class MembersService {
     final MembersRepository memRepo;
     final CardRepository cRepo;
 
-    // 카드정보 입력 후 회원가입 완료 버튼 눌렀을 때
+    // 로그인
+    public String signIn(MembersDTO membersDto){
+        String answer = "fail";
+
+        String loginId = membersDto.getMemberId();
+        String loginPwd = membersDto.getMemberPwd();
+
+        // 유효성 검사
+        Members mem = memRepo.findById(loginId).orElse(null);
+        if(mem != null){
+            String memberPwd = mem.getMemberPwd();
+            if(loginPwd.equals(memberPwd)){
+                answer = "success";
+            }
+        }
+
+        // MembersDTO => Members Entity
+        //Members member = Members.toEntity(membersDto);
+        //memRepo.save(member);
+
+        return answer;
+    }
+
+    // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)
     @Transactional
     public String signUp(CardDTO cardDto){
         String answer = "success";
