@@ -10,11 +10,16 @@ import KeyIcon from "@mui/icons-material/Key";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { SignInState } from "../recoil/SignInState";
 
 function SignIn(props) {
-  // 이메일(아이디)은 recoil 써서 가져와야겠다...가 아니고 여기서 로그인하면 recoil에 넣는 방식이 돼야겠네
   const [memberId, setMemberId] = useState("");
   const [memberPwd, setMemberPwd] = useState("");
+  const setLoggedInId = useSetRecoilState(SignInState);
+  const navi = useNavigate();
 
   const handleId = (e) => {
     setMemberId(e.target.value);
@@ -22,15 +27,24 @@ function SignIn(props) {
   const handlePwd = (e) => {
     setMemberPwd(e.target.value);
   };
-
-  console.log(memberPwd);
+  const signUp = () => {
+    // navi("/pages/members/SignUp");
+  };
 
   const signIn = () => {
     // 유효성 검사
     if (memberId === "" || undefined) {
-      console.log("아이디(이메일)를 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        text: "이메일을 입력해주세요",
+      });
+      return;
     } else if (memberPwd === "" || undefined) {
-      console.log("비밀번호를 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        text: "비밀번호를 입력해주세요",
+      });
+      return;
     }
 
     axios({
@@ -43,8 +57,18 @@ function SignIn(props) {
       headers: { "Content-Type": `application/json` },
     })
       .then((res) => {
-        console.log(res.data);
-        console.log("axios 성공");
+        const result = res.data;
+        console.log(result);
+
+        if (result === "fail") {
+          Swal.fire({
+            icon: "error",
+            text: "아이디와 비밀번호를 확인해주세요",
+          });
+        } else {
+          setLoggedInId(memberId); // recoil로 아이디 저장
+          // ★ 홈 화면으로 이동
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -74,6 +98,7 @@ function SignIn(props) {
           onChange={handlePwd}
           id="input-with-icon-textfield"
           label="PassWord"
+          type="password"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -86,6 +111,10 @@ function SignIn(props) {
       </Box>
       <Button onClick={signIn} variant="outlined">
         로그인
+      </Button>
+      <br></br>
+      <Button onClick={signUp} variant="outlined">
+        회원가입
       </Button>
     </>
   );
