@@ -48,7 +48,7 @@ function SignIn(props) {
     }
 
     axios({
-      url: "auth/sign-in",
+      url: "sign-in",
       method: "POST",
       data: JSON.stringify({
         memberId: memberId,
@@ -67,7 +67,7 @@ function SignIn(props) {
           });
         } else {
           setLoggedInId(memberId); // recoil로 아이디 저장
-          // ★ 홈 화면으로 이동
+          navi("/"); // 홈 화면으로 이동
         }
       })
       .catch((err) => {

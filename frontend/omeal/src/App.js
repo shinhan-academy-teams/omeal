@@ -12,6 +12,7 @@ import CardRegister from "./pages/members/CardRegister";
 import NavBar from "./pages/common/NavBar";
 import NoNavBar from "./pages/common/NoNavBar";
 import Main from "./pages/Main";
+import SignIn from "./component/SignIn";
 
 const App = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const App = () => {
 
         <Route path="/auth" element={<NoNavBar />}>
           <Route path="sign-up" element={<SignUp />} />
+          <Route path="sign-in" element={<SignIn />} />
           <Route path="card-register" element={<CardRegister />} />
         </Route>
       </Routes>
