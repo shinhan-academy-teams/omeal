@@ -2,9 +2,11 @@ package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
-import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -13,6 +15,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "SUBSCRIPTION")
 @SequenceGenerator(name = "SUB_SEQ_GEN", sequenceName = "SUB_SEQ", initialValue = 1, allocationSize = 1)
 public class Subscription {

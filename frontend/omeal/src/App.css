@@ -47,7 +47,7 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  position: relative;
+  position: fixed;
 }
 .contentWrapper {
   display: flex;
@@ -58,8 +58,8 @@
 .backColor {
   background-color: white;
 }
-.test {
-  margin-top: 7rem;
+.headerBtn {
+  float: right;
 }
 
 @keyframes App-logo-spin {
@@ -69,4 +69,12 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@font-face {
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
