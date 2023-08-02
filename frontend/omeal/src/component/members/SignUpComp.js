@@ -151,20 +151,9 @@ function SignUpComp(props) {
     allInputFilled,
   ]);
 
-  // 회원가입(카드 등록으로 이동)
-  const signUp = () => {
-    axios({
-      url: "sign-up",
-      method: "post",
-      data: member,
-    })
-      .then((response) => {
-        console.log(response.data);
-        // 카드 등록으로 이동
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  // 카드 등록으로 이동
+  const next = () => {
+    navi("/auth/card-register", { state: member });
   };
 
   return (
@@ -172,11 +161,12 @@ function SignUpComp(props) {
       <Box
         sx={{
           width: "100%",
-          height: "100vh",
+          height: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
+          backgroundColor: "#fff1f1",
         }}
       >
         <Typography variant="h4" component="h4">
@@ -380,12 +370,13 @@ function SignUpComp(props) {
           </Grid>
         </Grid>
         <Button
+          sx={{ mt: 3 }}
           type="button"
-          variant="contained"
-          onClick={signUp}
+          variant="outlined"
+          onClick={next}
           disabled={!buttonActive}
         >
-          카드 등록하러가기
+          Next
         </Button>
       </Box>
     </>
