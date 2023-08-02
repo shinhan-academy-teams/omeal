@@ -14,7 +14,7 @@ import { Button, Link } from "@mui/material";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import logoImg from "../assets/img/test.png";
+import logoImg from "../../assets/img/test.png";
 
 function Header(props) {
   const [state, setState] = React.useState({
