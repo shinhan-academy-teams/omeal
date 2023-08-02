@@ -27,27 +27,12 @@ public class MembersService {
 
     final MembersRepository memRepo;
     final CardRepository cRepo;
-  
-//     // 회원 가입
-//     public String signUp(HashMap<String, String> obj) {
-//         MembersDTO dto = MembersDTO.builder()
-//                 .memberId(obj.get("memberId"))
-//                 .memberPwd(obj.get("memberPwd"))
-//                 .memberName(obj.get("memberName"))
-//                 .memberNick(obj.get("memberNick"))
-//                 .memberTel(obj.get("memberTel"))
-//                 .memberAddr(obj.get("memberAddr"))
-//                 .build();
-
-//         memberRepo.save(Members.toEntity(dto));
-//         return "Sign Up Complete";
-//     }
 
     // 닉네임 중복 체크
     public int isNickDuplicated(String memberNick) {
         int rst = 0;
 
-        Members member = memberRepo.findByMemberNick(memberNick);
+        Members member = memRepo.findByMemberNick(memberNick);
         if(member == null) { // 아이디 중복 아님. 아이디 사용 가능.
             rst = 1;
         } else { // 아이디 중복. 아이디 사용 불가.
@@ -57,12 +42,11 @@ public class MembersService {
         return rst;
     }
 
-
     // 아이디 중복 체크
     public int isIdDuplicated(String memberId) {
         int rst = 0;
 
-        Members member = memberRepo.findById(memberId).orElse(null);
+        Members member = memRepo.findById(memberId).orElse(null);
         if(member == null) { // 아이디 중복 아님. 아이디 사용 가능.
             rst = 1;
         } else { // 아이디 중복. 아이디 사용 불가.
@@ -97,12 +81,24 @@ public class MembersService {
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)
     @Transactional
-    public String signUp(CardDTO cardDto){
+    public String signUp(CardDTO dto){
         String answer = "success";
+
+        // 카드 저장
+        CardDTO cardDto = CardDTO.builder()
+                .serialNumber(dto.getSerialNumber())
+                .expiryDate(dto.getExpiryDate())
+                .cvc(dto.getCvc())
+                .cardPwd(dto.getCardPwd())
+                .build();
 
         // CardDTO => Card Entity
         Card card = Card.toEntity(cardDto);
         cRepo.save(card);
+
+        // 카드 정보와 함께 회원 가입
+        Members member = Members.toEntityWithCard(dto.getMember(), card);
+        memRepo.save(member);
 
         return answer;
     }

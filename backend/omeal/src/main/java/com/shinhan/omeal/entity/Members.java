@@ -81,4 +81,18 @@ public class Members {
                 .build();
     }
 
+    public static Members toEntityWithCard(MembersDTO dto, Card card) {
+        return Members.builder()
+                .memberId(dto.getMemberId())
+                .memberPwd(dto.getMemberPwd())
+                .memberName(dto.getMemberName())
+                .memberNick(dto.getMemberNick())
+                .memberTel(dto.getMemberTel())
+                .memberAddr(dto.getMemberAddr())
+                .card(card)
+                .memberGrade(MemberGrade.날계란)
+                .memberRole(MemberRole.USER)
+                .build();
+    }
+
 }
