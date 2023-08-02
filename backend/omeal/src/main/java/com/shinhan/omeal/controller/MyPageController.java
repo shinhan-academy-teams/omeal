@@ -18,14 +18,14 @@ public class MyPageController {
     private final MyPageService mypageservice;
 
     // 회원정보 요청
-    @GetMapping("/userInfo")
+    @GetMapping("/user-info")
     public ResponseEntity<ResultUserInfoDTO> userInfoGet(String memId) {
         ResultUserInfoDTO member = mypageservice.getUserInfo(memId);
         return ResponseEntity.ok(member);
     }
 
     // 회원 정보 수정
-    @PostMapping("/userInfo")
+    @PostMapping("/user-info")
     public String userInfoUpdate(MyPageUserInfoDTO dto) {
         mypageservice.update(dto);
         return "success";
