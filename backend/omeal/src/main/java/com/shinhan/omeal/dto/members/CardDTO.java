@@ -10,7 +10,6 @@ import java.sql.Date;
 @Setter
 @ToString
 public class CardDTO {
-    //private String cardBrand;
     private String serialNumber; // 카드번호
     private String expiryDate; // 신용카드의 유효기간 영어 참조 : https://owldictionary.com/best-before-date/
     private Integer cvc;
