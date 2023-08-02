@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import axios from "axios";
 
-function CardInfo(props) {
+function Card(props) {
   const [serialNumber, setSerialNumber] = useState(""); // 카드번호
   const [expiryDate, setExpiryDate] = useState("");
   const [cvc, setCvc] = useState("");
@@ -184,4 +184,4 @@ function CardInfo(props) {
   );
 }
 
-export default CardInfo;
+export default Card;
