@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +23,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class MembersController {
 
     private final MembersService membersService;
+
+//     // 회원 가입
+//     @PostMapping("/sign-up")
+//     public String signUp(@RequestBody HashMap<String, String> obj) {
+//         return membersService.signUp(obj);
+//     }
+
+    // 닉네임 중복 체크
+    @GetMapping("/sign-up/nick-check")
+    public int isNickDuplicated(String memberNick) {
+        return membersService.isNickDuplicated(memberNick);
+    }
+
+    // 아이디 중복 체크
+    @GetMapping("/sign-up/id-check")
+    public int isIdDuplicated(@RequestParam String memberId) {
+        return membersService.isIdDuplicated(memberId);
+    }
 
     // 로그인
     @PostMapping(value = "/sign-in", consumes = "application/json", produces = "text/plain;charset=utf-8")
