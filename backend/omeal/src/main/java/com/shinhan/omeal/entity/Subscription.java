@@ -2,7 +2,6 @@ package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
-import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import org.hibernate.annotations.Comment;
@@ -10,7 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "SUBSCRIPTION")
@@ -60,5 +61,14 @@ public class Subscription {
     @Temporal(TemporalType.DATE)
     @Comment("구독 종료일")
     private Date endDate;
+
+    public List<String> getSubDTO(){
+        List<String> list = new ArrayList<>();
+        list.add(String.valueOf(this.subType));
+        list.add(String.valueOf(this.category));
+        list.add(String.valueOf(this.container));
+
+        return list;
+    }
 
 }

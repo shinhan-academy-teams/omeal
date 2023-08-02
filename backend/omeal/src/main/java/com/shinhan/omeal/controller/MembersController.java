@@ -1,6 +1,7 @@
 package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.members.CardDTO;
+import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.service.MembersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,17 +30,5 @@ public class MembersController {
         return null;
     }
 
-    // 회원정보 요청
-    @GetMapping("/userInfo")
-    public ResponseEntity<ResultUserInfoDTO> userInfoGet(String memId) {
-        ResultUserInfoDTO member = membersService.getInfo(memId);
-        return ResponseEntity.ok(member);
-    }
 
-    // 회원 정보 수정
-    @PostMapping("/userInfo")
-    public String userInfoUpdate(MyPageUserInfoDTO dto) {
-        membersService.update(dto);
-        return "success";
-    }
 }

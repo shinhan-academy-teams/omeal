@@ -1,6 +1,5 @@
 package com.shinhan.omeal.dto.members;
 
-import com.shinhan.omeal.entity.Card;
 import com.shinhan.omeal.entity.Members;
 import lombok.Getter;
 import lombok.Setter;
