@@ -7,6 +7,8 @@ import Bottom from "./component/Bottom";
 // import CardInfo from "./component/CardInfo";
 // import SignIn from "./component/SignIn";
 import Container from "@mui/system/Container";
+import CardInfo from "./component/CardInfo";
+import Card from "./component/Card";
 import { Route, Routes, useLocation } from "react-router-dom";
 import SignUp from "./pages/members/SignUp";
 
@@ -20,7 +22,7 @@ const App = () => {
           <Header></Header>
           <div className="contentWrapper">
             <body>contents</body>
-            <SignUp></SignUp>
+            <Card></Card>
           </div>
           <Bottom></Bottom>
         </div>
