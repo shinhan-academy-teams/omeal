@@ -12,7 +12,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Builder
@@ -65,5 +67,15 @@ public class Subscription {
     @Temporal(TemporalType.DATE)
     @Comment("구독 종료일")
     private Date endDate;
+
+    // 마이페이지 - 구독 정보만 가져오기
+    public List<String> getSubDTO(){
+        List<String> list = new ArrayList<>();
+        list.add(String.valueOf(this.subType));
+        list.add(String.valueOf(this.category));
+        list.add(String.valueOf(this.container));
+
+        return list;
+    }
 
 }
