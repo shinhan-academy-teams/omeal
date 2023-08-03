@@ -5,6 +5,7 @@ import com.shinhan.omeal.entity.Card;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.CardRepository;
 import com.shinhan.omeal.repository.MembersRepository;
+import com.shinhan.omeal.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class MembersService {
 
     final MembersRepository memRepo;
     final CardRepository cRepo;
+    final SubscriptionService subService;
 
     // 닉네임 중복 체크
     public int isNickDuplicated(String memberNick) {
@@ -62,7 +64,10 @@ public class MembersService {
             }
         }
 
-        return MembersDTO.toMembersDtoForSignIn(member);
+        // 로그인 시 => 회원등급 업데이트 & Front에 전송까지
+        Members updatedMember = subService.updateMemberGrade(member);
+
+        return MembersDTO.toMembersDtoForSignIn(updatedMember);
     }
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)

@@ -100,4 +100,9 @@ public class Members {
                 .build();
     }
 
+    // 등급 업데이트를 위한 메소드 (No Setter)
+    public void updateMemberGrade(MemberGrade memberGrade){
+        this.memberGrade = memberGrade;
+    }
+
 }
