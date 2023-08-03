@@ -62,4 +62,12 @@ public class Card {
         return dto;
     }
 
+    // card 정보 수정
+    public void updateCardInfo(CardDTO dto){
+        this.cardPwd = dto.getCardPwd();
+        this.cvc = dto.getCvc();
+        this.validate = dto.getExpiryDate();
+        this.serialNumber = dto.getSerialNumber();
+    }
+
 }

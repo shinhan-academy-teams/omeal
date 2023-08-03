@@ -27,7 +27,6 @@ public class MyPageController {
     // 회원 정보 수정
     @PutMapping(value = "/user-info",consumes = "application/json")
     public String userInfoUpdate(@RequestBody MyPageUserInfoDTO dto) {
-        System.out.println(dto);
         return mypageservice.update(dto);
     }
 
@@ -43,5 +42,10 @@ public class MyPageController {
     public ResponseEntity<CardDTO> userCardGet(String memId) {
         CardDTO card = cardService.select(memId);
         return ResponseEntity.ok(card);
+    }
+
+    @PutMapping("/card-info")
+    public String userCardUpdate(@RequestBody CardDTO cardDTO, String memId){
+        return cardService.update(cardDTO, memId);
     }
 }
