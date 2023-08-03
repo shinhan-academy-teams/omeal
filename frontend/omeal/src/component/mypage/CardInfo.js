@@ -36,6 +36,7 @@ function CardInfo(props) {
       method: "put",
       url: "/mypage/card-info",
       data: JSON.stringify({
+        member: { memberId: memberId },
         serialNumber: cardInfo.serialNumber,
         cvc: cardInfo.cvc,
         expiryDate: cardInfo.expiryDate,
@@ -113,9 +114,11 @@ function CardInfo(props) {
           label="카드 비밀번호"
           type="password"
           name="cardPwd"
-          defaultValue=" "
           value={cardInfo.cardPwd}
           onChange={handleInputChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Box>
       <br></br>
