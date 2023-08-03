@@ -4,6 +4,7 @@ import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import com.shinhan.omeal.entity.Members;
 
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
 
