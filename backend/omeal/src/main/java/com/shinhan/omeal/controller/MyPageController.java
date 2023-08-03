@@ -45,7 +45,7 @@ public class MyPageController {
     }
 
     @PutMapping("/card-info")
-    public String userCardUpdate(@RequestBody CardDTO cardDTO, String memId){
-        return cardService.update(cardDTO, memId);
+    public String userCardUpdate(@RequestBody CardDTO cardDTO){
+        return cardService.update(cardDTO, cardDTO.getMember().getMemberId());
     }
 }
