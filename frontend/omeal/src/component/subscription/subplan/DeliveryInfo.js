@@ -10,13 +10,26 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { AddrAtom, SubAddrAtom } from "../../../recoil/SubscriptionState";
 
 function DeliveryInfo(props) {
   const [doorPwd, setDoorPwd] = useState("");
   const [show, setShow] = useState(false);
   const [request, setRequest] = useState("");
 
-  const handleChange = (event) => {
+  const [addr, setAddr] = useRecoilState(AddrAtom);
+  const [subAddr, setSubAddr] = useRecoilState(SubAddrAtom);
+
+  const handleChange1 = (event) => {
+    setAddr(event.target.value);
+  };
+
+  const handleChang2 = (event) => {
+    setSubAddr(event.target.value);
+  };
+
+  const handleChange3 = (event) => {
     setDoorPwd(event.target.value);
   };
 
@@ -33,8 +46,20 @@ function DeliveryInfo(props) {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="주소" variant="outlined" />
-      <TextField id="outlined-basic" label="세부주소" variant="outlined" />
+      <TextField
+        id="outlined-basic"
+        label="주소"
+        variant="outlined"
+        value={addr}
+        onChange={handleChange1}
+      />
+      <TextField
+        id="outlined-basic"
+        label="상세 주소"
+        variant="outlined"
+        value={subAddr}
+        onChange={handleChang2}
+      />
 
       <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">
@@ -44,7 +69,7 @@ function DeliveryInfo(props) {
           color="primary"
           exclusive
           value={doorPwd}
-          onChange={handleChange}
+          onChange={handleChange3}
           aria-label="text alignment"
         >
           <ToggleButton
