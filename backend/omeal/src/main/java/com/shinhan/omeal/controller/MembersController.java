@@ -39,8 +39,8 @@ public class MembersController {
 
     // 로그인
     @PostMapping(value = "/sign-in", consumes = "application/json", produces = "application/json")
-    public Members signIn(@RequestBody MembersDTO membersDto) {
-        return membersService.signIn(membersDto); // 성공시 "success"
+    public MembersDTO signIn(@RequestBody MembersDTO membersDto) {
+        return membersService.signIn(membersDto);
     }
 
     // 회원가입

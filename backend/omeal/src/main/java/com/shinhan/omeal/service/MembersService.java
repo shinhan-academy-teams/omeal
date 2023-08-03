@@ -48,13 +48,21 @@ public class MembersService {
     }
 
     // 로그인
-    public Members signIn(MembersDTO membersDto){
+    public MembersDTO signIn(MembersDTO membersDto){
         String loginId = membersDto.getMemberId();
 
         // 유효성 검사
         Members member = memRepo.findById(loginId).orElse(null);
 
-        return member;
+        if (member == null) { // 입력한 아이디가 존재하지 않음.
+            return null;
+        } else { // 아이디는 존재함.
+            if (!member.getMemberPwd().equals(membersDto.getMemberPwd())) { // 비밀번호 틀림
+                return null;
+            }
+        }
+
+        return MembersDTO.toMembersDtoForSignIn(member);
     }
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)

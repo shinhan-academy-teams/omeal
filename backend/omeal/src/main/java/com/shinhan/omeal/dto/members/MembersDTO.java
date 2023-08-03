@@ -2,6 +2,7 @@ package com.shinhan.omeal.dto.members;
 
 import com.shinhan.omeal.entity.Allergy;
 import com.shinhan.omeal.entity.Card;
+import com.shinhan.omeal.entity.Members;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +25,11 @@ public class MembersDTO {
     private MemberGrade memberGrade = MemberGrade.날계란;
     private MemberRole memberRole = MemberRole.USER;
     private List<Allergy> memberAllergy;
+
+    public static MembersDTO toMembersDtoForSignIn(Members member) {
+        return MembersDTO.builder()
+                .memberId(member.getMemberId())
+                .memberGrade(member.getMemberGrade())
+                .build();
+    }
 }
