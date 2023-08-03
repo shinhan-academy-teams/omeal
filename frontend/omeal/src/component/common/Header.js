@@ -8,11 +8,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Button } from "@mui/material";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import logoImg from "../../assets/img/test.png";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +19,15 @@ import { SignInState } from "../../recoil/SignInState";
 
 function Header(props) {
   const navi = useNavigate();
+  const signIn = () => {
+    navi("/auth/sign-in");
+  };
+  const subscription = () => {
+    navi("/subscription");
+  };
+  const main = () => {
+    navi("/");
+  };
 
   const memberId = useRecoilValue(SignInState);
 
@@ -49,56 +56,90 @@ function Header(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["구독신청", "공지사항", "FAQ", "로그아웃"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding onClick={subscription}>
+          <ListItemButton>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="구독신청" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="공지사항" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="FAQ" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="로그아웃" />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
     </Box>
   );
 
-  const signIn = () => {
-    navi("/auth/sign-in");
-  };
   return (
     <>
       <div className="nav">
-        <img alt="" src={logoImg} width={"30%"} style={{ float: "left" }}></img>
+        <img
+          alt=""
+          src={logoImg}
+          width={"30%"}
+          style={{ float: "left", cursor: "pointer" }}
+          onClick={main}
+        ></img>
 
-        {memberId ? (
-          ""
-        ) : (
-          <Button variant="contained" onClick={signIn}>
-            로그인
-          </Button>
-        )}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {memberId ? (
+            <NotificationsNoneIcon sx={{ marginRight: 2 }} />
+          ) : (
+            <Button variant="contained" onClick={signIn}>
+              로그인
+            </Button>
+          )}
 
-        <div>
-          <NotificationsNoneIcon />
-          {/* <AccountCircleIcon /> */}
-        </div>
-
-        {["right"].map((anchor) => (
-          <React.Fragment key={anchor}>
-            <DehazeIcon onClick={toggleDrawer(anchor, true)}>
-              {anchor}
-            </DehazeIcon>
-            <Drawer
-              anchor={anchor}
-              open={state[anchor]}
-              onClose={toggleDrawer(anchor, false)}
-            >
-              {list(anchor)}
-            </Drawer>
-          </React.Fragment>
-        ))}
+          {["right"].map((anchor) => (
+            <React.Fragment key={anchor}>
+              <DehazeIcon
+                sx={{ cursor: "pointer", marginLeft: 3 }}
+                onClick={toggleDrawer(anchor, true)}
+              >
+                {anchor}
+              </DehazeIcon>
+              <Drawer
+                anchor={anchor}
+                open={state[anchor]}
+                onClose={toggleDrawer(anchor, false)}
+              >
+                {list(anchor)}
+              </Drawer>
+            </React.Fragment>
+          ))}
+        </Box>
       </div>
     </>
   );
