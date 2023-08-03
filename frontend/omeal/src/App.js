@@ -8,6 +8,7 @@ import SignUp from "./pages/members/SignUp";
 import Container from "@mui/system/Container";
 import Subscription from "./component/subscription/Subscription";
 import { ThemeProvider, createTheme } from "@mui/material";
+import SignIn from "./component/SignIn";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -34,6 +35,7 @@ const App = () => {
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-up" element={<SignUp />} />
+            <Route path="sign-in" element={<SignIn />} />
             <Route path="card-register" element={<CardRegister />} />
           </Route>
         </Routes>
