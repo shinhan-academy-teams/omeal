@@ -6,9 +6,16 @@ import HomeIcon from "@mui/icons-material/Home";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import MopedIcon from "@mui/icons-material/Moped";
 import EggIcon from "@mui/icons-material/Egg";
+import { useNavigate } from "react-router-dom";
 
 function Bottom(props) {
+  const navi = useNavigate();
+
   const [value, setValue] = React.useState(0);
+
+  const myPage = () => {
+    navi("/mypage");
+  };
   return (
     <div>
       <Box sx={{ width: "100%" }}>
@@ -32,7 +39,11 @@ function Bottom(props) {
           />
 
           <BottomNavigationAction label="오늘의 밀" icon={<MopedIcon />} />
-          <BottomNavigationAction label="마이페이지" icon={<EggIcon />} />
+          <BottomNavigationAction
+            label="마이페이지"
+            icon={<EggIcon />}
+            onClick={myPage}
+          />
         </BottomNavigation>
       </Box>
     </div>
