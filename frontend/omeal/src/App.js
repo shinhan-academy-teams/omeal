@@ -9,7 +9,6 @@ import SignIn from "./pages/members/SignIn";
 import SignUp from "./pages/members/SignUp";
 import Container from "@mui/system/Container";
 import Subscription from "./component/subscription/Subscription";
-import { ThemeProvider, createTheme } from "@mui/material";
 import Mypage from "./component/mypage/Mypage";
 import CardInfo from "./component/mypage/CardInfo";
 import SubInfo from "./component/mypage/SubInfo";
