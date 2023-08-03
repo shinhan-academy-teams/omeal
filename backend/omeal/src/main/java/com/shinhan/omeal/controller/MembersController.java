@@ -2,6 +2,7 @@ package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MembersDTO;
+import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.service.MembersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,12 +38,9 @@ public class MembersController {
     }
 
     // 로그인
-    @PostMapping(value = "/sign-in", consumes = "application/json", produces = "text/plain;charset=utf-8")
-    public String signIn(@RequestBody MembersDTO membersDto) {
-        log.info("로그인 버튼 클릭 : " + membersDto);
-        String answer = membersService.signIn(membersDto); // 성공시 "success"
-
-        return answer;
+    @PostMapping(value = "/sign-in", consumes = "application/json", produces = "application/json")
+    public Members signIn(@RequestBody MembersDTO membersDto) {
+        return membersService.signIn(membersDto); // 성공시 "success"
     }
 
     // 회원가입
