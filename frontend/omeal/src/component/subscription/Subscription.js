@@ -5,23 +5,40 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { Button, Grid, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
-import DeliveryCycle from "./DeliveryCycle";
-import SelectContainer from "./SelectContainer";
-import FoodCategory from "./FoodCategory";
-import SelectAllergy from "./SelectAllergy";
-import ReceiveInfo from "./ReceiveInfo";
-import DeliveryInfo from "./DeliveryInfo";
-import DeliveryTime from "./DeliveryTime";
-import CheckPayment from "./CheckPayment";
-
 import firecracker from "../../assets/firecracker.png";
+import { useRecoilState } from "recoil";
+import DeliveryCycle from "./subplan/DeliveryCycle";
+import SelectContainer from "./subplan/SelectContainer";
+import FoodCategory from "./subplan/FoodCategory";
+import SelectAllergy from "./subplan/SelectAllergy";
+import ReceiveInfo from "./subplan/ReceiveInfo";
+import DeliveryInfo from "./subplan/DeliveryInfo";
+import DeliveryTime from "./subplan/DeliveryTime";
+import CheckPayment from "./subplan/CheckPayment";
+import {
+  AddrAtom,
+  AllergyAtom,
+  ContainerTypeAtom,
+  FoodCategoryAtom,
+  SubAddrAtom,
+  SubTimeAtom,
+  SubTypeAtom,
+} from "../../recoil/SubscriptionState";
 
 function Subscription(props) {
   const [activeStep, setActiveStep] = useState(0); //스텝
   const [detailStep, setDetailStep] = useState(1); //페이지
 
+  const [subType] = useRecoilState(SubTypeAtom);
+  const [containerType] = useRecoilState(ContainerTypeAtom);
+  const [foodCategory] = useRecoilState(FoodCategoryAtom);
+  const [Allergy] = useRecoilState(AllergyAtom);
+  const [addr] = useRecoilState(AddrAtom);
+  const [subAddr] = useRecoilState(SubAddrAtom);
+  const [subTime] = useRecoilState(SubTimeAtom);
+
   const steps = ["오밀플랜", "배송 정보", "결제"];
-  
+
   const handleNext = () => {
     setDetailStep((preDetailStep) => preDetailStep + 1);
     if (detailStep === 4) {
@@ -168,14 +185,18 @@ function Notice(props) {
 function Complete(props) {
   return (
     <div>
-      <img src={firecracker} style={{ width: "80px", position:"absolute", top:"47%", left:"45%"}} alt="폭죽" />
+      <img
+        src={firecracker}
+        style={{ width: "80px", position: "absolute", top: "47%", left: "45%" }}
+        alt="폭죽"
+      />
       <Box
         sx={{
           width: 450,
           height: 180,
           backgroundColor: "#FEF7ED",
           borderRadius: "20px",
-          marginTop:"80px"
+          marginTop: "80px",
         }}
       >
         <Typography

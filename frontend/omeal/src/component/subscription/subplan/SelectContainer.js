@@ -1,12 +1,16 @@
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { ContainerTypeAtom } from "../../../recoil/SubscriptionState";
+
 
 function SelectContainer(props) {
-  const [containerType, setContainerType] = useState("weekly");
+  const [containerType, setContainerType] = useRecoilState(ContainerTypeAtom);
 
   const handleChange = (event, newAlignment) => {
     setContainerType(newAlignment);
   };
+
   return (
     <Box sx={{ width: 450 }}>
       <ToggleButtonGroup

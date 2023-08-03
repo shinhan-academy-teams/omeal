@@ -1,8 +1,10 @@
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { SubTimeAtom } from "../../../recoil/SubscriptionState";
 
 function DeliveryTime(props) {
-  const [subTime, setSubTime] = useState("");
+  const [subTime, setSubTime] = useRecoilState(SubTimeAtom);
   const handleChange = (event, newAlignment) => {
     setSubTime(newAlignment);
   };
