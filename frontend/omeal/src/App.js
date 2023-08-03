@@ -1,9 +1,11 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
+import { ThemeProvider, createTheme } from "@mui/material";
 import NavBar from "./pages/common/NavBar";
 import NoNavBar from "./pages/common/NoNavBar";
 import Main from "./pages/Main";
 import CardRegister from "./pages/members/CardRegister";
+import SignIn from "./pages/members/SignIn";
 import SignUp from "./pages/members/SignUp";
 import Container from "@mui/system/Container";
 import Subscription from "./component/subscription/Subscription";
@@ -38,6 +40,7 @@ const App = () => {
             <Route path="subinfo" element={<SubInfo />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
+            <Route path="sign-in" element={<SignIn />} />
             <Route path="sign-up" element={<SignUp />} />
             <Route path="card-register" element={<CardRegister />} />
           </Route>

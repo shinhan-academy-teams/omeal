@@ -59,7 +59,6 @@ public class MembersService {
     // 로그인
     public String signIn(MembersDTO membersDto){
         String answer = "fail";
-
         String loginId = membersDto.getMemberId();
         String loginPwd = membersDto.getMemberPwd();
 
@@ -71,11 +70,6 @@ public class MembersService {
                 answer = "success";
             }
         }
-
-        // MembersDTO => Members Entity
-        //Members member = Members.toEntity(membersDto);
-        //memRepo.save(member);
-
         return answer;
     }
 

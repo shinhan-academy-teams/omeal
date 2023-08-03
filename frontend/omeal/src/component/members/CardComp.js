@@ -102,7 +102,7 @@ function CardComp(props) {
       headers: { "Content-Type": `application/json` },
     })
       .then((res) => {
-        navi("/"); // 나중에 로그인 페이지로 이동하도록 변경
+        navi("/auth/sign-in");
       })
       .catch((err) => {
         console.log(err);
@@ -120,7 +120,7 @@ function CardComp(props) {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          backgroundColor: "#fff1f1",
+          backgroundColor: "#FEF7ED",
         }}
       >
         <Typography variant="h4" component="h4">
