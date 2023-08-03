@@ -1,5 +1,5 @@
 import React from "react";
-import CardImg from "../assets/img/card.png";
+import CardImg from "../../assets/img/card.png";
 import EggIcon from "@mui/icons-material/Egg";
 import { Box, Button } from "@mui/material";
 
