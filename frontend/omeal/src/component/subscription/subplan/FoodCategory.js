@@ -1,14 +1,26 @@
 import { Box, FormControlLabel, Grid, Radio, RadioGroup } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { FoodCategoryAtom } from "../../../recoil/SubscriptionState";
+import axios from "axios";
 
 function FoodCategory(props) {
   const [foodCategory, setFoodCategory] = useRecoilState(FoodCategoryAtom);
+  const [typeList, setTypeList] = useState([]);
 
   const handleChange = (event) => {
     setFoodCategory(event.target.value);
   };
+
+  useEffect(() => {
+    axios
+      .get("/plan-mealtype")
+      .then(function (response) {
+        setTypeList(response.data);
+      })
+      .catch(function (error) {});
+  }, []);
+
   return (
     <Box sx={{ width: 450 }}>
       <RadioGroup
@@ -19,44 +31,15 @@ function FoodCategory(props) {
         onChange={handleChange}
       >
         <Grid container spacing={6} style={{ margin: "20px 0px" }}>
-          <Grid item xs={6}>
-            <FormControlLabel
-              value="homemeal"
-              control={<Radio />}
-              label="가정식"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <FormControlLabel
-              value="ricesoup"
-              control={<Radio />}
-              label="국밥"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <FormControlLabel
-              value="bibimbap"
-              control={<Radio />}
-              label="비빔밥"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <FormControlLabel value="noodle" control={<Radio />} label="면" />
-          </Grid>
-          <Grid item xs={6}>
-            <FormControlLabel
-              value="salad"
-              control={<Radio />}
-              label="샐러드"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <FormControlLabel
-              value="sandwich"
-              control={<Radio />}
-              label="샌드위치"
-            />
-          </Grid>
+          {typeList.map((value, index) => (
+            <Grid item xs={6} key={index}>
+              <FormControlLabel
+                value={value}
+                control={<Radio />}
+                label={value}
+              />
+            </Grid>
+          ))}
         </Grid>
       </RadioGroup>
     </Box>
