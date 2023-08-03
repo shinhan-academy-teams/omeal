@@ -12,6 +12,7 @@ import Subscription from "./component/subscription/Subscription";
 import Mypage from "./component/mypage/Mypage";
 import CardInfo from "./component/mypage/CardInfo";
 import SubInfo from "./component/mypage/SubInfo";
+import UserInfo from "./component/mypage/UserInfo";
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
   const theme = createTheme({
@@ -35,8 +36,9 @@ const App = () => {
             <Route index element={<Main />} />
             <Route path="/subscription" element={<Subscription />} />
             <Route path="mypage" element={<Mypage />} />
-            <Route path="cardinfo" element={<CardInfo />} />
-            <Route path="subinfo" element={<SubInfo />} />
+            <Route path="card-info" element={<CardInfo />} />
+            <Route path="sub-info" element={<SubInfo />} />
+            <Route path="user-info" element={<UserInfo />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
