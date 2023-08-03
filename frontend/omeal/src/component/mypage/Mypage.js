@@ -36,6 +36,7 @@ function Mypage(props) {
               marginBottom: 10,
               fontSize: 150,
               margin: "auto",
+              cursor: "pointer",
             }}
             onClick={userInfo}
           ></EggIcon>

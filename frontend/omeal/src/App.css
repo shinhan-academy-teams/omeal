@@ -47,7 +47,6 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  position: fixed;
 }
 .contentWrapper {
   display: flex;
@@ -57,9 +56,6 @@
 }
 .backColor {
   background-color: white;
-}
-.headerBtn {
-  float: right;
 }
 
 @keyframes App-logo-spin {

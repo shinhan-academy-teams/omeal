@@ -16,6 +16,11 @@ function Bottom(props) {
   const myPage = () => {
     navi("/mypage");
   };
+
+  const main = () => {
+    navi("/");
+  };
+
   return (
     <div>
       <Box sx={{ width: "100%" }}>
@@ -27,7 +32,11 @@ function Bottom(props) {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction label="홈" icon={<HomeIcon />} />
+          <BottomNavigationAction
+            label="홈"
+            icon={<HomeIcon />}
+            onClick={main}
+          />
           <BottomNavigationAction label="커뮤니티" icon={<Diversity3Icon />} />
 
           <BottomNavigationAction
