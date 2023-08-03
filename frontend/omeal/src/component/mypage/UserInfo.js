@@ -3,18 +3,22 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { SignInState } from "../../recoil/SignInState";
 
 function UserInfo(props) {
   const [userInfo, setUserInfo] = useState([]);
+  const memberId = useRecoilValue(SignInState);
 
   const handleInputChange = (e) => {
-    setUserInfo(e.target.value);
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
+
   useEffect(() => {
     axios({
       method: "get",
-      url: "/auth/userInfo",
-      params: { memId: "kky417@kakao.com" },
+      url: "/mypage/user-info",
+      params: { memId: memberId },
     })
       .then((res) => {
         setUserInfo(res.data);
@@ -23,7 +27,27 @@ function UserInfo(props) {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [memberId]);
+
+  const handleUpdate = (e) => {
+    axios({
+      method: "put",
+      url: "/mypage/user-info",
+      data: JSON.stringify({
+        memberId: memberId,
+        memberNick: userInfo.memberNick,
+        memberPwd: userInfo.memberPwd,
+        memberTel: userInfo.memberTel,
+        memberAddr: userInfo.memberAddr,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((r) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <Box
@@ -43,7 +67,7 @@ function UserInfo(props) {
           id="outlined-disabled"
           label="E-Mail"
           type="text"
-          value={userInfo.memId}
+          value={memberId}
           defaultValue=" "
           InputProps={{
             readOnly: true,
@@ -55,7 +79,9 @@ function UserInfo(props) {
           id="outlined-password-input"
           label="Password"
           type="password"
+          name="memberPwd"
           autoComplete="current-password"
+          onChange={handleInputChange}
         />
         <br></br>
         <TextField
@@ -68,9 +94,10 @@ function UserInfo(props) {
         <br></br>
         <TextField
           className="backColor"
-          id="outlined-password-input"
+          id="outlined-required"
           label="닉네임"
           type="text"
+          name="memberNick"
           defaultValue=" "
           value={userInfo.memberNick}
           onChange={handleInputChange}
@@ -81,6 +108,7 @@ function UserInfo(props) {
           id="outlined-password-input"
           label="핸드폰번호"
           type="text"
+          name="memberTel"
           defaultValue=" "
           value={userInfo.memberTel}
           onChange={handleInputChange}
@@ -91,13 +119,16 @@ function UserInfo(props) {
           id="outlined-password-input"
           label="주소"
           type="text"
+          name="memberAddr"
           defaultValue=" "
           value={userInfo.memberAddr}
           onChange={handleInputChange}
         />
       </Box>
       <br></br>
-      <Button variant="outlined">회원 정보 수정</Button>
+      <Button variant="outlined" onClick={handleUpdate}>
+        회원 정보 수정
+      </Button>
     </>
   );
 }

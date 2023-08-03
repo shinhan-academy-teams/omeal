@@ -1,9 +1,23 @@
 import React from "react";
-import CardImg from "../assets/img/card.png";
+import CardImg from "../../assets/img/card.png";
 import EggIcon from "@mui/icons-material/Egg";
 import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Mypage(props) {
+  const navi = useNavigate();
+
+  const userInfo = () => {
+    navi("/user-info");
+  };
+
+  const subInfo = () => {
+    navi("/sub-info");
+  };
+
+  const cardInfo = () => {
+    navi("/card-info");
+  };
   return (
     <>
       <Box
@@ -23,6 +37,7 @@ function Mypage(props) {
               fontSize: 150,
               margin: "auto",
             }}
+            onClick={userInfo}
           ></EggIcon>
           <Box
             sx={{
@@ -36,7 +51,9 @@ function Mypage(props) {
             autoComplete="off"
           >
             <h3>누구 구독중이다 새꺄</h3>
-            <Button variant="contained">구독 정보</Button>
+            <Button variant="contained" onClick={subInfo}>
+              구독 정보
+            </Button>
             <br></br>
             <Button variant="contained">배송 내역</Button>
             <br></br>
@@ -44,7 +61,7 @@ function Mypage(props) {
           </Box>
         </div>
         <h3>연결하신 카드 정보</h3>
-        <img alt="" src={CardImg} width={"60%"}></img>
+        <img alt="" src={CardImg} width={"60%"} onClick={cardInfo}></img>
       </Box>
     </>
   );

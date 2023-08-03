@@ -46,7 +46,7 @@ public class MyPageController {
 
     // 회원의 카드 정보 수정
     @PutMapping("/card-info")
-    public String userCardUpdate(@RequestBody CardDTO cardDTO, String memId){
-        return cardService.update(cardDTO, memId);
+    public String userCardUpdate(@RequestBody CardDTO cardDTO){
+        return cardService.update(cardDTO, cardDTO.getMember().getMemberId());
     }
 }
