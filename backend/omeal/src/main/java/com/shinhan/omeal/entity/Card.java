@@ -14,6 +14,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "CARD")
 @SequenceGenerator(name = "CARD_SEQ_GEN", sequenceName = "CARD_SEQ", initialValue = 1, allocationSize = 1)
