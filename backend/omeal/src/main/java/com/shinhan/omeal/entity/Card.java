@@ -10,8 +10,7 @@ import org.hibernate.annotations.Comment;
 import javax.persistence.*;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
 @Setter
 @NoArgsConstructor

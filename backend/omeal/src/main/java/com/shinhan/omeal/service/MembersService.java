@@ -2,7 +2,6 @@ package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MembersDTO;
-import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Card;
 import com.shinhan.omeal.repository.CardRepository;
@@ -88,11 +87,4 @@ public class MembersService {
 
         return answer;
     }
-
-    public ResultUserInfoDTO getInfo(String memId) {
-        Members mem = memRepo.findById(memId).get();
-        ResultUserInfoDTO remem = new ResultUserInfoDTO(mem);
-        return remem;
-    }
-
 }
