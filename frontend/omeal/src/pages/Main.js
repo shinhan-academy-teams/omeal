@@ -1,11 +1,14 @@
 import { Typography } from "@mui/material";
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { SignInState } from "../recoil/SignInState";
+import { MemberGradeState, SignInState } from "../recoil/SignInState";
 
 function Main(props) {
+  // ★ 이렇게 가져다 쓰시면 됩니다
   const memberId = useRecoilValue(SignInState);
-  console.log("Recoil에서 잘 가져왔습니까? " + memberId);
+  const memberGrade = useRecoilValue(MemberGradeState);
+  console.log("Recoil에서 가져온 아이디 " + memberId);
+  console.log("Recoil에서 가져온 회원등급 " + memberGrade);
   return (
     <>
       <Typography variant="h1" gutterBottom>
