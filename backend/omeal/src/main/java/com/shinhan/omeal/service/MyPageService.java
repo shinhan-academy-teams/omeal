@@ -3,6 +3,7 @@ package com.shinhan.omeal.service;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
+import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
 import com.shinhan.omeal.entity.Allergy;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
@@ -42,14 +43,14 @@ public class MyPageService {
     }
 
     @Transactional
-    public SubscriptionDTO getSubInfo(String memId) {  // 마이페이지 - 구독과 알러지 정보 응답
+    public UserSubInfoDTO getSubInfo(String memId) {  // 마이페이지 - 구독과 알러지 정보 응답
         Members mem = memRepo.findById(memId).get();
         try{
             List<Allergy> allergyList = mem.getMemberAllergy();
             List<String> allergy = allergyList.stream().map(Allergy::getAllergyFood).collect(Collectors.toList());
             Subscription sub = subRepo.findByMember(mem);
 
-            SubscriptionDTO dto = new SubscriptionDTO(sub.getSubDTO(), allergy);
+            UserSubInfoDTO dto = new UserSubInfoDTO(sub.getSubDTO(), allergy);
 
             return dto;
         }catch (NullPointerException e){

@@ -2,7 +2,7 @@ package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
-import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
+import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
 import com.shinhan.omeal.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +30,8 @@ public class MyPageController {
 
     // 회원의 구독과 알러지 정보 응답
     @GetMapping("/sub-info")
-    public ResponseEntity<SubscriptionDTO> subInfoGet(String memId){
-        SubscriptionDTO dto = mypageservice.getSubInfo(memId);
+    public ResponseEntity<UserSubInfoDTO> subInfoGet(String memId){
+        UserSubInfoDTO dto = mypageservice.getSubInfo(memId);
         return ResponseEntity.ok(dto);
     }
 }

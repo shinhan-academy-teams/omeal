@@ -4,6 +4,9 @@ import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,6 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "SUBSCRIPTION")
 @SequenceGenerator(name = "SUB_SEQ_GEN", sequenceName = "SUB_SEQ", initialValue = 1, allocationSize = 1)
 public class Subscription {
@@ -62,6 +68,7 @@ public class Subscription {
     @Comment("구독 종료일")
     private Date endDate;
 
+    // 마이페이지 - 구독 정보만 가져오기
     public List<String> getSubDTO(){
         List<String> list = new ArrayList<>();
         list.add(String.valueOf(this.subType));

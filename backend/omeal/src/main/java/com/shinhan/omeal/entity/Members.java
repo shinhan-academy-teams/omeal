@@ -2,6 +2,7 @@ package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.members.MemberRole;
+import com.shinhan.omeal.dto.members.MembersDTO;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -47,10 +48,12 @@ public class Members {
     @Comment("카드 정보")
     private Card card;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Comment("회원 등급")
     private MemberGrade memberGrade = MemberGrade.날계란;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Comment("관리자 권한")
     private MemberRole memberRole = MemberRole.USER;
@@ -61,11 +64,42 @@ public class Members {
     @Comment("멤버별 알레르기 목록")
     private List<Allergy> memberAllergy;
 
+    // 마이페이지 - 회원 정보 수정
     public void updateUserInfo(MyPageUserInfoDTO userInfo) {
         this.memberAddr = userInfo.getMemberAddr();
         this.memberNick = userInfo.getMemberNick();
         this.memberPwd = userInfo.getMemberPwd();
         this.memberTel = userInfo.getMemberTel();
+    }
+
+    // 회원 알레르기 정보 업데이트
+    public void updateAllergy(List<Allergy> allergyList) {
+        this.memberAllergy = allergyList;
+    }
+
+    public static Members toEntity(MembersDTO dto) {
+        return Members.builder()
+                .memberId(dto.getMemberId())
+                .memberPwd(dto.getMemberPwd())
+                .memberName(dto.getMemberName())
+                .memberNick(dto.getMemberNick())
+                .memberTel(dto.getMemberTel())
+                .memberAddr(dto.getMemberAddr())
+                .build();
+    }
+
+    public static Members toEntityWithCard(MembersDTO dto, Card card) {
+        return Members.builder()
+                .memberId(dto.getMemberId())
+                .memberPwd(dto.getMemberPwd())
+                .memberName(dto.getMemberName())
+                .memberNick(dto.getMemberNick())
+                .memberTel(dto.getMemberTel())
+                .memberAddr(dto.getMemberAddr())
+                .card(card)
+                .memberGrade(MemberGrade.날계란)
+                .memberRole(MemberRole.USER)
+                .build();
     }
 
 }

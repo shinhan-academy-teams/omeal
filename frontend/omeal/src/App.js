@@ -1,47 +1,44 @@
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
-import { useMediaQuery } from "react-responsive";
-import Header from "./component/Header";
-import Bottom from "./component/Bottom";
-//import SubInfo from "./component/SubInfo";
-// import Card from "./component/Card";
-// import UserInfo from "./component/UserInfo";
-// import CardInfo from "./component/CardInfo";
-// import SignIn from "./component/SignIn";
-import SignUp from "./component/SignUp";
+import NavBar from "./pages/common/NavBar";
+import NoNavBar from "./pages/common/NoNavBar";
+import Main from "./pages/Main";
+import CardRegister from "./pages/members/CardRegister";
+import SignUp from "./pages/members/SignUp";
 import Container from "@mui/system/Container";
+import Subscription from "./component/subscription/Subscription";
+import { ThemeProvider, createTheme } from "@mui/material";
 
-const Desktop = ({ children }) => {
-  const isDesktop = useMediaQuery({ minWidth: 992 });
-  return isDesktop ? children : null;
-};
-const Tablet = ({ children }) => {
-  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
-  return isTablet ? children : null;
-};
-const Mobile = ({ children }) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  return isMobile ? children : null;
-};
-const Default = ({ children }) => {
-  const isNotMobile = useMediaQuery({ minWidth: 768 });
-  return isNotMobile ? children : null;
-};
+const App = () => {
+  // 프로젝트 폰트, 메인 컬러 등
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#EA5C2B",
+        light: "#FF7F3F",
+      },
+    },
+    typography: {
+      fontFamily: "GmarketSansMedium",
+    },
+  });
 
-function App() {
+  const location = useLocation();
   return (
-    <Container maxWidth="sm" disableGutters>
-      <div className="App">
-        <div className="wrapper">
-          <Header></Header>
-          <div className="contentWrapper">
-            <body>contents</body>
-            <SignUp></SignUp>
-          </div>
-          <Bottom></Bottom>
-        </div>
-      </div>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="sm" disableGutters>
+        <Routes location={location}>
+          <Route path="/" element={<NavBar />}>
+            <Route index element={<Main />} />
+            <Route path="/subscription" element={<Subscription />} />
+          </Route>
+          <Route path="/auth" element={<NoNavBar />}>
+            <Route path="sign-up" element={<SignUp />} />
+            <Route path="card-register" element={<CardRegister />} />
+          </Route>
+        </Routes>
+      </Container>
+    </ThemeProvider>
   );
-}
-
+};
 export default App;
