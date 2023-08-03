@@ -40,6 +40,7 @@ public class SubscriptionService {
         // 2. 구독 기간을 이용해서 (1)등급 계산 & (2)업데이트 (by용희)
         MemberGrade memberGrade = calMemberGrade(days);
         member.updateMemberGrade(memberGrade);
+        memRepo.save(member);
 
         // 3. 마지막으로 등급을 리턴 => 로그인 시 전송되게끔
         return member;
