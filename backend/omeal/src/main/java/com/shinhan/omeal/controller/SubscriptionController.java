@@ -1,6 +1,7 @@
 package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.delivery.DeliveryContainer;
+import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.service.SubscriptionService;
@@ -32,8 +33,13 @@ public class SubscriptionController {
     }
 
     @GetMapping(value = "/plan-container")
-    public DeliveryContainer[] ContainerTypes() {
+    public DeliveryContainer[] containerTypes() {
         return DeliveryContainer.values();
+    }
+
+    @GetMapping(value = "/plan-mealtype")
+    public SubscriptionCategory[] mealTypes() {
+        return SubscriptionCategory.values();
     }
 
 }
