@@ -1,7 +1,5 @@
 package com.shinhan.omeal.entity;
 
-import javax.persistence.*;
-
 import com.shinhan.omeal.dto.members.CardDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
-import java.util.Date;
+import javax.persistence.*;
+
+
 
 @Builder
 @Setter
@@ -35,7 +35,6 @@ public class Card {
     private Integer cvc;
 
     @Column(nullable = false)
-    //@Temporal(TemporalType.DATE) : (용희)편의상 String으로 바꿨기 때문에 @Temporal 지웠음.
     @Comment("카드 유효기간")
     private String validate;
 
@@ -50,6 +49,25 @@ public class Card {
                 .cvc(card.getCvc())
                 .cardPwd(card.getCardPwd())
                 .build();
+    }
+
+    // card 정보를 cardDTO로 넘길때
+    public CardDTO createDTO(){
+        CardDTO dto = CardDTO.builder().build();
+        dto.setCardPwd(this.cardPwd);
+        dto.setCvc(this.cvc);
+        dto.setExpiryDate(this.validate);
+        dto.setSerialNumber(this.serialNumber);
+
+        return dto;
+    }
+
+    // card 정보 수정
+    public void updateCardInfo(CardDTO dto){
+        this.cardPwd = dto.getCardPwd();
+        this.cvc = dto.getCvc();
+        this.validate = dto.getExpiryDate();
+        this.serialNumber = dto.getSerialNumber();
     }
 
 }

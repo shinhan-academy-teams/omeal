@@ -1,5 +1,6 @@
 package com.shinhan.omeal.entity;
 
+import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ public class Allergy {
     private Long allergyCode;
 
     @Comment("알레르기 유발 식품명")
+    @Getter
     private String allergyFood;
 
 }

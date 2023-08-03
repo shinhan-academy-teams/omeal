@@ -2,8 +2,31 @@ import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
+import { useEffect } from "react";
+import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { SignInState } from "../../recoil/SignInState";
+import { useState } from "react";
 
 function SubInfo(props) {
+  const [subInfo, setSubrInfo] = useState([]);
+  const memberId = useRecoilValue(SignInState);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "/mypage/sub-info",
+      params: { memId: memberId },
+    })
+      .then((res) => {
+        setSubrInfo(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [memberId]);
+
   return (
     <>
       <Box
@@ -23,7 +46,7 @@ function SubInfo(props) {
           label="구독 종류"
           color="secondary"
           focused
-          value="구독종류 여기다가 넣으셈"
+          value={subInfo.subType}
           InputProps={{
             readOnly: true,
           }}
@@ -34,7 +57,7 @@ function SubInfo(props) {
           label="식사 종류"
           color="secondary"
           focused
-          value="식사종류 여기다가 넣으셈"
+          value={subInfo.category}
           InputProps={{
             readOnly: true,
           }}
@@ -45,7 +68,7 @@ function SubInfo(props) {
           label="용기 종류"
           color="secondary"
           focused
-          value="용기종류 여기다가 넣으셈"
+          value={subInfo.container}
           InputProps={{
             readOnly: true,
           }}
@@ -56,7 +79,7 @@ function SubInfo(props) {
           label="알러지 음식"
           color="secondary"
           focused
-          value="음식종류 여기다가 넣으셈"
+          value={subInfo.memberAllergy}
           InputProps={{
             readOnly: true,
           }}

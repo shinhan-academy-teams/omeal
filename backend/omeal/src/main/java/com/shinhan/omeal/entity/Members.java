@@ -2,11 +2,9 @@ package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.members.MemberRole;
-import lombok.*;
 import com.shinhan.omeal.dto.members.MembersDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
@@ -18,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "MEMBERS")
+@ToString
 public class Members {
 
     @Id
@@ -26,26 +25,21 @@ public class Members {
 
     @Column(nullable = false)
     @Comment("회원 비밀번호")
-    @Setter
     private String memberPwd;
 
     @Column(nullable = false)
-    @Setter
     @Comment("회원 이름")
     private String memberName;
 
     @Column(nullable = false, unique = true)
-    @Setter
     @Comment("닉네임")
     private String memberNick;
 
     @Column(nullable = false, unique = true)
-    @Setter
     @Comment("연락처")
     private String memberTel;
 
     @Column(nullable = false)
-    @Setter
     @Comment("주소")
     private String memberAddr;
 
@@ -69,6 +63,14 @@ public class Members {
             inverseJoinColumns = @JoinColumn(name = "ALLERGY_CODE"))
     @Comment("멤버별 알레르기 목록")
     private List<Allergy> memberAllergy;
+
+    // 마이페이지 - 회원 정보 수정
+    public void updateUserInfo(MyPageUserInfoDTO userInfo) {
+        this.memberAddr = userInfo.getMemberAddr();
+        this.memberNick = userInfo.getMemberNick();
+        this.memberPwd = userInfo.getMemberPwd();
+        this.memberTel = userInfo.getMemberTel();
+    }
 
     // 회원 알레르기 정보 업데이트
     public void updateAllergy(List<Allergy> allergyList) {
@@ -98,6 +100,11 @@ public class Members {
                 .memberGrade(MemberGrade.날계란)
                 .memberRole(MemberRole.USER)
                 .build();
+    }
+
+    // 등급 업데이트를 위한 메소드 (No Setter)
+    public void updateMemberGrade(MemberGrade memberGrade){
+        this.memberGrade = memberGrade;
     }
 
 }
