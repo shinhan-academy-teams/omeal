@@ -1,13 +1,11 @@
 package com.shinhan.omeal.controller;
 
+import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +29,11 @@ public class SubscriptionController {
     @GetMapping(value = "/plan-subtype")
     public SubscriptionType[] subscriptionTypes() {
         return SubscriptionType.values();
+    }
+
+    @GetMapping(value = "/plan-container")
+    public DeliveryContainer[] ContainerTypes() {
+        return DeliveryContainer.values();
     }
 
 }
