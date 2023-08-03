@@ -166,7 +166,7 @@ function SignUpComp(props) {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          backgroundColor: "#fff1f1",
+          backgroundColor: "#FEF7ED",
         }}
       >
         <Typography variant="h4" component="h4">
