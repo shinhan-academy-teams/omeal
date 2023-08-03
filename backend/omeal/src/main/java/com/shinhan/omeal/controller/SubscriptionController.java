@@ -1,9 +1,13 @@
 package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
+import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +28,9 @@ public class SubscriptionController {
     3. 음식 카테고리 선택 SubscriptoinCategory
     4. 배송 시간 선택 DeliveryTime
      */
+    @GetMapping(value = "/plan-subtype")
+    public SubscriptionType[] subscriptionTypes() {
+        return SubscriptionType.values();
+    }
 
 }
