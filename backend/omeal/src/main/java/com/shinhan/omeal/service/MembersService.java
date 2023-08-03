@@ -1,9 +1,6 @@
 package com.shinhan.omeal.service;
 
-import com.shinhan.omeal.dto.members.CardDTO;
-import com.shinhan.omeal.dto.members.MembersDTO;
-import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
-import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
+import com.shinhan.omeal.dto.members.*;
 import com.shinhan.omeal.entity.Card;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.CardRepository;
@@ -13,12 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-
-import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -57,20 +48,13 @@ public class MembersService {
     }
 
     // 로그인
-    public String signIn(MembersDTO membersDto){
-        String answer = "fail";
+    public Members signIn(MembersDTO membersDto){
         String loginId = membersDto.getMemberId();
-        String loginPwd = membersDto.getMemberPwd();
 
         // 유효성 검사
-        Members mem = memRepo.findById(loginId).orElse(null);
-        if(mem != null){
-            String memberPwd = mem.getMemberPwd();
-            if(loginPwd.equals(memberPwd)){
-                answer = "success";
-            }
-        }
-        return answer;
+        Members member = memRepo.findById(loginId).orElse(null);
+
+        return member;
     }
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)
