@@ -3,7 +3,9 @@ package com.shinhan.omeal.entity;
 import javax.persistence.*;
 
 import com.shinhan.omeal.dto.members.CardDTO;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
@@ -11,6 +13,8 @@ import java.util.Date;
 
 @Builder
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "CARD")
 @SequenceGenerator(name = "CARD_SEQ_GEN", sequenceName = "CARD_SEQ", initialValue = 1, allocationSize = 1)
