@@ -2,12 +2,12 @@ import { atom } from "recoil";
 
 export const SubTypeAtom = atom({
   key: "SubTypeAtom",
-  default: "weekly",
+  default: "WEEKLY",
 });
 
 export const ContainerTypeAtom = atom({
   key: "ContainerTypeAtom",
-  default: "disposable",
+  default: "일회용기",
 });
 
 export const FoodCategoryAtom = atom({
@@ -32,10 +32,5 @@ export const SubAddrAtom = atom({
 
 export const SubTimeAtom = atom({
   key: "SubTimeAtom",
-  default: "",
+  default: "아침",
 });
-
-// export const TestAtom = atom({
-//   key: "Test",
-//   default: ["weekly", "disposable"],
-// });
