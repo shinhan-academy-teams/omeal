@@ -1,8 +1,10 @@
 package com.shinhan.omeal.controller;
 
+import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
 import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
+import com.shinhan.omeal.service.CardService;
 import com.shinhan.omeal.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/mypage")
 public class MyPageController {
     private final MyPageService mypageservice;
+    private final CardService cardService;
 
     // 회원정보 요청
     @GetMapping("/user-info")
@@ -22,9 +25,8 @@ public class MyPageController {
     }
 
     // 회원 정보 수정
-    @PostMapping(value = "/user-info",consumes = "application/json")
+    @PutMapping(value = "/user-info",consumes = "application/json")
     public String userInfoUpdate(@RequestBody MyPageUserInfoDTO dto) {
-        System.out.println(dto);
         return mypageservice.update(dto);
     }
 
@@ -33,5 +35,17 @@ public class MyPageController {
     public ResponseEntity<UserSubInfoDTO> subInfoGet(String memId){
         UserSubInfoDTO dto = mypageservice.getSubInfo(memId);
         return ResponseEntity.ok(dto);
+    }
+
+    // 회원의 카드 정보 요청
+    @GetMapping ("/card-info")
+    public ResponseEntity<CardDTO> userCardGet(String memId) {
+        CardDTO card = cardService.select(memId);
+        return ResponseEntity.ok(card);
+    }
+
+    @PutMapping("/card-info")
+    public String userCardUpdate(@RequestBody CardDTO cardDTO, String memId){
+        return cardService.update(cardDTO, memId);
     }
 }

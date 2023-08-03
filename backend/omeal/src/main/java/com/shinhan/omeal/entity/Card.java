@@ -51,4 +51,23 @@ public class Card {
                 .build();
     }
 
+    // card 정보를 cardDTO로 넘길때
+    public CardDTO createDTO(){
+        CardDTO dto = CardDTO.builder().build();
+        dto.setCardPwd(this.cardPwd);
+        dto.setCvc(this.cvc);
+        dto.setExpiryDate(this.validate);
+        dto.setSerialNumber(this.serialNumber);
+
+        return dto;
+    }
+
+    // card 정보 수정
+    public void updateCardInfo(CardDTO dto){
+        this.cardPwd = dto.getCardPwd();
+        this.cvc = dto.getCvc();
+        this.validate = dto.getExpiryDate();
+        this.serialNumber = dto.getSerialNumber();
+    }
+
 }
