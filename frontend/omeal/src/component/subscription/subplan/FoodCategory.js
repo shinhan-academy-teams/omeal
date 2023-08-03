@@ -1,10 +1,23 @@
 import { Box, FormControlLabel, Grid, Radio, RadioGroup } from "@mui/material";
 import React from "react";
+import { useRecoilState } from "recoil";
+import { FoodCategoryAtom } from "../../../recoil/SubscriptionState";
 
 function FoodCategory(props) {
+  const [foodCategory, setFoodCategory] = useRecoilState(FoodCategoryAtom);
+
+  const handleChange = (event) => {
+    setFoodCategory(event.target.value);
+  };
   return (
     <Box sx={{ width: 450 }}>
-      <RadioGroup aria-labelledby="storage-label" size="lg" sx={{ gap: 1.5 }}>
+      <RadioGroup
+        aria-labelledby="storage-label"
+        size="lg"
+        sx={{ gap: 1.5 }}
+        value={foodCategory}
+        onChange={handleChange}
+      >
         <Grid container spacing={6} style={{ margin: "20px 0px" }}>
           <Grid item xs={6}>
             <FormControlLabel
@@ -28,7 +41,7 @@ function FoodCategory(props) {
             />
           </Grid>
           <Grid item xs={6}>
-            <FormControlLabel value="monthly" control={<Radio />} label="면" />
+            <FormControlLabel value="noodle" control={<Radio />} label="면" />
           </Grid>
           <Grid item xs={6}>
             <FormControlLabel

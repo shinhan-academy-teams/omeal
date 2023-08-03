@@ -1,8 +1,10 @@
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { SubTypeAtom } from "../../../recoil/SubscriptionState";
 
 function DeliveryCycle(props) {
-  const [subType, setSubType] = useState("weekly");
+  const [subType, setSubType] = useRecoilState(SubTypeAtom);
 
   const handleChange = (event, newAlignment) => {
     setSubType(newAlignment);
