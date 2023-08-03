@@ -44,6 +44,7 @@ public class MyPageController {
         return ResponseEntity.ok(card);
     }
 
+    // 회원의 카드 정보 수정
     @PutMapping("/card-info")
     public String userCardUpdate(@RequestBody CardDTO cardDTO, String memId){
         return cardService.update(cardDTO, memId);
