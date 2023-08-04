@@ -17,6 +17,10 @@ function Bottom(props) {
     navi("/mypage");
   };
 
+  const todayMeal = () => {
+    navi("/today-meal");
+  };
+
   const main = () => {
     navi("/");
   };
@@ -47,7 +51,11 @@ function Bottom(props) {
             }
           />
 
-          <BottomNavigationAction label="오늘의 밀" icon={<MopedIcon />} />
+          <BottomNavigationAction
+            label="오늘의 밀"
+            icon={<MopedIcon />}
+            onClick={todayMeal}
+          />
           <BottomNavigationAction
             label="마이페이지"
             icon={<EggIcon />}
