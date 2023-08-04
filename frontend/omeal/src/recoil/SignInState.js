@@ -9,3 +9,13 @@ export const MemberGradeState = atom({
   key: "MemberGradeState",
   default: "",
 });
+
+export const MemberNickState = atom({
+  key: "MemberNickState",
+  default: "",
+});
+
+export const ContinuousDaysState = atom({
+  key: "ContinuousDaysState",
+  default: "",
+});
