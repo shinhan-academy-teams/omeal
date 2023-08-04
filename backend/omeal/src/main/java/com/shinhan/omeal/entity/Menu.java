@@ -1,10 +1,14 @@
 package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
+import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
+@Getter
+@ToString
 @Entity
 @Table(name = "MENU")
 @SequenceGenerator(name = "MENU_SEQ_GEN", sequenceName = "MENU_SEQ", initialValue = 1, allocationSize = 1)

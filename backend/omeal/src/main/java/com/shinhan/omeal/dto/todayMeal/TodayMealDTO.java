@@ -20,9 +20,9 @@ public class TodayMealDTO {
     // toDTO
     public static TodayMealDTO toTodayMealDTO(DeliveryHistory deliveryHistory){
         return TodayMealDTO.builder()
-                .menu("")
+                .menu(deliveryHistory.getMenu())
                 .status(deliveryHistory.getStatus())
-                .deliveryAddr("")
+                .deliveryAddr(deliveryHistory.getDeliveryAddr())
                 .build();
     }
 }
