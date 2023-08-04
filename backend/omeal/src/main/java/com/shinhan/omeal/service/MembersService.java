@@ -66,8 +66,9 @@ public class MembersService {
 
         // 로그인 시 => 회원등급 업데이트 & Front에 전송까지
         Members updatedMember = subService.updateMemberGrade(member);
+        int days = subService.getContinuousDays(loginId);
 
-        return MembersDTO.toMembersDtoForSignIn(updatedMember);
+        return MembersDTO.toMembersDtoForSignIn(updatedMember, days);
     }
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)
