@@ -1,12 +1,17 @@
 package com.shinhan.omeal.entity;
 
 import com.shinhan.omeal.dto.delivery.DeliveryStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Getter
 @Entity
 @Table(name = "DELIVERY_HISTORY")
 @SequenceGenerator(name = "DELIVERY_SEQ_GEN", sequenceName = "DELIVERY_SEQ", initialValue = 1, allocationSize = 1)
