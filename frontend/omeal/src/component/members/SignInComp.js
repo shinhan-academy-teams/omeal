@@ -10,13 +10,14 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
+import { MemberGradeState, SignInState } from "../../recoil/SignInState";
 import { Grid, Typography } from "@mui/material";
 
 function SignInComp(props) {
   const [memberId, setMemberId] = useState("");
   const [memberPwd, setMemberPwd] = useState("");
   const setLoggedInId = useSetRecoilState(SignInState);
+  const setMemberGrade = useSetRecoilState(MemberGradeState);
   const navi = useNavigate();
 
   const handleId = (e) => {
@@ -56,15 +57,17 @@ function SignInComp(props) {
     })
       .then((res) => {
         const result = res.data;
-        console.log(result);
+        // console.log("result : " + result.memberGrade);
 
-        if (result === "fail") {
+        if (result === "") {
+          // 로그인 실패시 Back에서 null 보내게끔 했고, Front에선 ""로 인식하더라고
           Swal.fire({
             icon: "error",
             text: "아이디와 비밀번호를 확인해주세요",
           });
         } else {
-          setLoggedInId(memberId); // recoil로 아이디 저장
+          setLoggedInId(result.memberId); // recoil로 아이디 저장
+          setMemberGrade(result.memberGrade); // recoil로 회원등급 저장
           navi("/"); // 홈 화면으로 이동
         }
       })
