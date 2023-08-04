@@ -30,9 +30,17 @@ function SignInComp(props) {
   const handleId = (e) => {
     setMemberId(e.target.value);
   };
+
   const handlePwd = (e) => {
     setMemberPwd(e.target.value);
   };
+
+  const handlePwdEnter = (e) => {
+    if (e.keyCode === 13) {
+      signIn();
+    }
+  };
+
   const signUp = () => {
     navi("/auth/sign-up");
   };
@@ -137,6 +145,7 @@ function SignInComp(props) {
               name="memberPwd"
               value={memberPwd}
               onChange={handlePwd}
+              onKeyUp={handlePwdEnter}
               variant="standard"
             />
           </Grid>
