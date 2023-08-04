@@ -6,10 +6,16 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
+import { SignInState } from "../../recoil/SignInState";
+import { useRecoilValue } from "recoil";
 
 function TodayMealComp(props) {
+  const memberId = useRecoilValue(SignInState);
+
   const steps = ["배송 준비중", "배송중", "배송 완료"];
 
   const [activeStep, setActiveStep] = useState(0);
@@ -52,6 +58,20 @@ function TodayMealComp(props) {
       return newSkipped;
     });
   };
+
+  useEffect(() => {
+    axios({
+      url: "/today-meal/delivery-info",
+      method: "get",
+      params: { memberId: memberId },
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
