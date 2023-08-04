@@ -2,7 +2,6 @@ package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
-import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
 import com.shinhan.omeal.entity.Allergy;
 import com.shinhan.omeal.entity.Members;
