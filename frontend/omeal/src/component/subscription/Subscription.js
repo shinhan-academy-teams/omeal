@@ -113,7 +113,7 @@ function Subscription(props) {
           case 4:
             return <SelectAllergy />;
           case 5:
-            return <ReceiveInfo />;
+            return <ReceiveInfo memberId={memberId} />;
           case 6:
             return <DeliveryInfo />;
           case 7:
