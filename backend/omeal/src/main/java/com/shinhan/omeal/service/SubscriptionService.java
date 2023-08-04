@@ -12,11 +12,12 @@ import com.shinhan.omeal.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,19 @@ public class SubscriptionService {
                 .build();
         subRepo.save(newSubscription);
         return "OK";
+    }
+
+    // 첫 배송 예정일 안내
+    public LocalDate calFirstDeliveryDate() {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDeliveryDate = today.plusDays(2);
+        DayOfWeek week = firstDeliveryDate.getDayOfWeek();
+        if(week.equals(DayOfWeek.SATURDAY)) {
+            firstDeliveryDate = firstDeliveryDate.plusDays(2);
+        } else if(week.equals(DayOfWeek.SUNDAY)) {
+            firstDeliveryDate = firstDeliveryDate.plusDays(1);
+        }
+        return firstDeliveryDate;
     }
 
     // 구독 종료일 계산
