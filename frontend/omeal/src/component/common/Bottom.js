@@ -21,6 +21,10 @@ function Bottom(props) {
     navi("/");
   };
 
+  const omealland = () => {
+    navi("/omealland");
+  };
+
   return (
     <div>
       <Box sx={{ width: "100%" }}>
@@ -37,7 +41,11 @@ function Bottom(props) {
             icon={<HomeIcon />}
             onClick={main}
           />
-          <BottomNavigationAction label="커뮤니티" icon={<Diversity3Icon />} />
+          <BottomNavigationAction
+            label="커뮤니티"
+            icon={<Diversity3Icon />}
+            onClick={omealland}
+          />
 
           <BottomNavigationAction
             icon={
