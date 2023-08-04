@@ -24,6 +24,7 @@ import {
   SubTimeAtom,
   SubTypeAtom,
 } from "../../recoil/SubscriptionState";
+import axios from "axios";
 
 function Subscription(props) {
   const [activeStep, setActiveStep] = useState(0); //스텝
@@ -47,8 +48,23 @@ function Subscription(props) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
     } else if (detailStep === 8) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
+      axios
+        .post("/subscribe", {
+          memberId: "asdf@naver.com",
+          subType: subType,
+          container: containerType,
+          category: foodCategory,
+          deliveryAddr: addr + " " + subAddr,
+          mealTime: subTime,
+          memberAllergy: Allergy,
+        })
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {});
     }
   };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
@@ -103,8 +119,6 @@ function Subscription(props) {
             return null;
         }
       })()}
-
-      {/* <Middle detailStep={detailStep} /> */}
 
       {detailStep < 8 ? (
         <Button variant="contained" onClick={handleNext}>

@@ -1,15 +1,25 @@
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { ContainerTypeAtom } from "../../../recoil/SubscriptionState";
-
+import axios from "axios";
 
 function SelectContainer(props) {
   const [containerType, setContainerType] = useRecoilState(ContainerTypeAtom);
+  const [typeList, setTypeList] = useState([]);
 
   const handleChange = (event, newAlignment) => {
     setContainerType(newAlignment);
   };
+
+  useEffect(() => {
+    axios
+      .get("/plan-container")
+      .then(function (response) {
+        setTypeList(response.data);
+      })
+      .catch(function (error) {});
+  }, []);
 
   return (
     <Box sx={{ width: 450 }}>
@@ -20,12 +30,11 @@ function SelectContainer(props) {
         onChange={handleChange}
         aria-label="Platform"
       >
-        <ToggleButton value="disposable" aria-label="disposable">
-          일회용기
-        </ToggleButton>
-        <ToggleButton value="multiple" aria-label="multiple">
-          다회용기
-        </ToggleButton>
+        {typeList.map((value, index) => (
+          <ToggleButton key={index} value={value} aria-label="disposable">
+            {value}
+          </ToggleButton>
+        ))}
       </ToggleButtonGroup>
     </Box>
   );
