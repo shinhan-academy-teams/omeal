@@ -1,5 +1,6 @@
 package com.shinhan.omeal.service;
 
+import com.shinhan.omeal.dto.community.BoardCategory;
 import com.shinhan.omeal.dto.community.BoardDTO;
 import com.shinhan.omeal.dto.community.ContentsDTO;
 import com.shinhan.omeal.dto.community.TownName;
@@ -52,6 +53,14 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getContentsTown(TownName townName) {
         List<Board> boardlist = boardRepo.findAllByTownName(townName);
+        List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        return contentlist;
+    }
+
+    // 특정 마을의 카테고리 글 목록 요청
+    @Transactional
+    public List<ContentsDTO> getContentsCategory(TownName townName, BoardCategory category) {
+        List<Board> boardlist = boardRepo.findAllByTownNameAndCategory(townName, category);
         List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
         return contentlist;
     }

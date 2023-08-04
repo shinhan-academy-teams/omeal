@@ -37,7 +37,7 @@ public class BoardController {
 
     // 특정 마을의 카테고리별 글 목록 조회
     @GetMapping("/{townname}/{category}")
-    public void getContentsList(@PathVariable TownName townname,@PathVariable BoardCategory category) {
-        System.out.println(townname+" "+category);
+    public List<ContentsDTO> getContentsList(@PathVariable TownName townname,@PathVariable BoardCategory category) {
+        return boardService.getContentsCategory(townname,category);
     }
 }
