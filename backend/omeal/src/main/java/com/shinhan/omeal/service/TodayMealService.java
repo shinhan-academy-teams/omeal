@@ -1,22 +1,18 @@
 package com.shinhan.omeal.service;
 
+import com.shinhan.omeal.dto.delivery.DeliveryStatus;
+import com.shinhan.omeal.dto.delivery.DeliveryTime;
+import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.todayMeal.TodayMealDTO;
-import com.shinhan.omeal.entity.Allergy;
-import com.shinhan.omeal.entity.DeliveryHistory;
-import com.shinhan.omeal.entity.Members;
-import com.shinhan.omeal.entity.Menu;
-import com.shinhan.omeal.repository.AllergyRepository;
-import com.shinhan.omeal.repository.MembersRepository;
-import com.shinhan.omeal.repository.MenuRepository;
-import com.shinhan.omeal.repository.TodayMealRepository;
+import com.shinhan.omeal.entity.*;
+import com.shinhan.omeal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +22,7 @@ public class TodayMealService {
     final MembersRepository memRepo;
     final AllergyRepository allergyRepo;
     final MenuRepository menuRepo;
+    final SubscriptionRepository subRepo;
 
     // 하단의 '오늘의 밀' 아이콘 눌렀을 때 뜨는 첫 페이지
     public TodayMealDTO getDeliveryInfo(String memberId){
@@ -39,38 +36,48 @@ public class TodayMealService {
         return TodayMealDTO.toTodayMealDTO(deliveryHistory);
     }
 
-    // 랜덤 메뉴 얻기 (without 알러지)
-    public String getRandomMenu(){ // 나중에 매개변수에 회원 ID ㄱㄱ
-        String memberId = "test1@mail.com";
+    /*
+    오늘의 메뉴 준비 스케줄러
+    오전6시에 일괄적으로 배송 준비
+    아침 구독은 배송 시작
+     */
+    @Scheduled(cron = "0 0 6 * * *")
+    @Transactional
+    public void prepareTodayMeal() {
+        // 서비스 구독중인 회원 목록
+        subRepo.findAll().forEach(subscription -> {
+            // 구독 중인 음식 타입 메뉴 뽑기
+            Set<Menu> allMenu = menuRepo.findByCategory(SubscriptionCategory.샌드위치백작); //subscription.getCategory()
+            // 알레르기 유무 확인
+            if(subscription.getMember().getMemberAllergy().size()!=0) {
+                allMenu = menuRepo.findByAllergyNotIn(subscription.getMember().getMemberAllergy());
+            }
+            // 메뉴 선정
+            String todayMeal = getRandomMenu(allMenu);
+            // 배송 준비
+            prepareDelivery(subscription, todayMeal);
+        });
 
-        Members member = memRepo.findById(memberId).get();
-        List<Allergy> memberAllergyList =  member.getMemberAllergy();
-
-        // 알러지 코드에 해당하지 않는 메뉴 얻기
-        return getMenuWithoutAllergy(memberAllergyList);
     }
 
-    public List<Long> getAllergyCodeList(List<Allergy> memberAllergyList){
-        List<Long> allergyCodeList = new ArrayList<>();
-        for(int i=0; i<memberAllergyList.size(); i++){
-            Long allergyCode = memberAllergyList.get(i).getAllergyCode();
-            allergyCodeList.add(allergyCode);
-        }
-        return allergyCodeList;
+    // 랜덤으로 오늘의 메뉴 선정
+    private String getRandomMenu(Set<Menu> allMenu){
+        long size = allMenu.size();
+        int randomNumber = (int)(Math.random()*size);
+        List<Menu> menuList = new ArrayList<>(allMenu);
+        String todayMeal = menuList.get(randomNumber).getMenuName();
+        return todayMeal;
     }
 
-    public String getMenuWithoutAllergy(List<Allergy> memberAllergyList){
-        // 알러지 코드에 해당하지 않는 메뉴 얻기
-        Set<Menu> menuSet = menuRepo.findByAllergyNotIn(memberAllergyList);
-        long size = menuSet.size();
-        int random = (int)(Math.random() * size);
-
-        // 중복 제거한 menuSet으로 menuList 만들기 (for 랜덤 뽑기)
-        List<Menu> menuList = new ArrayList<>(menuSet);
-
-        String menuName = menuList.get(random).getMenuName();
-        System.out.println(menuName);
-
-        return menuName;
+    // 구독한 회원들의 메뉴 배송 준비
+    private void prepareDelivery(Subscription subscription, String todayMeal) {
+        DeliveryHistory todayDelivery = DeliveryHistory.builder()
+                .member(subscription.getMember())
+                .menu(todayMeal)
+                .status(subscription.getMealTime().equals(DeliveryTime.아침)?DeliveryStatus.배송중:DeliveryStatus.배송준비중)
+                .deliveryAddr(subscription.getDeliveryAddr())
+                .build();
+        tmRepo.save(todayDelivery);
     }
+
 }
