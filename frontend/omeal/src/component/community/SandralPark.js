@@ -22,11 +22,17 @@ import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SandralPark(props) {
   const [searchCategory, setSearchCategory] = useState("");
   const [postList, setPostList] = useState([]);
   const [search, setSearch] = useState("");
+
+  const navi = useNavigate();
+  const boardReg = () =>{
+    navi("/omealland/register");
+  }
 
   //처음 전체 게시물
   useEffect(() => {
@@ -248,11 +254,7 @@ function SandralPark(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <Button
-          variant="contained"
-          href="/omealland/register"
-          sx={{ marginTop: "30px" }}
-        >
+        <Button variant="contained" onClick={boardReg}>
           글 작성
         </Button>
       </Box>
