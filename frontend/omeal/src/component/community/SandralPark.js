@@ -22,15 +22,22 @@ import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SandralPark(props) {
   const [search, setSearch] = useState("");
   const [postList, setPostList] = useState([]);
 
+  const navi = useNavigate();
+  const boardReg = () => {
+    navi("/omealland/register");
+  };
+
   const handleChange = (event) => {
     setSearch(event.target.value);
     console.log(event.target.value);
   };
+
   useEffect(() => {
     axios
       .get("/board/샌드럴파크", { townName: "샌드럴파크" })
@@ -173,11 +180,7 @@ function SandralPark(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <Button
-          variant="contained"
-          href="/omealland/register"
-          sx={{ marginTop: "30px" }}
-        >
+        <Button variant="contained" onClick={boardReg}>
           글 작성
         </Button>
       </Box>
