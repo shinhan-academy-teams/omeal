@@ -16,11 +16,12 @@ import { useState } from "react";
 import { MemberNameState, SignInState } from "../../recoil/SignInState";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
-import menuImg from "../../assets/img/noodle_temp.png";
-import noodleImg from "../../../src/assets/img/noodle.webp";
-import bibimbapImg from "../../../src/assets/img/bibimbap.webp";
-import saladImg from "../../../src/assets/img/salad.webp";
-import sandwichImg from "../../../src/assets/img/sandwich.webp";
+import noodleImg from "../../../src/assets/img/menuCategory/noodle.png";
+import bibimbapImg from "../../../src/assets/img/menuCategory/bibimbap.png";
+import saladImg from "../../../src/assets/img/menuCategory/salad.png";
+import sandwichImg from "../../../src/assets/img/menuCategory/sandwich.png";
+import soupImg from "../../../src/assets/img/menuCategory/soup.png";
+import homeImg from "../../../src/assets/img/menuCategory/home.png";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
@@ -33,19 +34,19 @@ function TodayMealComp(props) {
   const steps = ["배송 준비중", "배송중", "배송 완료"];
 
   const [activeStep, setActiveStep] = useState(-1);
-  
+
   const [categoryNo, setCategoryNo] = useState("");
-  
+
   // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
   const categoryImg = [
-    noodleImg,
     noodleImg,
     bibimbapImg,
     saladImg,
     sandwichImg,
-    noodleImg,
+    soupImg,
+    homeImg,
   ];
-  
+
   useEffect(() => {
     axios({
       url: "/today-meal/delivery-info",
@@ -61,6 +62,8 @@ function TodayMealComp(props) {
   }, []);
 
   useEffect(() => {
+    console.log(delivery);
+
     if (delivery.status === "배송준비중") {
       setActiveStep(0);
     } else if (delivery.status === "배송중") {
@@ -69,6 +72,20 @@ function TodayMealComp(props) {
       setActiveStep(3);
     } else {
       setActiveStep(-1);
+    }
+
+    if (delivery.category === "면장님") {
+      setCategoryNo(0);
+    } else if (delivery.category === "비빔대감") {
+      setCategoryNo(1);
+    } else if (delivery.category === "샐러디안") {
+      setCategoryNo(2);
+    } else if (delivery.category === "샌드위치백작") {
+      setCategoryNo(3);
+    } else if (delivery.category === "국밥부장관") {
+      setCategoryNo(4);
+    } else if (delivery.category === "애국자") {
+      setCategoryNo(5);
     }
   }, [delivery]);
 
@@ -140,11 +157,10 @@ function TodayMealComp(props) {
             <Grid item xs={6}>
               <img
                 alt="menu"
-                src={menuImg}
+                src={categoryImg[categoryNo]}
                 width="200px"
                 style={{ borderRadius: "20px" }}
               />
-              // <img alt="" src={categoryImg[categoryNo]} width={"60%"}></img>
             </Grid>
             <Grid item xs={6}>
               <Box py={3} px={2}>
