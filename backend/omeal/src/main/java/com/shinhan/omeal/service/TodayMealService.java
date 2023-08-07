@@ -7,7 +7,6 @@ import com.shinhan.omeal.dto.todayMeal.TodayMealDTO;
 import com.shinhan.omeal.entity.*;
 import com.shinhan.omeal.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +49,7 @@ public class TodayMealService {
         // 서비스 구독중인 회원 목록
         subRepo.findAll().forEach(subscription -> {
             // 구독 중인 음식 타입 메뉴 뽑기
-            Set<Menu> allMenu = menuRepo.findByCategory(SubscriptionCategory.샌드위치백작); //subscription.getCategory()
+            Set<Menu> allMenu = menuRepo.findByCategory(subscription.getCategory());
             // 알레르기 유무 확인
             if(subscription.getMember().getMemberAllergy().size()!=0) {
                 allMenu = menuRepo.findByAllergyNotIn(subscription.getMember().getMemberAllergy());
