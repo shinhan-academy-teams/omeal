@@ -14,7 +14,7 @@ public interface MenuRepository extends CrudRepository<Menu, Long> {
     // 알러지 제외한 메뉴 리스트 얻기
     // findByAgeNotIn(Collection<Age> ages) 형태 이용함
     // ★중복된 메뉴이름이 많고, 여러 건이 나와서 List가 아니라 Set으로 담음.
-    Set<Menu> findByAllergyNotIn(List<Allergy> allergyList); // 참조 : https://docs.spring.io/spring-data/jpa/docs/2.5.1/reference/html/#jpa.query-methods
+    Set<Menu> findByAllergyIn(List<Allergy> allergyList); // 참조 : https://docs.spring.io/spring-data/jpa/docs/2.5.1/reference/html/#jpa.query-methods
 
     // 구독 카테고리별 메뉴
     Set<Menu> findByCategory(SubscriptionCategory category);
