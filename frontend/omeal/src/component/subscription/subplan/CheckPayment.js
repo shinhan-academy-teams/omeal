@@ -1,7 +1,32 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { SubTypeAtom } from "../../../recoil/SubscriptionState";
 
 function CheckPayment(props) {
+  const [deliveryDate, setdeliveryDate] = useState();
+  const subType = useRecoilValue(SubTypeAtom);
+  const [mealFee, setMealFee] = useState(0);
+  const [deliveryFee, setDeliveryFee] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("/delivery-info")
+      .then(function (response) {
+        setdeliveryDate(response.data);
+      })
+      .catch(function (error) {});
+
+    if (subType === "WEEKLY") {
+      setMealFee(39500);
+      setDeliveryFee(12500);
+    } else {
+      setMealFee(150000);
+      setDeliveryFee(40000);
+    }
+  }, []);
+
   return (
     <div>
       <Box
@@ -16,7 +41,7 @@ function CheckPayment(props) {
           variant="h6"
           style={{ color: "#FF7F3F", padding: "25px 0px 10px" }}
         >
-          첫 배송 예정일 :{" "}
+          첫 배송 예정일 : {deliveryDate}
         </Typography>
         <Typography variant="body1">
           당신의 오밀을 맛있게 요리 중입니다.
@@ -32,7 +57,7 @@ function CheckPayment(props) {
           </Grid>
           <Grid item xs={8}>
             <Typography variant="h6" align="right" gutterBottom>
-              {""}원
+              {mealFee.toLocaleString()}원
             </Typography>
           </Grid>
         </Grid>
@@ -44,7 +69,7 @@ function CheckPayment(props) {
           </Grid>
           <Grid item xs={8}>
             <Typography variant="h6" align="right" gutterBottom>
-              {""}원
+              {deliveryFee.toLocaleString()}원
             </Typography>
           </Grid>
         </Grid>
@@ -67,7 +92,7 @@ function CheckPayment(props) {
               gutterBottom
               style={{ color: "#FF7F3F" }}
             >
-              회당 {""}원
+              회당 {(mealFee + deliveryFee).toLocaleString()}원
             </Typography>
           </Grid>
         </Grid>

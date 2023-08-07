@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import NavBar from "./pages/common/NavBar";
 import NoNavBar from "./pages/common/NoNavBar";
 import Main from "./pages/Main";
+import TodayMeal from "./pages/todayMeal/TodayMeal";
 import CardRegister from "./pages/members/CardRegister";
 import SignIn from "./pages/members/SignIn";
 import SignUp from "./pages/members/SignUp";
@@ -22,6 +23,7 @@ import KoreaTown from "./component/community/KoreaTown";
 import Register from "./component/community/Register";
 import OmealLand from "./component/community/OmealLand";
 
+import Feedback from "./pages/todayMeal/Feedback";
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
   const theme = createTheme({
@@ -58,6 +60,9 @@ const App = () => {
             <Route path="omealland/noodle" element={<NoodleOffice />} />
             <Route path="omealland/homemeal" element={<KoreaTown />} />
             <Route path="omealland/register" element={<Register />} />
+
+            <Route path="today-meal" element={<TodayMeal />} />
+            <Route path="today-meal/feedback" element={<Feedback />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />

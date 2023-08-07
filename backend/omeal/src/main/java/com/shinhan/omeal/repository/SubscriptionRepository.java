@@ -1,14 +1,16 @@
 package com.shinhan.omeal.repository;
 
+import com.shinhan.omeal.dto.delivery.DeliveryTime;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import com.shinhan.omeal.entity.Members;
+
+import java.util.List;
 
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
 
-    public Subscription findByMember(Members memberId);
+    public Subscription findByMember(Members member);
 
     @Query(value = "WITH continuous AS ( " +
             "SELECT sub_union_his.*, " +
@@ -27,4 +29,8 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
             "FROM continuous " +
             "WHERE date_diff > 1 ", nativeQuery = true)
     public int findContinuousDaysByMemberId(String memberId);
+
+    // 배송시간에 따른 구독정보
+    public List<Subscription> findAllByMealTime(DeliveryTime time);
+
 }

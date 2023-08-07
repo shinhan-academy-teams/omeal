@@ -16,12 +16,9 @@ function DeliveryCycle(props) {
     axios
       .get("/plan-subtype")
       .then(function (response) {
-        setTypeList((prevState) => {
-          return {
-            ...prevState,
-            주간구독: response.data[0],
-            월간구독: response.data[1],
-          };
+        setTypeList({
+          주간구독: response.data[0],
+          월간구독: response.data[1],
         });
       })
       .catch(function (error) {});
