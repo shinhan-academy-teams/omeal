@@ -18,4 +18,6 @@ public interface MenuRepository extends CrudRepository<Menu, Long> {
 
     // 구독 카테고리별 메뉴
     Set<Menu> findByCategory(SubscriptionCategory category);
+
+    Set<Menu> findBySubcategory(String subCategory);
 }
