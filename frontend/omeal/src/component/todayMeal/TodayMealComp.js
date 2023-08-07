@@ -14,6 +14,10 @@ import { useState } from "react";
 import { MemberNameState, SignInState } from "../../recoil/SignInState";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
+import noodleImg from "../../../src/assets/img/noodle.webp";
+import bibimbapImg from "../../../src/assets/img/bibimbap.webp";
+import saladImg from "../../../src/assets/img/salad.webp";
+import sandwichImg from "../../../src/assets/img/sandwich.webp";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
@@ -22,6 +26,17 @@ function TodayMealComp(props) {
   const memberName = useRecoilValue(MemberNameState);
 
   const steps = ["배송 준비중", "배송중", "배송 완료"];
+  const [categoryNo, setCategoryNo] = useState("");
+
+  // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
+  const categoryImg = [
+    noodleImg,
+    noodleImg,
+    bibimbapImg,
+    saladImg,
+    sandwichImg,
+    noodleImg,
+  ];
 
   const [activeStep, setActiveStep] = useState(-1);
 
@@ -33,11 +48,27 @@ function TodayMealComp(props) {
     })
       .then((response) => {
         console.log(response.data);
-        if (response.data.status === "배송준비중") {
+        const result = response.data;
+        const category = result.category;
+        if (category === "애국자") {
+          setCategoryNo(0);
+        } else if (category === "국밥부장관") {
+          setCategoryNo(1);
+        } else if (category === "비빔대감") {
+          setCategoryNo(2);
+        } else if (category === "샐러디안") {
+          setCategoryNo(3);
+        } else if (category === "샌드위치백작") {
+          setCategoryNo(4);
+        } else if (category === "면장님") {
+          setCategoryNo(5);
+        }
+
+        if (result.status === "배송준비중") {
           setActiveStep(0);
-        } else if (response.data.status === "배송중") {
+        } else if (result.status === "배송중") {
           setActiveStep(1);
-        } else if (response.data.status === "배송완료") {
+        } else if (result.status === "배송완료") {
           setActiveStep(3);
         } else {
           setActiveStep(-1);
@@ -105,6 +136,7 @@ function TodayMealComp(props) {
           }}
         >
           성향 마다 메뉴 개수가 다른데 어떻게 만들어야 할지 모르겠음
+          <img alt="" src={categoryImg[categoryNo]} width={"60%"}></img>
         </Paper>
       </Tooltip>
     </>
