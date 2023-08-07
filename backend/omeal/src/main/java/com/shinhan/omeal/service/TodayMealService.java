@@ -8,7 +8,6 @@ import com.shinhan.omeal.dto.todayMeal.TodayMealDTO;
 import com.shinhan.omeal.entity.*;
 import com.shinhan.omeal.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,77 +76,59 @@ public class TodayMealService {
         return TodayMealDTO.toTodayMealDTO(deliveryHistory, category);
     }
 
-    /*
-    오늘의 메뉴 준비 스케줄러
-    오전6시에 일괄적으로 배송준비
-    아침구독 배송시작
-     */
-    @Scheduled(cron = "0 0 6 * * *")
     @Transactional
     public void prepareTodayMeal() {
         // 서비스 구독중인 회원 목록
         subRepo.findAll().forEach(subscription -> {
-            // 구독 중인 음식 타입 메뉴 뽑기
-            Set<Menu> allMenu = menuRepo.findByCategory(SubscriptionCategory.샌드위치백작); //subscription.getCategory()
-            // 알레르기 유무 확인
-            if (subscription.getMember().getMemberAllergy().size() != 0) {
-                allMenu = menuRepo.findByAllergyNotIn(subscription.getMember().getMemberAllergy());
+            // 구독 멤버 알레르기 정보 확인
+            Set<Menu> allergyMenu = null;
+            if(!subscription.hasNotAllergy()) {
+                allergyMenu = menuRepo.findByAllergyIn(subscription.getMemberAllergyInfo());
             }
-            // 메뉴선정
-            String todayMeal = getRandomMenu(allMenu);
+            // 메뉴 선정
+            String todayMeal = "";
+            if(subscription.getCategory().equals(SubscriptionCategory.애국자)){
+                todayMeal = getHomeMeal(allergyMenu);
+            } else {
+                todayMeal = getCommonMeal(allergyMenu, subscription.getCategory());
+            }
             // 배송준비
             prepareDelivery(subscription, todayMeal);
         });
-
     }
 
-    /*
-    오전8시 1차 배송 확인 스케줄러
-    아침구독 배송완료
-    점심구독 배송시작
-     */
-    @Scheduled(cron = "0 0 8 * * *")
-    public void morningDelivery() {
-        // 아침구독 배송완료
-        completeDelivery(checkMealTime(DeliveryTime.아침));
-        // 점심구독 배송시작
-        inProgressDelivery(checkMealTime(DeliveryTime.점심));
+    // 가정식 제외 메뉴 선정
+    private String getCommonMeal(Set<Menu> allergyMenu, SubscriptionCategory category) {
+        Set<Menu> allMenu = menuRepo.findByCategory(category);
+        if(allergyMenu!=null) {
+            allMenu.removeAll(allergyMenu);
+        }
+        return getRandomMenu(allMenu);
     }
 
-    /*
-    오후12시 2차 배송 확인 스케줄러
-    점심구독 배송완료
-    저녁구독 배송시작
-    */
-    @Scheduled(cron = "0 0 12 * * *")
-    public void lunchDelivery() {
-        // 점심구독 배송완료
-        completeDelivery(checkMealTime(DeliveryTime.점심));
-        // 저녁구독 배송시작
-        inProgressDelivery(checkMealTime(DeliveryTime.저녁));
+    // 가정식 메뉴 선정
+    private String getHomeMeal(Set<Menu> allergyMenu) {
+        Set<Menu> mainDishList = menuRepo.findBySubcategory("메인반찬");
+        Set<Menu> sideDishList = menuRepo.findBySubcategory("밑반찬");
+        if(allergyMenu!=null) {
+            mainDishList.removeAll(allergyMenu);
+            sideDishList.removeAll(allergyMenu);
+        }
+        String mainDish = getRandomMenu(mainDishList);
+        String sideDish = getRandomMenu(sideDishList);
+        return mainDish + "|" + sideDish;
     }
 
-    /*
-    오후19시 3차 배송 확인 스케줄러
-    저녁구독 배송완료
-    */
-    @Scheduled(cron = "0 0 19 * * *")
-    public void dinnerDelivery() {
-        // 저녁구독 배송완료
-        completeDelivery(checkMealTime(DeliveryTime.저녁));
-    }
-
-
-    // 랜덤으로 오늘의 메뉴 선정
-    private String getRandomMenu(Set<Menu> allMenu) {
-        long size = allMenu.size();
-        int randomNumber = (int) (Math.random() * size);
-        List<Menu> menuList = new ArrayList<>(allMenu);
+    // 가정식 제외 랜덤으로 오늘의 메뉴 선정
+    private String getRandomMenu(Set<Menu> menu){
+        long size = menu.size();
+        int randomNumber = (int)(Math.random()*size);
+        List<Menu> menuList = new ArrayList<>(menu);
         String todayMeal = menuList.get(randomNumber).getMenuName();
         return todayMeal;
     }
 
-    // 구독한 회원들의 메뉴 배송 준비
+    // 메뉴 배송 준비
     private void prepareDelivery(Subscription subscription, String todayMeal) {
         DeliveryHistory todayDelivery = DeliveryHistory.builder()
                 .member(subscription.getMember())
@@ -156,6 +137,19 @@ public class TodayMealService {
                 .deliveryAddr(subscription.getDeliveryAddr())
                 .build();
         tmRepo.save(todayDelivery);
+    }
+
+    // 배송상태 변경
+    public void changeDeliveryStatus(String start, String complete) {
+        // 배송시작
+        if(start!=null) {
+            inProgressDelivery(checkMealTime(DeliveryTime.valueOf(start)));
+        }
+        // 배송완료
+        if(complete!=null) {
+            completeDelivery(checkMealTime(DeliveryTime.valueOf(complete)));
+        }
+
     }
 
     // 멤버별 구독 시간 확인

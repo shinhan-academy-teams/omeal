@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
 
-    public Subscription findByMember(Members member);
+    Subscription findByMember(Members member);
 
     @Query(value = "WITH continuous AS ( " +
             "SELECT sub_union_his.*, " +
@@ -28,9 +28,9 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
             "SELECT TIMESTAMPDIFF(DAY, IFNULL(MAX(continuous_start_date), (SELECT MIN(start_date) FROM continuous)), sysdate()) + 1 AS result " +
             "FROM continuous " +
             "WHERE date_diff > 1 ", nativeQuery = true)
-    public int findContinuousDaysByMemberId(String memberId);
+    int findContinuousDaysByMemberId(String memberId);
 
     // 배송시간에 따른 구독정보
-    public List<Subscription> findAllByMealTime(DeliveryTime time);
+    List<Subscription> findAllByMealTime(DeliveryTime time);
 
 }
