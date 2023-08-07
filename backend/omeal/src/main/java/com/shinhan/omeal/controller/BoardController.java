@@ -40,4 +40,10 @@ public class BoardController {
     public List<ContentsDTO> getContentsList(@PathVariable TownName townname,@PathVariable BoardCategory category) {
         return boardService.getContentsCategory(townname,category);
     }
+
+    // 특정 마을의 인기글 조회
+    @GetMapping("/{townname}/best")
+    public List<ContentsDTO> getBestContentsList(@PathVariable TownName townname){
+        return boardService.getBestContentsList(townname);
+    }
 }

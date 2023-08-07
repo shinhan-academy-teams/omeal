@@ -9,13 +9,9 @@ import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.BoardRepository;
 import com.shinhan.omeal.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +59,14 @@ public class BoardService {
         List<Board> boardlist = boardRepo.findAllByTownNameAndCategory(townName, category);
         List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
         return contentlist;
+    }
+
+    // 마을의 인기글 조회
+    @Transactional
+    public List<ContentsDTO> getBestContentsList(TownName townname) {
+        List<Board> boardList =boardRepo.findTop10ByTownNameOrderByHitsDesc(townname);
+        List<ContentsDTO> dto = boardList.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        return dto;
     }
 
 }
