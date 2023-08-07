@@ -13,6 +13,7 @@ import { useSetRecoilState } from "recoil";
 import {
   ContinuousDaysState,
   MemberGradeState,
+  MemberNameState,
   MemberNickState,
   SignInState,
 } from "../../recoil/SignInState";
@@ -24,6 +25,7 @@ function SignInComp(props) {
   const setLoggedInId = useSetRecoilState(SignInState);
   const setMemberGrade = useSetRecoilState(MemberGradeState);
   const setMemberNick = useSetRecoilState(MemberNickState);
+  const setMemberName = useSetRecoilState(MemberNameState);
   const setContinuousDaysState = useSetRecoilState(ContinuousDaysState);
   const navi = useNavigate();
 
@@ -84,6 +86,7 @@ function SignInComp(props) {
           setLoggedInId(result.memberId); // recoil로 아이디 저장
           setMemberGrade(result.memberGrade); // recoil로 회원등급 저장
           setMemberNick(result.memberNick);
+          setMemberName(result.memberName);
           setContinuousDaysState(result.continuousDays);
           navi("/"); // 홈 화면으로 이동
         }
