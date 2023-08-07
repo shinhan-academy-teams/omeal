@@ -13,4 +13,5 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
     List<Board> findAllByTownName(TownName townName);
     List<Board> findAllByTownNameAndCategory(TownName townName, BoardCategory category);
     List<Board> findTop10ByTownNameOrderByHitsDesc(TownName townName);
+    List<Board> findAllByTownNameAndTitleContainingOrderByRegDateDesc(TownName townName, String title);
 }

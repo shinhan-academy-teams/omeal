@@ -46,4 +46,17 @@ public class BoardController {
     public List<ContentsDTO> getBestContentsList(@PathVariable TownName townname){
         return boardService.getBestContentsList(townname);
     }
+
+    // 특정 마을의 제목으로 게시물 조회
+    @GetMapping("/{townname}/title")
+    public List<ContentsDTO> getTitleContentsList(@PathVariable TownName townname, String title) {
+        return boardService.getTitleContentsList(townname, title);
+    }
+
+    // 특정 마을의 닉네임으로 게시물 죄회
+    @GetMapping("/{townname}/nick-name")
+    public void getNicknameContentsList(@PathVariable TownName townname, String nickname) {
+        //List<ContentsDTO>
+        System.out.println(townname + "  " + nickname);
+    }
 }

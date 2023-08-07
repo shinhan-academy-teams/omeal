@@ -69,4 +69,14 @@ public class BoardService {
         return dto;
     }
 
+    // 마을의 제목으로 게시글 조회
+    @Transactional
+    public List<ContentsDTO> getTitleContentsList(TownName townname, String title) {
+        List<Board> boardList = boardRepo.findAllByTownNameAndTitleContainingOrderByRegDateDesc(townname, title);
+        List<ContentsDTO> dto = boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList());
+        return dto;
+    }
+
+    // 마을의 닉네임으로 게시글 조회
+
 }
