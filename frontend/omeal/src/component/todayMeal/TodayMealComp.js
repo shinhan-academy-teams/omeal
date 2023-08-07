@@ -17,6 +17,10 @@ import { MemberNameState, SignInState } from "../../recoil/SignInState";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import menuImg from "../../assets/img/noodle_temp.png";
+import noodleImg from "../../../src/assets/img/noodle.webp";
+import bibimbapImg from "../../../src/assets/img/bibimbap.webp";
+import saladImg from "../../../src/assets/img/salad.webp";
+import sandwichImg from "../../../src/assets/img/sandwich.webp";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
@@ -29,7 +33,19 @@ function TodayMealComp(props) {
   const steps = ["배송 준비중", "배송중", "배송 완료"];
 
   const [activeStep, setActiveStep] = useState(-1);
-
+  
+  const [categoryNo, setCategoryNo] = useState("");
+  
+  // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
+  const categoryImg = [
+    noodleImg,
+    noodleImg,
+    bibimbapImg,
+    saladImg,
+    sandwichImg,
+    noodleImg,
+  ];
+  
   useEffect(() => {
     axios({
       url: "/today-meal/delivery-info",
@@ -128,6 +144,7 @@ function TodayMealComp(props) {
                 width="200px"
                 style={{ borderRadius: "20px" }}
               />
+              // <img alt="" src={categoryImg[categoryNo]} width={"60%"}></img>
             </Grid>
             <Grid item xs={6}>
               <Box py={3} px={2}>

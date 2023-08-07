@@ -71,7 +71,10 @@ public class TodayMealService {
         List<DeliveryHistory> deliveryHistoryList = tmRepo.findByMemberOrderByDeliveryNoDesc(member);
         DeliveryHistory deliveryHistory = deliveryHistoryList.get(0);
 
-        return TodayMealDTO.toTodayMealDTO(deliveryHistory);
+        // TodayMealDTO에 category도 같이 넘겨주기 위해
+        SubscriptionCategory category = subRepo.findByMember(member).getCategory();
+        
+        return TodayMealDTO.toTodayMealDTO(deliveryHistory, category);
     }
 
     /*
