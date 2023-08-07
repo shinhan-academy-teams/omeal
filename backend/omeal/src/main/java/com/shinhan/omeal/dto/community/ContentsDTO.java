@@ -4,22 +4,18 @@ import com.shinhan.omeal.entity.Members;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Builder
-public class BoardDTO {
+public class ContentsDTO {
+    // 게시판 글 목록
     private Long postNo;
     private String title;
-    private String content;
-    private String photo;
-    private BoardCategory category;
-    private TownName townName;
     private Integer hits;
+    private BoardCategory category;
     private Members member;
     private Timestamp regDate;
 }

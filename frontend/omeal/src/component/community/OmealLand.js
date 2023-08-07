@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 function OmealLand(props) {
   const navi = useNavigate();
+
+  const handleClick = (value) => {
+    navi("/omealland/" + value);
+  };
+
   return (
     <div className="top">
       <Box
@@ -30,7 +35,7 @@ function OmealLand(props) {
           name="test"
           type="button"
           onClick={() => {
-            navi("/omealland/sandwich");
+            handleClick("sandwich");
           }}
           style={{
             width: "100px",
@@ -46,7 +51,7 @@ function OmealLand(props) {
           name="test"
           type="button"
           onClick={() => {
-            navi("/omealland/bibimbap");
+            handleClick("bibimbap");
           }}
           style={{
             width: "100px",
@@ -62,7 +67,7 @@ function OmealLand(props) {
           name="test"
           type="button"
           onClick={() => {
-            navi("/omealland/ricesoup");
+            handleClick("ricesoup");
           }}
           style={{
             width: "100px",
@@ -78,7 +83,7 @@ function OmealLand(props) {
           name="test"
           type="button"
           onClick={() => {
-            navi("/omealland/salad");
+            handleClick("salad");
           }}
           style={{
             width: "100px",
@@ -94,7 +99,7 @@ function OmealLand(props) {
           name="test"
           type="button"
           onClick={() => {
-            navi("/omealland/noodle");
+            handleClick("noodle");
           }}
           style={{
             width: "100px",
@@ -110,7 +115,7 @@ function OmealLand(props) {
           name="test"
           type="button"
           onClick={() => {
-            navi("/omealland/homemeal");
+            handleClick("homemeal");
           }}
           style={{
             width: "100px",

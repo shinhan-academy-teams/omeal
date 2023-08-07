@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Card,
   Chip,
   FormControl,
   InputLabel,
@@ -19,6 +20,8 @@ import {
 import React from "react";
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import { useEffect } from "react";
+import axios from "axios";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -34,6 +37,14 @@ const rows = [
 
 function SandralPark(props) {
   const [search, setSearch] = useState("");
+  const [postList, setPostList] = useState([]);
+
+  // const [freeBoard, setFreeBoard] = useState(false);
+  // const [qna, setQna] = useState(false);
+  // const [todayMeal, setTodayMeal] = useState(false);
+  // const [famous, setFamous] = useState(false);
+  // const [popular, setPopular] = useState(false);
+
   const handleChange = (event) => {
     setSearch(event.target.value);
     console.log(event.target.value);
@@ -42,6 +53,18 @@ function SandralPark(props) {
   const handleClick = (chipValue) => {
     console.log(chipValue);
   };
+
+  useEffect(() => {
+    axios
+      .get("/board/샌드럴파크", { townName: "샌드럴파크" })
+      .then((res) => {
+        console.log(res.data);
+        setPostList(res.data.map((data) => data));
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   return (
     <div>
@@ -70,53 +93,81 @@ function SandralPark(props) {
         <Button variant="contained" sx={{ height: "55px", marginLeft: "10px" }}>
           <SearchIcon />
         </Button>
-        <Stack spacing={3} alignItems="center" sx={{ marginTop: "10px" }}>
+        <Stack
+          spacing={3}
+          alignItems="center"
+          sx={{ marginTop: "10px", marginBottom: "20px" }}
+        >
           <Stack direction="row" spacing={1}>
-            {[
-              "자유게시판",
-              "질문/답변",
-              "오늘의 밀",
-              "맛집 추천",
-              "인기글",
-            ].map((chip, index) => (
-              <Chip
-                key={index}
-                label={chip}
-                color="primary"
-                variant="outlined"
-                onClick={() => {
-                  handleClick(chip);
-                }}
-              />
-            ))}
+            <Chip
+              label="자유게시판"
+              color="primary"
+              variant="primary"
+              onClick={() => {
+                handleClick("자유게시판");
+              }}
+            />
+            <Chip
+              label="질문/답변"
+              color="primary"
+              variant="outlined"
+              onClick={() => {
+                handleClick("질문/답변");
+              }}
+            />
+            <Chip
+              label="오늘의 밀"
+              color="primary"
+              variant="outlined"
+              onClick={() => {
+                handleClick("오늘의 밀");
+              }}
+            />
+            <Chip
+              label="맛집 추천"
+              color="primary"
+              variant="outlined"
+              onClick={() => {
+                handleClick("맛집 추천");
+              }}
+            />
+            <Chip
+              label="인기글"
+              color="primary"
+              variant="outlined"
+              onClick={() => {
+                handleClick("인기글");
+              }}
+            />
           </Stack>
-          <Stack direction="column"></Stack>
         </Stack>
         {/* 테이블 */}
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer component={Card}>
+          <Table sx={{ minWidth: 500 }} aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              <TableRow sx={{ backgroundColor: "#FEF7ED" }}>
+                <TableCell>인덱스</TableCell>
+                <TableCell align="right">제목</TableCell>
+                <TableCell align="right">작성자</TableCell>
+                <TableCell align="right">작성일</TableCell>
+                <TableCell align="right">조회수</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {postList.map((post) => (
                 <TableRow
-                  key={row.name}
+                  key={post.postNo}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {post.postNo}
                   </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
+                  <TableCell align="right">{post.title}</TableCell>
+                  <TableCell align="right">{post.member.memberNick}</TableCell>
+                  <TableCell align="right">
+                    {new Date(post.regDate).toISOString().split("T")[0]}
+                  </TableCell>
+                  <TableCell align="right">{post.hits}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

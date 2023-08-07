@@ -1,18 +1,15 @@
 package com.shinhan.omeal.service;
 
-import com.shinhan.omeal.dto.members.*;
-import com.shinhan.omeal.entity.Card;
 import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MembersDTO;
-import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Card;
+import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.CardRepository;
 import com.shinhan.omeal.repository.MembersRepository;
-import com.shinhan.omeal.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

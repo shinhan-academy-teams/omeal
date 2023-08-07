@@ -20,8 +20,8 @@ import RiceSoupMinistry from "./component/community/RiceSoupMinistry";
 import GreenZone from "./component/community/GreenZone";
 import NoodleOffice from "./component/community/NoodleOffice";
 import KoreaTown from "./component/community/KoreaTown";
-import OmealLand from "./component/community/OmealLand";
 import Register from "./component/community/Register";
+import OmealLand from "./component/community/OmealLand";
 
 import Feedback from "./pages/todayMeal/Feedback";
 const App = () => {
@@ -66,6 +66,7 @@ const App = () => {
 
             <Route path="today-meal" element={<TodayMeal />} />
             <Route path="today-meal/feedback" element={<Feedback />} />
+            <Route path="omealland/register" element={<Register />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
