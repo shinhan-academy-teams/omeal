@@ -6,7 +6,7 @@ import StepLabel from "@mui/material/StepLabel";
 import { Button, Grid, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import firecracker from "../../assets/firecracker.png";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import DeliveryCycle from "./subplan/DeliveryCycle";
 import SelectContainer from "./subplan/SelectContainer";
 import FoodCategory from "./subplan/FoodCategory";
@@ -25,11 +25,13 @@ import {
   SubTypeAtom,
 } from "../../recoil/SubscriptionState";
 import axios from "axios";
+import { SignInState } from "../../recoil/SignInState";
 
 function Subscription(props) {
   const [activeStep, setActiveStep] = useState(0); //스텝
   const [detailStep, setDetailStep] = useState(1); //페이지
 
+  // 구독 정보 데이터
   const [subType] = useRecoilState(SubTypeAtom);
   const [containerType] = useRecoilState(ContainerTypeAtom);
   const [foodCategory] = useRecoilState(FoodCategoryAtom);
@@ -37,6 +39,9 @@ function Subscription(props) {
   const [addr] = useRecoilState(AddrAtom);
   const [subAddr] = useRecoilState(SubAddrAtom);
   const [subTime] = useRecoilState(SubTimeAtom);
+
+  // 회원 아이디
+  const memberId = useRecoilValue(SignInState);
 
   const steps = ["오밀플랜", "배송 정보", "결제"];
 
@@ -50,7 +55,7 @@ function Subscription(props) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
       axios
         .post("/subscribe", {
-          memberId: "asdf@naver.com",
+          memberId: memberId,
           subType: subType,
           container: containerType,
           category: foodCategory,
@@ -108,7 +113,7 @@ function Subscription(props) {
           case 4:
             return <SelectAllergy />;
           case 5:
-            return <ReceiveInfo />;
+            return <ReceiveInfo memberId={memberId} />;
           case 6:
             return <DeliveryInfo />;
           case 7:

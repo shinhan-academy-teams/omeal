@@ -1,7 +1,24 @@
 import { Box, TextField } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 function ReceiveInfo(props) {
+  const [memberInfo, setMemberInfo] = useState({});
+
+  useEffect(() => {
+    axios
+      .get("/mypage/user-info", {
+        params: { memId: props.memberId },
+      })
+      .then(function (response) {
+        setMemberInfo({
+          받는사람: response.data.memberName,
+          연락처: response.data.memberTel,
+        });
+      })
+      .catch(function (error) {});
+  }, []);
+
   return (
     <Box
       component="form"
@@ -11,9 +28,15 @@ function ReceiveInfo(props) {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="받는사람" variant="outlined" />
-      <br />
-      <TextField id="outlined-basic" label="연락처" variant="outlined" />
+      {Object.keys(memberInfo).map((key) => (
+        <TextField
+          key={key}
+          id="outlined-basic"
+          label={key}
+          variant="outlined"
+          defaultValue={memberInfo[key]}
+        />
+      ))}
     </Box>
   );
 }

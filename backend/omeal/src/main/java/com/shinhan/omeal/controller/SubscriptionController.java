@@ -9,6 +9,8 @@ import com.shinhan.omeal.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequiredArgsConstructor
 public class SubscriptionController {
@@ -19,6 +21,12 @@ public class SubscriptionController {
     @PostMapping(value = "/subscribe")
     public String subscribe(@RequestBody SubscriptionDTO subscriptionInfo) {
         return subscriptionService.subscribe(subscriptionInfo);
+    }
+
+    // 첫 배송일 안내
+    @GetMapping(value = "/delivery-info")
+    public LocalDate noticeFirstDelivery() {
+        return subscriptionService.calFirstDeliveryDate();
     }
 
     /*
