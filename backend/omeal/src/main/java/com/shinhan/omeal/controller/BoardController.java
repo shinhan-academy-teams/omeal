@@ -65,18 +65,18 @@ public class BoardController {
     }
 
     // 특정 마을의 카테고리별 제목으로 검색
-    @GetMapping("/{townname}/{category}")
+    @GetMapping("/{townname}/{category}/title")
     public List<ContentsDTO> getCategoryContentsListTitle(@PathVariable TownName townname, @PathVariable BoardCategory category, String title) {
         if(category==BoardCategory.인기글){
             return boardService.getBestContentsListTitle(townname, title);
         }
         else{
-            return boardService.getContentsCategoryTitle(townname,category, title);
+            return boardService.getContentsCategoryTitle(townname, category, title);
         }
     }
 
     // 특정 마을의 카테고리별 닉네임으로 검색
-    @GetMapping("/{townname}/{category}")
+    @GetMapping("/{townname}/{category}/nick-name")
     public List<ContentsDTO> getCategoryContentsListNickname(@PathVariable TownName townname, @PathVariable BoardCategory category, String nickname) {
         if(category==BoardCategory.인기글){
             return boardService.getBestContentsListNickname(townname, nickname);
@@ -87,7 +87,7 @@ public class BoardController {
     }
 
     // 특정 마을의 카테고리별 내용으로 검색
-    @GetMapping("/{townname}/{category}")
+    @GetMapping("/{townname}/{category}/content")
     public List<ContentsDTO> getCategoryContentsListPost(@PathVariable TownName townname, @PathVariable BoardCategory category, String content) {
         if(category==BoardCategory.인기글){
             return boardService.getBestContentsListPost(townname, content);
