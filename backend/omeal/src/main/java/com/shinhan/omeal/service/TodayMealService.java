@@ -32,8 +32,11 @@ public class TodayMealService {
         // 배송내역 1건만 보여줘야 하므로
         List<DeliveryHistory> deliveryHistoryList = tmRepo.findByMemberOrderByDeliveryNoDesc(member);
         DeliveryHistory deliveryHistory = deliveryHistoryList.get(0);
+
+        // TodayMealDTO에 category도 같이 넘겨주기 위해
+        SubscriptionCategory category = subRepo.findByMember(member).getCategory();
         
-        return TodayMealDTO.toTodayMealDTO(deliveryHistory);
+        return TodayMealDTO.toTodayMealDTO(deliveryHistory, category);
     }
 
     /*

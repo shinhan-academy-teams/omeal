@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
 
-    public Subscription findByMember(Members memberId);
+    public Subscription findByMember(Members member);
 
     @Query(value = "WITH continuous AS ( " +
             "SELECT sub_union_his.*, " +
