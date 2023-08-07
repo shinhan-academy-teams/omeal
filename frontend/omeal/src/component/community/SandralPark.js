@@ -4,11 +4,11 @@ import {
   Card,
   Chip,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
-  Paper,
+  RadioGroup,
   Select,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -23,37 +23,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
 import axios from "axios";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 function SandralPark(props) {
   const [search, setSearch] = useState("");
   const [postList, setPostList] = useState([]);
-
-  // const [freeBoard, setFreeBoard] = useState(false);
-  // const [qna, setQna] = useState(false);
-  // const [todayMeal, setTodayMeal] = useState(false);
-  // const [famous, setFamous] = useState(false);
-  // const [popular, setPopular] = useState(false);
 
   const handleChange = (event) => {
     setSearch(event.target.value);
     console.log(event.target.value);
   };
-
-  const handleClick = (chipValue) => {
-    console.log(chipValue);
-  };
-
   useEffect(() => {
     axios
       .get("/board/샌드럴파크", { townName: "샌드럴파크" })
@@ -65,6 +42,36 @@ function SandralPark(props) {
         console.log("error", err);
       });
   }, []);
+
+  // 토글
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const changeOption = (value) => {
+    setSelectedOption(value);
+    console.log(selectedOption);
+  };
+  const radioOptions = [
+    {
+      value: "자유게시판",
+      label: "자유게시판",
+    },
+    {
+      value: "질문/답변",
+      label: "질문/답변",
+    },
+    {
+      value: "오늘의 밀",
+      label: "오늘의 밀",
+    },
+    {
+      value: "맛집 추천",
+      label: "맛집 추천",
+    },
+    {
+      value: "인기글",
+      label: "인기글",
+    },
+  ];
 
   return (
     <div>
@@ -93,54 +100,47 @@ function SandralPark(props) {
         <Button variant="contained" sx={{ height: "55px", marginLeft: "10px" }}>
           <SearchIcon />
         </Button>
-        <Stack
-          spacing={3}
-          alignItems="center"
-          sx={{ marginTop: "10px", marginBottom: "20px" }}
+
+        {/* 토글버튼 */}
+        <FormControl
+          sx={{
+            p: "5px",
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
         >
-          <Stack direction="row" spacing={1}>
-            <Chip
-              label="자유게시판"
-              color="primary"
-              variant="primary"
-              onClick={() => {
-                handleClick("자유게시판");
-              }}
-            />
-            <Chip
-              label="질문/답변"
-              color="primary"
-              variant="outlined"
-              onClick={() => {
-                handleClick("질문/답변");
-              }}
-            />
-            <Chip
-              label="오늘의 밀"
-              color="primary"
-              variant="outlined"
-              onClick={() => {
-                handleClick("오늘의 밀");
-              }}
-            />
-            <Chip
-              label="맛집 추천"
-              color="primary"
-              variant="outlined"
-              onClick={() => {
-                handleClick("맛집 추천");
-              }}
-            />
-            <Chip
-              label="인기글"
-              color="primary"
-              variant="outlined"
-              onClick={() => {
-                handleClick("인기글");
-              }}
-            />
-          </Stack>
-        </Stack>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="female"
+            name="radio-buttons-group"
+            sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}
+          >
+            {radioOptions.map((radioOption) => {
+              return (
+                <FormControlLabel
+                  value={radioOption.value}
+                  key={radioOption.value}
+                  control={
+                    <Chip
+                      color="primary"
+                      label={radioOption.label}
+                      variant={
+                        selectedOption === radioOption.value
+                          ? "filled"
+                          : "outlined"
+                      }
+                      sx={{ m: "5px" }}
+                      onClick={() => changeOption(radioOption.value)}
+                    />
+                  }
+                />
+              );
+            })}
+          </RadioGroup>
+        </FormControl>
+
         {/* 테이블 */}
         <TableContainer component={Card}>
           <Table sx={{ minWidth: 500 }} aria-label="simple table">
