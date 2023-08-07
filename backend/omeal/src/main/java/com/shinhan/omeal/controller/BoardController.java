@@ -61,6 +61,7 @@ public class BoardController {
     // 마을의 내용으로 게시글 조회
     @GetMapping("/{townname}/content")
     public List<ContentsDTO> getPostContentsList(@PathVariable TownName townname, String content) {
-        return boardService.getNicknameContentsList(townname, content);
+        System.out.println("--------------------------------내용!!"+content);
+        return boardService.getPostContentsList(townname, content);
     }
 }

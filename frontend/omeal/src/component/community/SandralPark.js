@@ -24,18 +24,15 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function SandralPark(props) {
-  const [search, setSearch] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
   const [postList, setPostList] = useState([]);
+  const [search, setSearch] = useState("");
 
-  const handleChange = (event) => {
-    setSearch(event.target.value);
-    console.log(event.target.value);
-  };
+  //처음 전체 게시물
   useEffect(() => {
     axios
-      .get("/board/샌드럴파크", { townName: "샌드럴파크" })
+      .get("/board/샌드럴파크", { townname: "샌드럴파크" })
       .then((res) => {
-        console.log(res.data);
         setPostList(res.data.map((data) => data));
       })
       .catch((err) => {
@@ -43,28 +40,101 @@ function SandralPark(props) {
       });
   }, []);
 
-  // 토글
+  ////검색
+  //검색 카테고리
+  const handleChange = (event) => {
+    setSearchCategory(event.target.value);
+  };
+
+  //검색창
+  const changeSearchHandle = (event) => {
+    setSearch(event.target.value);
+  };
+
+  //검색버튼
+  const searchSubmit = () => {
+    if (searchCategory === "title") {
+      //제목 검색
+      axios({
+        method: "get",
+        url: "/board/샌드럴파크/title",
+        params: { townname: "샌드럴파크", title: search },
+      })
+        .then((res) => {
+          setPostList(res.data.map((data) => data));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    } else if (searchCategory === "content") {
+      //내용 검색
+      console.log("내용", search);
+      axios({
+        method: "get",
+        url: "/board/샌드럴파크/content",
+        params: { townname: "샌드럴파크", content: search },
+      })
+        .then((res) => {
+          setPostList(res.data.map((data) => data));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    } else if (searchCategory === "writer") {
+      //작성자 검색
+      axios({
+        method: "get",
+        url: "/board/샌드럴파크/nick-name",
+        params: { townname: "샌드럴파크", nickname: search },
+      })
+        .then((res) => {
+          setPostList(res.data.map((data) => data));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    } else {
+      //검색카테고리 전체, 검색
+    }
+  };
+
+  // 게시물 카테고리
   const [selectedOption, setSelectedOption] = useState("");
 
   const changeOption = (value) => {
     setSelectedOption(value);
-    console.log(selectedOption);
   };
+
+  useEffect(() => {
+    if (selectedOption === "") return;
+    axios({
+      method: "get",
+      url: "/board/샌드럴파크/" + selectedOption,
+      params: { townname: "샌드럴파크", category: selectedOption },
+    })
+      .then((res) => {
+        setPostList(res.data.map((data) => data));
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [selectedOption]);
+
   const radioOptions = [
     {
       value: "자유게시판",
       label: "자유게시판",
     },
     {
-      value: "질문/답변",
+      value: "QnA",
       label: "질문/답변",
     },
     {
-      value: "오늘의 밀",
+      value: "오늘의밀",
       label: "오늘의 밀",
     },
     {
-      value: "맛집 추천",
+      value: "맛집추천",
       label: "맛집 추천",
     },
     {
@@ -82,7 +152,7 @@ function SandralPark(props) {
           <Select
             labelId="search-condition-label"
             id="search-condition"
-            value={search}
+            value={searchCategory}
             label="search"
             onChange={handleChange}
           >
@@ -96,8 +166,13 @@ function SandralPark(props) {
           label=""
           variant="outlined"
           sx={{ width: "300px" }}
+          onChange={changeSearchHandle}
         />
-        <Button variant="contained" sx={{ height: "55px", marginLeft: "10px" }}>
+        <Button
+          variant="contained"
+          sx={{ height: "55px", marginLeft: "10px" }}
+          onClick={searchSubmit}
+        >
           <SearchIcon />
         </Button>
 
@@ -146,7 +221,7 @@ function SandralPark(props) {
           <Table sx={{ minWidth: 500 }} aria-label="simple table">
             <TableHead>
               <TableRow sx={{ backgroundColor: "#FEF7ED" }}>
-                <TableCell>인덱스</TableCell>
+                <TableCell>번호</TableCell>
                 <TableCell align="right">제목</TableCell>
                 <TableCell align="right">작성자</TableCell>
                 <TableCell align="right">작성일</TableCell>
