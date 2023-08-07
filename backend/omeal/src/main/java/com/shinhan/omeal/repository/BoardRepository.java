@@ -3,6 +3,7 @@ package com.shinhan.omeal.repository;
 import com.shinhan.omeal.dto.community.BoardCategory;
 import com.shinhan.omeal.dto.community.TownName;
 import com.shinhan.omeal.entity.Board;
+import com.shinhan.omeal.entity.Members;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,6 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
     List<Board> findAllByTownNameAndCategory(TownName townName, BoardCategory category);
     List<Board> findTop10ByTownNameOrderByHitsDesc(TownName townName);
     List<Board> findAllByTownNameAndTitleContainingOrderByRegDateDesc(TownName townName, String title);
+    List<Board> findAllByTownNameAndMemberOrderByRegDateDesc(TownName townName, Members members);
+    List<Board> findAllByTownNameAndContentContainingOrderByRegDateDesc(TownName townName, String content);
 }

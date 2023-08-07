@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,5 +79,28 @@ public class BoardService {
     }
 
     // 마을의 닉네임으로 게시글 조회
+    @Transactional
+    public List<ContentsDTO> getNicknameContentsList(TownName townName, String nickname) {
+        List<Members> memlist = memRepo.findAllByMemberNickContaining(nickname);
+        System.out.println(memlist);
+        if(memlist.isEmpty())
+            return null;
 
+        List<ContentsDTO> dto = new LinkedList();
+        for(Members mem : memlist){
+            List<Board> boardList = boardRepo.findAllByTownNameAndMemberOrderByRegDateDesc(townName, mem);
+            System.out.println(mem.getMemberNick()+" "+boardList);
+            dto.addAll(boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList()));
+        }
+
+        return dto;
+    }
+
+    // 마을의 내용으로 게시글 조회
+    @Transactional
+    public List<ContentsDTO> getPostContentsList(TownName townName, String content) {
+        List<Board> boardList = boardRepo.findAllByTownNameAndContentContainingOrderByRegDateDesc(townName, content);
+        List<ContentsDTO> dto = boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList());
+        return dto;
+    }
 }

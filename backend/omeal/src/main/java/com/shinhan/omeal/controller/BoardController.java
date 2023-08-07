@@ -38,13 +38,11 @@ public class BoardController {
     // 특정 마을의 카테고리별 글 목록 조회
     @GetMapping("/{townname}/{category}")
     public List<ContentsDTO> getContentsList(@PathVariable TownName townname,@PathVariable BoardCategory category) {
+        if(category.equals("인기글")){
+            return boardService.getBestContentsList(townname);
+        }
         return boardService.getContentsCategory(townname,category);
-    }
 
-    // 특정 마을의 인기글 조회
-    @GetMapping("/{townname}/best")
-    public List<ContentsDTO> getBestContentsList(@PathVariable TownName townname){
-        return boardService.getBestContentsList(townname);
     }
 
     // 특정 마을의 제목으로 게시물 조회
@@ -53,10 +51,15 @@ public class BoardController {
         return boardService.getTitleContentsList(townname, title);
     }
 
-    // 특정 마을의 닉네임으로 게시물 죄회
+    // 특정 마을의 닉네임으로 게시물 조회
     @GetMapping("/{townname}/nick-name")
-    public void getNicknameContentsList(@PathVariable TownName townname, String nickname) {
-        //List<ContentsDTO>
-        System.out.println(townname + "  " + nickname);
+    public List<ContentsDTO> getNicknameContentsList(@PathVariable TownName townname, String nickName) {
+        return boardService.getNicknameContentsList(townname, nickName);
+    }
+
+    // 마을의 내용으로 게시글 조회
+    @GetMapping("/{townname}/content")
+    public List<ContentsDTO> getPostContentsList(@PathVariable TownName townname, String content) {
+        return boardService.getNicknameContentsList(townname, content);
     }
 }
