@@ -10,6 +10,11 @@ export const MemberGradeState = atom({
   default: "",
 });
 
+export const MemberNameState = atom({
+  key: "MemberNameState",
+  default: "",
+});
+
 export const MemberNickState = atom({
   key: "MemberNickState",
   default: "",
