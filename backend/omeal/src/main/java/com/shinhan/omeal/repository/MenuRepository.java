@@ -3,7 +3,6 @@ package com.shinhan.omeal.repository;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.entity.Allergy;
 import com.shinhan.omeal.entity.Menu;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -20,4 +19,7 @@ public interface MenuRepository extends CrudRepository<Menu, Long> {
     Set<Menu> findByCategory(SubscriptionCategory category);
 
     Set<Menu> findBySubcategory(String subCategory);
+
+    List<Menu> findByMenuName(String menuName);
+
 }
