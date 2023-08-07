@@ -19,8 +19,8 @@ import RiceSoupMinistry from "./component/community/RiceSoupMinistry";
 import GreenZone from "./component/community/GreenZone";
 import NoodleOffice from "./component/community/NoodleOffice";
 import KoreaTown from "./component/community/KoreaTown";
-import OmealLand from "./component/community/OmealLand";
 import Register from "./component/community/Register";
+import OmealLand from "./component/community/OmealLand";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -57,8 +57,7 @@ const App = () => {
             <Route path="omealland/salad" element={<GreenZone />} />
             <Route path="omealland/noodle" element={<NoodleOffice />} />
             <Route path="omealland/homemeal" element={<KoreaTown />} />
-            <Route path="omealland/register" element={<Register />}/>
-
+            <Route path="omealland/register" element={<Register />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
