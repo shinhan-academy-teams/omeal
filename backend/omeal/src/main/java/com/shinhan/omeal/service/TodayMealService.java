@@ -51,8 +51,9 @@ public class TodayMealService {
             // 구독 중인 음식 타입 메뉴 뽑기
             Set<Menu> allMenu = menuRepo.findByCategory(subscription.getCategory());
             // 알레르기 유무 확인
-            if(subscription.getMember().getMemberAllergy().size()!=0) {
-                allMenu = menuRepo.findByAllergyNotIn(subscription.getMember().getMemberAllergy());
+            if(!subscription.hasNotAllergy()) {
+                Set<Menu> allergyMenu = menuRepo.findByAllergyNotIn(subscription.getMemberAllergyInfo());
+                allMenu.removeAll(allergyMenu);
             }
             // 메뉴선정
             String todayMeal = getRandomMenu(allMenu);
