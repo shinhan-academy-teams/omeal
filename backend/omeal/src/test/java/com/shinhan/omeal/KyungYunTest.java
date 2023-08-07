@@ -1,12 +1,20 @@
 package com.shinhan.omeal;
 
+import com.shinhan.omeal.dto.todayMeal.FeedbackDTO;
+import com.shinhan.omeal.entity.Feedback;
 import com.shinhan.omeal.entity.Members;
+import com.shinhan.omeal.entity.Menu;
 import com.shinhan.omeal.entity.Subscription;
+import com.shinhan.omeal.repository.FeedbackRepository;
 import com.shinhan.omeal.repository.MembersRepository;
+import com.shinhan.omeal.repository.MenuRepository;
 import com.shinhan.omeal.repository.SubscriptionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @SpringBootTest
 public class KyungYunTest {
@@ -15,9 +23,33 @@ public class KyungYunTest {
     MembersRepository memRepo;
     @Autowired
     SubscriptionRepository subRepo;
+    @Autowired
+    MenuRepository menuRepo;
+    @Autowired
+    FeedbackRepository fbRepo;
+
+    // 피드백 남기기
+//    @Test
+    @Transactional
+    void submitFeedback() {
+        FeedbackDTO dto = new FeedbackDTO("test41@mail.com", "감자샐러드샌드위치", "like");
+
+        Members member = memRepo.findById(dto.getMemberId()).orElse(null);
+        List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
+        for (Menu menu : menuIdList) {
+            Feedback feedback = Feedback.builder()
+                    .member(member)
+                    .menu(menu)
+                    .build();
+
+            System.out.println(feedback);
+
+            fbRepo.save(feedback);
+        }
+    }
 
     // 회원의 연속 기간 가져오기
-    @Test
+//    @Test
     void getContinuousDays() {
         String input = "test5@mail.com";
 
