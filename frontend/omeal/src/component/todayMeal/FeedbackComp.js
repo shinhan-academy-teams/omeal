@@ -1,5 +1,6 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
+import OneMenu from "./OneMenu";
 
 function FeedbackComp(props) {
   return (
@@ -25,11 +26,15 @@ function FeedbackComp(props) {
         elevation={2}
         sx={{
           width: "80%",
-          aspectRatio: 1 / 1,
+          aspectRatio: 1.7 / 1,
           borderRadius: "20px",
         }}
       >
-        성향 마다 메뉴 개수가 다른데 어떻게 만들어야 할지 모르겠음
+        {/* 성향 마다 메뉴 개수가 다른데 어떻게 만들어야 할지 모르겠음 */}
+        <Grid container spacing={2}>
+          <OneMenu />
+          <OneMenu />
+        </Grid>
       </Paper>
     </>
   );
