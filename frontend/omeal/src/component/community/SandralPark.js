@@ -181,7 +181,6 @@ function SandralPark(props) {
         >
           <SearchIcon />
         </Button>
-
         {/* 토글버튼 */}
         <FormControl
           sx={{
@@ -221,39 +220,44 @@ function SandralPark(props) {
             })}
           </RadioGroup>
         </FormControl>
-
         {/* 테이블 */}
-        <TableContainer component={Card}>
-          <Table sx={{ minWidth: 500 }} aria-label="simple table">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#FEF7ED" }}>
+        <div className="tableScroll">
+          <TableContainer component={Card}>
+            <Table sx={{ minWidth: 500 }} aria-label="simple table">
+              <TableHead sx={{ backgroundColor: "#FEF7ED" }}>
+                <TableRow>
                 <TableCell>번호</TableCell>
-                <TableCell align="right">제목</TableCell>
-                <TableCell align="right">작성자</TableCell>
-                <TableCell align="right">작성일</TableCell>
-                <TableCell align="right">조회수</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {postList.map((post) => (
-                <TableRow
-                  key={post.postNo}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {post.postNo}
+                  <TableCell align="center">제목</TableCell>
+                  <TableCell align="center">작성자</TableCell>
+                  <TableCell align="center">작성일</TableCell>
+                  <TableCell align="center" style={{ width: 42 }}>
+                    조회수
                   </TableCell>
-                  <TableCell align="right">{post.title}</TableCell>
-                  <TableCell align="right">{post.member.memberNick}</TableCell>
-                  <TableCell align="right">
-                    {new Date(post.regDate).toISOString().split("T")[0]}
-                  </TableCell>
-                  <TableCell align="right">{post.hits}</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {postList.map((post) => (
+                  <TableRow
+                    key={post.postNo}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {post.postNo}
+                    </TableCell>
+                    <TableCell align="center">{post.title}</TableCell>
+                    <TableCell align="center">
+                      {post.member.memberNick}
+                    </TableCell>
+                    <TableCell align="center">
+                      {new Date(post.regDate).toISOString().split("T")[0]}
+                    </TableCell>
+                    <TableCell align="center">{post.hits}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
         <Button variant="contained" onClick={boardReg}>
           글 작성
         </Button>
