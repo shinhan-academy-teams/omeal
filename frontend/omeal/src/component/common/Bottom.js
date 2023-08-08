@@ -29,7 +29,7 @@ function Bottom(props) {
     <div>
       <Box sx={{ width: "100%" }}>
         <BottomNavigation
-          style={{ backgroundColor: "gray" }}
+          style={{ backgroundColor: "#ea5c2b" }}
           showLabels
           value={value}
           onChange={(event, newValue) => {

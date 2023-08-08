@@ -12,7 +12,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Button } from "@mui/material";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
-import logoImg from "../../assets/img/test.png";
+import logoImg from "../../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
