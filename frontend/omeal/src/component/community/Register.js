@@ -28,10 +28,11 @@ function Register(props) {
   const [showAlert, setShowAlert] = useState(false);
 
   //s3
-  const ACCESS_KEY = "AKIA2RBV2QZZZ35ERFWD";
-  const SECRET_ACCESS_KEY = "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"; //하드코딩
+  const ACCESS_KEY = "AKIA2RBV2QZZ5S3CQ74Y"; // S3 액세스키
+  const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY; //시크릿 키
   const REGION = "ap-northeast-2";
-  const S3_BUCKET = "omeal";
+  const S3_BUCKET = "omeal-jomeal";
+  console.log("시크릿키", SECRET_ACCESS_KEY);
 
   // 토글
   const [selectedOption, setSelectedOption] = useState("");
@@ -110,32 +111,30 @@ function Register(props) {
     photoString += "picture/" + selectedPhoto[i].name + "@";
   }
 
-  const uploadFile = (files) => {
-    console.log("~~사진 파일!!!!", files[0].name);
+  const uploadFile = (file) => {
+    console.log("~~사진 파일!!!!", file[0].type);
 
-    for (let i = 0; i < files.length; i++) {
-      const params = {
-        ACL: "public-read",
-        Body: files[i],
-        Bucket: S3_BUCKET,
-        Key: "picture/" + files[i].name,
-        ContentType: files[i].type,
-      };
+    const params = {
+      ACL: "public-read",
+      Body: file[0],
+      Bucket: S3_BUCKET,
+      Key: "picture/" + file[0].name,
+      ContentType: file[0].type,
+    };
 
-      myBucket
-        .putObject(params)
-        .on("httpUploadProgress", (evt) => {
-          setProgress(Math.round((evt.loaded / evt.total) * 100));
-          setShowAlert(true);
-          setTimeout(() => {
-            setShowAlert(false);
-            setSelectedPhoto([]);
-          }, 3000);
-        })
-        .send((err) => {
-          if (err) console.log("에러", err);
-        });
-    }
+    myBucket
+      .putObject(params)
+      .on("httpUploadProgress", (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100));
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+          setSelectedPhoto([]);
+        }, 3000);
+      })
+      .send((err) => {
+        if (err) console.log("에러", err);
+      });
   };
 
   const onClickRegister = (e) => {
