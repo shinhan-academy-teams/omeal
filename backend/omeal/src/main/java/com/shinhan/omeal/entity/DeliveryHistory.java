@@ -52,4 +52,13 @@ public class DeliveryHistory {
         this.status = status;
     }
 
+    public DeliveryHistoryDTO getDeliveryHistoryDTO() {
+        DeliveryHistoryDTO dto = new DeliveryHistoryDTO();
+        dto.setDate(this.deliveryDate);
+        dto.setMenu(this.menu);
+        dto.setDeliveryAddr(this.deliveryAddr);
+        dto.setStatus(this.status);
+        return dto;
+    }
+
 }
