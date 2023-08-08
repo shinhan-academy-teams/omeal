@@ -1,5 +1,6 @@
 package com.shinhan.omeal.controller;
 
+import com.shinhan.omeal.dto.delivery.DeliveryHistoryDTO;
 import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
@@ -9,6 +10,8 @@ import com.shinhan.omeal.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,4 +51,11 @@ public class MyPageController {
     public String userCardUpdate(@RequestBody CardDTO cardDTO){
         return cardService.update(cardDTO, cardDTO.getMember().getMemberId());
     }
+
+    // 배송내역
+    @GetMapping("/delivery-info")
+    public List<DeliveryHistoryDTO> getDeliveryHistory(String memId) {
+        return mypageservice.getDeliveryHistory(memId);
+    }
+
 }
