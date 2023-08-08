@@ -28,11 +28,10 @@ function Register(props) {
   const [showAlert, setShowAlert] = useState(false);
 
   //s3
-  const ACCESS_KEY = "AKIA2RBV2QZZ5S3CQ74Y"; // S3 액세스키
+  const ACCESS_KEY = "AKIA2RBV2QZZXODHE65T"; // S3 액세스키
   const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY; //시크릿 키
   const REGION = "ap-northeast-2";
   const S3_BUCKET = "omeal-jomeal";
-  console.log("시크릿키", SECRET_ACCESS_KEY);
 
   // 토글
   const [selectedOption, setSelectedOption] = useState("");
@@ -74,7 +73,7 @@ function Register(props) {
   //AWS 연결
   AWS.config.update({
     accessKeyId: ACCESS_KEY,
-    scretAccessKey: SECRET_ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
   });
 
   const myBucket = new AWS.S3({
