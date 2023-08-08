@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Button, Grid, IconButton, Typography } from "@mui/material";
+import { Button, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -200,15 +200,17 @@ function SignUpComp(props) {
             }}
           >
             <Box mr={2}>
-              <IconButton aria-label="checkIdDup" onClick={checkIdDup}>
-                {idAvailable ? (
-                  <CheckCircleIcon sx={{ fontSize: 32, color: "olive" }} />
-                ) : (
-                  <CheckCircleOutlineIcon
-                    sx={{ fontSize: 32, color: "black" }}
-                  />
-                )}
-              </IconButton>
+              <Tooltip title="중복 체크" arrow placement="top">
+                <IconButton aria-label="checkIdDup" onClick={checkIdDup}>
+                  {idAvailable ? (
+                    <CheckCircleIcon sx={{ fontSize: 32, color: "olive" }} />
+                  ) : (
+                    <CheckCircleOutlineIcon
+                      sx={{ fontSize: 32, color: "black" }}
+                    />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Box>
           </Grid>
           {idRegexBool ? (
@@ -314,15 +316,17 @@ function SignUpComp(props) {
             }}
           >
             <Box mr={2}>
-              <IconButton aria-label="checkNickDup" onClick={checkNickDup}>
-                {nickAvailable ? (
-                  <CheckCircleIcon sx={{ fontSize: 32, color: "olive" }} />
-                ) : (
-                  <CheckCircleOutlineIcon
-                    sx={{ fontSize: 32, color: "black" }}
-                  />
-                )}
-              </IconButton>
+              <Tooltip title="중복 체크" arrow placement="top">
+                <IconButton aria-label="checkNickDup" onClick={checkNickDup}>
+                  {nickAvailable ? (
+                    <CheckCircleIcon sx={{ fontSize: 32, color: "olive" }} />
+                  ) : (
+                    <CheckCircleOutlineIcon
+                      sx={{ fontSize: 32, color: "black" }}
+                    />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Box>
           </Grid>
           <Grid item xs={12}>

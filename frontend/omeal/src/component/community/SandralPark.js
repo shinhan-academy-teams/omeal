@@ -25,24 +25,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function SandralPark(props) {
-  const [search, setSearch] = useState("");
   const [postList, setPostList] = useState([]);
+  const [searchCategory, setSearchCategory] = useState(""); //검색 조건
+  const [search, setSearch] = useState(""); //검색내용
+  const [selectedOption, setSelectedOption] = useState(""); //옵션
 
   const navi = useNavigate();
   const boardReg = () => {
     navi("/omealland/register");
   };
 
-  const handleChange = (event) => {
-    setSearch(event.target.value);
-    console.log(event.target.value);
-  };
-
+  //처음 전체 게시물
   useEffect(() => {
     axios
-      .get("/board/샌드럴파크", { townName: "샌드럴파크" })
+      .get("/board/샌드럴파크", { townname: "샌드럴파크" })
       .then((res) => {
-        console.log(res.data);
         setPostList(res.data.map((data) => data));
       })
       .catch((err) => {
@@ -50,28 +47,123 @@ function SandralPark(props) {
       });
   }, []);
 
-  // 토글
-  const [selectedOption, setSelectedOption] = useState("");
+  //검색조건
+  const handleChange = (event) => {
+    setSearchCategory(event.target.value);
+  };
 
+  //검색창
+  const changeSearchHandle = (event) => {
+    setSearch(event.target.value);
+  };
+
+  //검색 옵션
   const changeOption = (value) => {
     setSelectedOption(value);
-    console.log(selectedOption);
   };
+
+  ////검색 버튼 클릭시
+  const searchSubmit = () => {
+    //검색 옵션 있을때
+    if (selectedOption) {
+      if (searchCategory === "") {
+        //옵션O, 카테고리X
+        axios({
+          method: "get",
+          url: `/board/샌드럴파크/${selectedOption}/10`,
+        })
+          .then((res) => {
+            setPostList(res.data.map((data) => data));
+          })
+          .catch((err) => {
+            console.log("error", err);
+          });
+      } else {
+        //제목, 내용, 작성자별
+        axios({
+          method: "get",
+          url: "/board/샌드럴파크/" + selectedOption + "/" + searchCategory,
+          params: {
+            topic: search,
+          },
+        })
+          .then((res) => {
+            setPostList(res.data.map((data) => data));
+          })
+          .catch((err) => {
+            console.log("error", err);
+          });
+      }
+    } else {
+      //검색 옵션 선택 안했을때 ok
+      axios({
+        method: "get",
+        url: "/board/샌드럴파크/" + searchCategory,
+        params: {
+          townname: "샌드럴파크",
+          category: searchCategory,
+          topic: search,
+        },
+      })
+        .then((res) => {
+          setPostList(res.data.map((data) => data));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  };
+
+  //검색 버튼 클릭 안하고 옵션만 변경할때
+  useEffect(() => {
+    //카테고리 선택 전
+    if (selectedOption === "") return;
+
+    //카테고리 선택 후, 옵션적용
+    if (searchCategory.length > 0 && selectedOption) {
+      axios({
+        method: "get",
+        url: "/board/샌드럴파크/" + selectedOption + "/" + searchCategory,
+        params: {
+          topic: search,
+        },
+      })
+        .then((res) => {
+          setPostList(res.data.map((data) => data));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    } else {
+      //옵션만 바뀌고 검색 안했을때
+      axios({
+        method: "get",
+        url: `/board/샌드럴파크/${selectedOption}/10`,
+      })
+        .then((res) => {
+          setPostList(res.data.map((data) => data));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [selectedOption]);
+
   const radioOptions = [
     {
       value: "자유게시판",
       label: "자유게시판",
     },
     {
-      value: "질문/답변",
+      value: "QnA",
       label: "질문/답변",
     },
     {
-      value: "오늘의 밀",
+      value: "오늘의밀",
       label: "오늘의 밀",
     },
     {
-      value: "맛집 추천",
+      value: "맛집추천",
       label: "맛집 추천",
     },
     {
@@ -89,13 +181,13 @@ function SandralPark(props) {
           <Select
             labelId="search-condition-label"
             id="search-condition"
-            value={search}
+            value={searchCategory}
             label="search"
             onChange={handleChange}
           >
             <MenuItem value={"title"}>제목</MenuItem>
             <MenuItem value={"content"}>내용</MenuItem>
-            <MenuItem value={"writer"}>작성자</MenuItem>
+            <MenuItem value={"nick-name"}>작성자</MenuItem>
           </Select>
         </FormControl>
         <TextField
@@ -103,8 +195,13 @@ function SandralPark(props) {
           label=""
           variant="outlined"
           sx={{ width: "300px" }}
+          onChange={changeSearchHandle}
         />
-        <Button variant="contained" sx={{ height: "55px", marginLeft: "10px" }}>
+        <Button
+          variant="contained"
+          sx={{ height: "55px", marginLeft: "10px" }}
+          onClick={searchSubmit}
+        >
           <SearchIcon />
         </Button>
         {/* 토글버튼 */}
@@ -152,7 +249,7 @@ function SandralPark(props) {
             <Table sx={{ minWidth: 500 }} aria-label="simple table">
               <TableHead sx={{ backgroundColor: "#FEF7ED" }}>
                 <TableRow>
-                  <TableCell></TableCell>
+                  <TableCell>번호</TableCell>
                   <TableCell align="center">제목</TableCell>
                   <TableCell align="center">작성자</TableCell>
                   <TableCell align="center">작성일</TableCell>

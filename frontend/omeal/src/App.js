@@ -46,8 +46,6 @@ const App = () => {
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
             <Route path="subscription" element={<Subscription />} />
-            <Route path="/subscription" element={<Subscription />} />
-
             <Route path="mypage" element={<Mypage />} />
             <Route path="card-info" element={<CardInfo />} />
             <Route path="sub-info" element={<SubInfo />} />
@@ -61,8 +59,7 @@ const App = () => {
             <Route path="omealland/salad" element={<GreenZone />} />
             <Route path="omealland/noodle" element={<NoodleOffice />} />
             <Route path="omealland/homemeal" element={<KoreaTown />} />
-            <Route path="omealland/register" element={<Register />}/>
-
+            <Route path="omealland/register" element={<Register />} />
 
             <Route path="today-meal" element={<TodayMeal />} />
             <Route path="today-meal/feedback" element={<Feedback />} />
