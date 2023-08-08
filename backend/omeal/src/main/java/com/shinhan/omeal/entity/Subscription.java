@@ -80,4 +80,14 @@ public class Subscription {
         return list;
     }
 
+    // 구독 회원 알레르기 유무
+    public boolean hasNotAllergy() {
+        return this.member.hasNotAllergy();
+    }
+
+    // 구독 회원 알레르기 정보 가져오기
+    public List<Allergy> getMemberAllergyInfo() {
+        return this.member.getMemberAllergyInfo();
+    }
+
 }

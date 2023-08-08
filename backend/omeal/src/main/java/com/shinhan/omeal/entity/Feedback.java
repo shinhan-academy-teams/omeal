@@ -1,10 +1,16 @@
 package com.shinhan.omeal.entity;
 
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Table(name = "FEEDBACK")
 @SequenceGenerator(name = "FEEDBACK_SEQ_GEN", sequenceName = "FEEDBACK_SEQ", initialValue = 1, allocationSize = 1)
 public class Feedback {
