@@ -4,6 +4,7 @@ import com.shinhan.omeal.dto.delivery.DeliveryHistoryDTO;
 import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
+import com.shinhan.omeal.dto.subscription.PaymentDTO;
 import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
 import com.shinhan.omeal.service.CardService;
 import com.shinhan.omeal.service.MyPageService;
@@ -57,6 +58,12 @@ public class MyPageController {
     @GetMapping("/delivery-info")
     public List<DeliveryHistoryDTO> getDeliveryHistory(String memId) {
         return mypageservice.getDeliveryHistory(memId);
+    }
+
+    // 결제내역
+    @GetMapping("/payment-info")
+    public List<PaymentDTO> getPayHistory(String memId) {
+        return mypageservice.getPaymentHistory(memId);
     }
 
 }
