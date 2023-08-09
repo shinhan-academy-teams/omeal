@@ -88,4 +88,11 @@ public class Subscription {
         return this.member.getMemberAllergyInfo();
     }
 
+    // 구독 회원 정보 갱신
+    public void updateSubscription(LocalDate endDate) {
+        this.startDate = LocalDate.now();
+        this.endDate = endDate;
+        this.payDate = LocalDateTime.now();
+    }
+
 }

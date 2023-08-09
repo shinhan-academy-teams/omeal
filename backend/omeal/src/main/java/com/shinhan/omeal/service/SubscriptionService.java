@@ -63,6 +63,28 @@ public class SubscriptionService {
         return "OK";
     }
 
+    // 구독정보 갱신
+    public void updateSubscriptionInfo() {
+        LocalDate today = LocalDate.now();
+        subRepo.findAll().forEach(subscription -> {
+            if(subscription.getEndDate().isBefore(today)){
+                History history = History.builder()
+                        .member(subscription.getMember())
+                        .subType(subscription.getSubType())
+                        .category(subscription.getCategory())
+                        .status(SubscriptionStatus.END)
+                        .payDate(subscription.getPayDate())
+                        .startDate(subscription.getStartDate())
+                        .endDate(subscription.getEndDate())
+                        .build();
+                historyRepo.save(history);
+                LocalDate newEndDate = calEndDate(subscription.getSubType());
+                subscription.updateSubscription(newEndDate);
+                subRepo.save(subscription);
+            }
+        });
+    }
+
     // 첫 배송 예정일 안내
     public LocalDate calFirstDeliveryDate() {
         LocalDate today = LocalDate.now();
