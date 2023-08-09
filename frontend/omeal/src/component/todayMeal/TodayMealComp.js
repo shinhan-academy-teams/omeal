@@ -14,7 +14,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { MemberNameState, SignInState } from "../../recoil/SignInState";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import noodleImg from "../../../src/assets/img/menuCategory/noodle.png";
 import bibimbapImg from "../../../src/assets/img/menuCategory/bibimbap.png";
@@ -22,6 +22,8 @@ import saladImg from "../../../src/assets/img/menuCategory/salad.png";
 import sandwichImg from "../../../src/assets/img/menuCategory/sandwich.png";
 import soupImg from "../../../src/assets/img/menuCategory/soup.png";
 import homeImg from "../../../src/assets/img/menuCategory/home.png";
+import { FeedbackState } from "../../recoil/FeedbackState";
+import Swal from "sweetalert2";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
@@ -30,12 +32,11 @@ function TodayMealComp(props) {
   const memberName = useRecoilValue(MemberNameState);
   const [delivery, setDelivery] = useState({});
   const [elevation, setElevation] = useState(2);
-
   const steps = ["배송 준비중", "배송중", "배송 완료"];
-
   const [activeStep, setActiveStep] = useState(-1);
-
   const [categoryNo, setCategoryNo] = useState("");
+  const [feedbackStatus, setFeedbackStatus] = useRecoilState(FeedbackState);
+  const [todayMealStatus, setTodayMealStatus] = useState(0);
 
   // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
   const categoryImg = [
@@ -54,7 +55,14 @@ function TodayMealComp(props) {
       params: { memberId: memberId },
     })
       .then((response) => {
-        setDelivery(response.data);
+        const dto = response.data;
+        console.log("dto : " + dto);
+        if (dto !== "") {
+          setDelivery(dto);
+          setFeedbackStatus(dto.feedbackStatus);
+        } else {
+          setTodayMealStatus(1);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -119,7 +127,8 @@ function TodayMealComp(props) {
             조금만 기다려주세요!
             <br />
             {memberName} 님의 식사가{" "}
-            <span style={{ color: "#FF7F3F" }}>{steps[activeStep]}</span>입니다.
+            <span style={{ color: "#FF7F3F" }}>{steps[activeStep]}</span>
+            입니다.
           </Typography>
         ) : (
           <>
@@ -127,7 +136,7 @@ function TodayMealComp(props) {
               식사가 <span style={{ color: "#FF7F3F" }}>{steps[2]}</span>
               되었습니다!
               <br />
-              {memberName} 님, 맛있게 드세요 :)
+              {memberName} 님, 맛있게 드세요
             </Typography>
           </>
         )}
@@ -144,7 +153,12 @@ function TodayMealComp(props) {
             borderRadius: "20px",
           }}
           onClick={() => {
-            navi("/today-meal/feedback", { state: delivery });
+            feedbackStatus === 0
+              ? navi("/today-meal/feedback", { state: delivery })
+              : Swal.fire({
+                  icon: "warning",
+                  text: "오늘은 이미 의견을 남겨주셨습니다!",
+                });
           }}
         >
           <Grid
