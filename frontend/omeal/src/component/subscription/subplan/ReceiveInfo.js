@@ -23,7 +23,7 @@ function ReceiveInfo(props) {
     <Box
       component="form"
       sx={{
-        "& > :not(style)": { m: 1, width: "450px" },
+        "& > :not(style)": { m: 2, width: "450px" },
       }}
       noValidate
       autoComplete="off"

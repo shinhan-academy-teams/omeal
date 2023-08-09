@@ -22,7 +22,7 @@ function SelectContainer(props) {
   }, []);
 
   return (
-    <Box sx={{ width: 450 }}>
+    <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
       <ToggleButtonGroup
         color="primary"
         value={containerType}

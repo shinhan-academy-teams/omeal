@@ -60,7 +60,7 @@ function SelectAllergy(props) {
   };
 
   return (
-    <Box sx={{ width: 450 }}>
+    <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
       <Grid container spacing={2} style={{ margin: "20px 0px" }}>
         <Grid item xs={3}>
           <ToggleButtonGroup

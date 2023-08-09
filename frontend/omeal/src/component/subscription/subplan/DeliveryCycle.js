@@ -25,7 +25,8 @@ function DeliveryCycle(props) {
   }, []);
 
   return (
-    <Box sx={{ width: 450 }}>
+    <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+      {/* <Box sx={{ width: 450 }}></Box> */}
       <ToggleButtonGroup
         color="primary"
         value={subType}

@@ -2,6 +2,7 @@ import {
   Box,
   FormControl,
   FormLabel,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -41,7 +42,12 @@ function DeliveryInfo(props) {
     <Box
       component="form"
       sx={{
-        "& > :not(style)": { m: 1, width: "450px" },
+        "& > :not(style)": {
+          m: 2,
+          width: "450px",
+          // display: "flex",
+          // justifyContent: "center",
+        },
       }}
       noValidate
       autoComplete="off"
@@ -62,10 +68,14 @@ function DeliveryInfo(props) {
       />
 
       <FormControl>
-        <FormLabel id="demo-radio-buttons-group-label">
+        <FormLabel
+          id="demo-radio-buttons-group-label"
+          style={{ display: "flex" }}
+        >
           공동현관 출입 여부
         </FormLabel>
         <ToggleButtonGroup
+          style={{ marginBottom: 15 }}
           color="primary"
           exclusive
           value={doorPwd}
@@ -73,6 +83,7 @@ function DeliveryInfo(props) {
           aria-label="text alignment"
         >
           <ToggleButton
+            style={{ width: "100%" }}
             value="yesPwd"
             aria-label="yesPwd"
             onClick={() => setShow(true)}
@@ -80,6 +91,7 @@ function DeliveryInfo(props) {
             비밀번호
           </ToggleButton>
           <ToggleButton
+            style={{ width: "100%" }}
             value="noPwd"
             aria-label="noPwd"
             onClick={() => setShow(false)}
@@ -88,13 +100,7 @@ function DeliveryInfo(props) {
           </ToggleButton>
         </ToggleButtonGroup>
         {show && (
-          <div id="divshow" style={{ display: "block" }}>
-            <TextField
-              id="outlined-basic"
-              label="비밀번호"
-              variant="outlined"
-            />
-          </div>
+          <TextField id="outlined-basic" label="비밀번호" variant="outlined" />
         )}
       </FormControl>
       <FormControl>
