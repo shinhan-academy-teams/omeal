@@ -15,6 +15,7 @@ import CardInfo from "./component/mypage/CardInfo";
 import SubInfo from "./component/mypage/SubInfo";
 import UserInfo from "./component/mypage/UserInfo";
 import Feedback from "./pages/todayMeal/Feedback";
+import Worldcup from "./pages/worldcup/Worldcup";
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
   const theme = createTheme({
@@ -45,6 +46,8 @@ const App = () => {
 
             <Route path="today-meal" element={<TodayMeal />} />
             <Route path="today-meal/feedback" element={<Feedback />} />
+
+            <Route path="food-worldcup" element={<Worldcup />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
