@@ -7,7 +7,6 @@ import Diversity3Icon from "@mui/icons-material/Diversity3";
 import MopedIcon from "@mui/icons-material/Moped";
 import EggIcon from "@mui/icons-material/Egg";
 import { useNavigate } from "react-router-dom";
-import eggImg from "../../assets/img/egg2.png";
 import { useRecoilValue } from "recoil";
 import { MemberGradeState } from "../../recoil/SignInState";
 import eggImg1 from "../../assets/img/egg1.png";
