@@ -1,18 +1,21 @@
 package com.shinhan.omeal.service;
 
+import com.shinhan.omeal.dto.delivery.DeliveryHistoryDTO;
 import com.shinhan.omeal.dto.members.MyPageUserInfoDTO;
 import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
-import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
 import com.shinhan.omeal.entity.Allergy;
+import com.shinhan.omeal.entity.DeliveryHistory;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import com.shinhan.omeal.repository.MembersRepository;
 import com.shinhan.omeal.repository.SubscriptionRepository;
+import com.shinhan.omeal.repository.TodayMealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 public class MyPageService {
     final MembersRepository memRepo;
     final SubscriptionRepository subRepo;
+    final TodayMealRepository tmRepo;
 
     @Transactional
     public String update(MyPageUserInfoDTO userInfo) {
@@ -59,4 +63,15 @@ public class MyPageService {
         }
 
     }
+
+    // 마이페이지 - 배송내역
+    public List<DeliveryHistoryDTO> getDeliveryHistory(String memId) {
+        Members member = memRepo.findById(memId).orElse(null);
+        List<DeliveryHistoryDTO> history = new ArrayList<>();
+        tmRepo.findAllByMemberOrderByDeliveryDateDesc(member).forEach(deliveryHistory -> {
+            history.add(deliveryHistory.getDeliveryHistoryDTO());
+        });
+        return history;
+    }
+
 }

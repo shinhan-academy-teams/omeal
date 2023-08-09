@@ -1,12 +1,12 @@
 package com.shinhan.omeal.service;
 
+import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.entity.Allergy;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import com.shinhan.omeal.repository.AllergyRepository;
-import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.repository.MembersRepository;
 import com.shinhan.omeal.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;

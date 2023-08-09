@@ -14,7 +14,18 @@ import Mypage from "./component/mypage/Mypage";
 import CardInfo from "./component/mypage/CardInfo";
 import SubInfo from "./component/mypage/SubInfo";
 import UserInfo from "./component/mypage/UserInfo";
+import SandralPark from "./component/community/SandralPark";
+import BibimLab from "./component/community/BibimLab";
+import RiceSoupMinistry from "./component/community/RiceSoupMinistry";
+import GreenZone from "./component/community/GreenZone";
+import NoodleOffice from "./component/community/NoodleOffice";
+import KoreaTown from "./component/community/KoreaTown";
+import Register from "./component/community/Register";
+import OmealLand from "./component/community/OmealLand";
 import Feedback from "./pages/todayMeal/Feedback";
+import PostView from "./component/community/PostView";
+import DeliveryInfo from "./component/mypage/DeliveryInfo";
+
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
   const theme = createTheme({
@@ -36,15 +47,32 @@ const App = () => {
         <Routes location={location}>
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
-            <Route path="/subscription" element={<Subscription />} />
-
+            <Route path="subscription" element={<Subscription />} />
             <Route path="mypage" element={<Mypage />} />
             <Route path="card-info" element={<CardInfo />} />
             <Route path="sub-info" element={<SubInfo />} />
             <Route path="user-info" element={<UserInfo />} />
+            <Route path="delivery-info" element={<DeliveryInfo />} />
+
+            {/* 커뮤니티 */}
+            <Route path="omealland" element={<OmealLand />} />
+            <Route path="omealland/sandwich" element={<SandralPark />} />
+
+            <Route
+              path="omealland/sandwich/PostView/:no"
+              element={<PostView />}
+            />
+
+            <Route path="omealland/bibimbap" element={<BibimLab />} />
+            <Route path="omealland/ricesoup" element={<RiceSoupMinistry />} />
+            <Route path="omealland/salad" element={<GreenZone />} />
+            <Route path="omealland/noodle" element={<NoodleOffice />} />
+            <Route path="omealland/homemeal" element={<KoreaTown />} />
+            <Route path="omealland/register" element={<Register />} />
 
             <Route path="today-meal" element={<TodayMeal />} />
             <Route path="today-meal/feedback" element={<Feedback />} />
+            <Route path="omealland/register" element={<Register />} />
           </Route>
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
