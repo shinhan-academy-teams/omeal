@@ -62,6 +62,13 @@ public class BoardController {
         }
     }
 
+    //게시글 내용
+    @GetMapping("/{townname}/detail/{no}")
+    public BoardDTO getBoardDetail(@PathVariable Long no) {
+
+        return boardService.getBoardDetail(no);
+    }
+
     // 마을 + 옵션 + 카테고리 + 검색어
     @GetMapping("/{townname}/{option}/{category}")
     public List<ContentsDTO> getOptionContentsList(@PathVariable TownName townname, @PathVariable BoardCategory option, @PathVariable String category, String topic) {
