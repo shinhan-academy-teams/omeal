@@ -47,7 +47,6 @@ function FoodCategory(props) {
 
   return (
     <>
-      {/* <Box mb={2} ml={2} mr={2}> */}
       <Box
         sx={{ display: "flex", justifyContent: "center", mb: 2, ml: 2, mr: 2 }}
       >

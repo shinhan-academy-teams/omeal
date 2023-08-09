@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import firecracker from "../../assets/firecracker.png";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -147,7 +147,7 @@ function Notice(props) {
   const step = `${props.progress}/${props.total}`;
   const title = [
     {
-      1: "배송 주기 선택",
+      1: "구독 주기 선택",
       2: "식사 용기 선택",
       3: "음식 카테고리 선택",
       4: "음식 알러지 선택",
@@ -177,14 +177,21 @@ function Notice(props) {
           style={{ display: "flex", alignItems: "center" }}
         >
           <Grid container spacing={0}>
-            <Grid item xs={4}>
-              <Chip label={step} color="primary" />
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1.5}>
+              <Chip
+                style={{ display: "flex", alignItems: "center" }}
+                label={step}
+                color="primary"
+              />
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h5" align="left" gutterBottom>
+            <Grid item xs={7}>
+              <Typography variant="h5" align="center" gutterBottom>
                 {title[props.step][props.progress]}
               </Typography>
+              <br />
             </Grid>
+            <Grid item xs={2.5}></Grid>
           </Grid>
         </div>
         {props.step === 0 ? (
