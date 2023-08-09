@@ -16,12 +16,12 @@ import { useState } from "react";
 import { MemberNameState, SignInState } from "../../recoil/SignInState";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
-import noodleImg from "../../../src/assets/img/menuCategory/noodle.png";
-import bibimbapImg from "../../../src/assets/img/menuCategory/bibimbap.png";
-import saladImg from "../../../src/assets/img/menuCategory/salad.png";
-import sandwichImg from "../../../src/assets/img/menuCategory/sandwich.png";
-import soupImg from "../../../src/assets/img/menuCategory/soup.png";
-import homeImg from "../../../src/assets/img/menuCategory/home.png";
+import noodleImg from "../../assets/img/menuCategory/noodle.png";
+import bibimbapImg from "../../assets/img/menuCategory/bibimbap.png";
+import saladImg from "../../assets/img/menuCategory/salad.png";
+import sandwichImg from "../../assets/img/menuCategory/sandwich.png";
+import soupImg from "../../assets/img/menuCategory/soup.png";
+import homeImg from "../../assets/img/menuCategory/home.png";
 import { FeedbackState } from "../../recoil/FeedbackState";
 import Swal from "sweetalert2";
 
