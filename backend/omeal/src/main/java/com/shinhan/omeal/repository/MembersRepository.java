@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface MembersRepository extends CrudRepository<Members, String> {
 
-    public Members findByMemberNick(String memberNick);
+    Members findByMemberNick(String memberNick);
 
     List<Members> findAllByMemberNickContaining(String memberNick);
 }

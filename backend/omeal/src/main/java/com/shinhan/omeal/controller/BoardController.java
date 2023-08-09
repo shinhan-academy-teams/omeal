@@ -21,6 +21,7 @@ public class BoardController {
     // 글 게시
     @PostMapping("/register")
     public String boardRegister(@RequestBody BoardDTO dto) {
+        System.out.println("___________________________"+dto);
         return boardService.post(dto);
     }
 

@@ -1,5 +1,7 @@
 import {
   Box,
+  Divider,
+  Grid,
   Paper,
   Step,
   StepLabel,
@@ -14,31 +16,36 @@ import { useState } from "react";
 import { MemberNameState, SignInState } from "../../recoil/SignInState";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
-import noodleImg from "../../../src/assets/img/noodle.webp";
-import bibimbapImg from "../../../src/assets/img/bibimbap.webp";
-import saladImg from "../../../src/assets/img/salad.webp";
-import sandwichImg from "../../../src/assets/img/sandwich.webp";
+import noodleImg from "../../../src/assets/img/menuCategory/noodle.png";
+import bibimbapImg from "../../../src/assets/img/menuCategory/bibimbap.png";
+import saladImg from "../../../src/assets/img/menuCategory/salad.png";
+import sandwichImg from "../../../src/assets/img/menuCategory/sandwich.png";
+import soupImg from "../../../src/assets/img/menuCategory/soup.png";
+import homeImg from "../../../src/assets/img/menuCategory/home.png";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
 
   const memberId = useRecoilValue(SignInState);
   const memberName = useRecoilValue(MemberNameState);
+  const [delivery, setDelivery] = useState({});
+  const [elevation, setElevation] = useState(2);
 
   const steps = ["배송 준비중", "배송중", "배송 완료"];
+
+  const [activeStep, setActiveStep] = useState(-1);
+
   const [categoryNo, setCategoryNo] = useState("");
 
   // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
   const categoryImg = [
     noodleImg,
-    noodleImg,
     bibimbapImg,
     saladImg,
     sandwichImg,
-    noodleImg,
+    soupImg,
+    homeImg,
   ];
-
-  const [activeStep, setActiveStep] = useState(-1);
 
   useEffect(() => {
     axios({
@@ -47,37 +54,40 @@ function TodayMealComp(props) {
       params: { memberId: memberId },
     })
       .then((response) => {
-        console.log(response.data);
-        const result = response.data;
-        const category = result.category;
-        if (category === "애국자") {
-          setCategoryNo(0);
-        } else if (category === "국밥부장관") {
-          setCategoryNo(1);
-        } else if (category === "비빔대감") {
-          setCategoryNo(2);
-        } else if (category === "샐러디안") {
-          setCategoryNo(3);
-        } else if (category === "샌드위치백작") {
-          setCategoryNo(4);
-        } else if (category === "면장님") {
-          setCategoryNo(5);
-        }
-
-        if (result.status === "배송준비중") {
-          setActiveStep(0);
-        } else if (result.status === "배송중") {
-          setActiveStep(1);
-        } else if (result.status === "배송완료") {
-          setActiveStep(3);
-        } else {
-          setActiveStep(-1);
-        }
+        setDelivery(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    console.log(delivery);
+
+    if (delivery.status === "배송준비중") {
+      setActiveStep(0);
+    } else if (delivery.status === "배송중") {
+      setActiveStep(1);
+    } else if (delivery.status === "배송완료") {
+      setActiveStep(3);
+    } else {
+      setActiveStep(-1);
+    }
+
+    if (delivery.category === "면장님") {
+      setCategoryNo(0);
+    } else if (delivery.category === "비빔대감") {
+      setCategoryNo(1);
+    } else if (delivery.category === "샐러디안") {
+      setCategoryNo(2);
+    } else if (delivery.category === "샌드위치백작") {
+      setCategoryNo(3);
+    } else if (delivery.category === "국밥부장관") {
+      setCategoryNo(4);
+    } else if (delivery.category === "애국자") {
+      setCategoryNo(5);
+    }
+  }, [delivery]);
 
   return (
     <>
@@ -95,7 +105,7 @@ function TodayMealComp(props) {
         </Stepper>
       </Box>
       <Box
-        my={3}
+        my={5}
         sx={{
           width: "80%",
           backgroundColor: "#FEF7ED",
@@ -124,19 +134,48 @@ function TodayMealComp(props) {
       </Box>
       <Tooltip title="피드백 남기기" arrow placement="top">
         <Paper
-          elevation={2}
+          elevation={elevation}
+          onMouseEnter={() => setElevation(8)}
+          onMouseLeave={() => setElevation(2)}
           sx={{
             cursor: "pointer",
             width: "80%",
-            aspectRatio: 1.7 / 1,
+            height: "auto",
             borderRadius: "20px",
           }}
           onClick={() => {
-            navi("/today-meal/feedback");
+            navi("/today-meal/feedback", { state: delivery });
           }}
         >
-          성향 마다 메뉴 개수가 다른데 어떻게 만들어야 할지 모르겠음
-          <img alt="" src={categoryImg[categoryNo]} width={"60%"}></img>
+          <Grid
+            container
+            spacing={2}
+            p={2}
+            justify="flex-end"
+            alignItems="center"
+          >
+            <Grid item xs={6}>
+              <img
+                alt="menu"
+                src={categoryImg[categoryNo]}
+                width="200px"
+                style={{ borderRadius: "20px" }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Box py={3} px={2}>
+                <Typography variant="h6">오늘의 밀</Typography>
+                <Divider variant="middle" sx={{ borderBottomWidth: 3 }} />
+                <Typography
+                  variant="body1"
+                  mt={3}
+                  sx={{ letterSpacing: "0.2em" }}
+                >
+                  {delivery.menu}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </Paper>
       </Tooltip>
     </>

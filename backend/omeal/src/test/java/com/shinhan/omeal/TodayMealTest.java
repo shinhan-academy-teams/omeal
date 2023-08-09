@@ -2,7 +2,6 @@ package com.shinhan.omeal;
 
 import com.shinhan.omeal.dto.delivery.DeliveryStatus;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
-import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.entity.*;
 import com.shinhan.omeal.repository.MembersRepository;
 import com.shinhan.omeal.repository.MenuRepository;
@@ -36,7 +35,7 @@ public class TodayMealTest {
     void getMemberAllergyTest() {
         Members member = memRepo.findById("test2@mail.com").orElse(null);
         List<Allergy> memberAllergyList = member.getMemberAllergy();
-        Set<Menu> menuSet = menuRepo.findByAllergyNotIn(memberAllergyList);
+        Set<Menu> menuSet = menuRepo.findByAllergyIn(memberAllergyList);
         System.out.println(menuSet.size());
     }
 
@@ -46,7 +45,7 @@ public class TodayMealTest {
         List<Subscription> subscriptionList = new ArrayList<>();
         subRepo.findAll().forEach(subscription -> {
             List<Allergy> memberAllergyList = subscription.getMember().getMemberAllergy();
-            Set<Menu> menuSet = menuRepo.findByAllergyNotIn(memberAllergyList);
+            Set<Menu> menuSet = menuRepo.findByAllergyIn(memberAllergyList);
             System.out.println(menuSet.size());
 
         });
@@ -58,10 +57,12 @@ public class TodayMealTest {
         // 서비스 구독중인 회원 목록
         subRepo.findAll().forEach(subscription -> {
             // 구독 중인 음식 타입 메뉴 뽑기
-            Set<Menu> allMenu = menuRepo.findByCategory(SubscriptionCategory.샌드위치백작); //subscription.getCategory()
+            Set<Menu> allMenu = menuRepo.findByCategory(subscription.getCategory());
+            System.out.println(subscription.getCategory());
             // 알레르기 유무 확인
             if(subscription.getMember().getMemberAllergy().size()!=0) {
-                allMenu = menuRepo.findByAllergyNotIn(subscription.getMember().getMemberAllergy());
+                Set<Menu> allergyMenu = menuRepo.findByAllergyIn(subscription.getMember().getMemberAllergy());
+                allMenu.removeAll(allergyMenu);
             }
             // 랜덤으로 오늘의 메뉴 선정
             long size = allMenu.size();
@@ -94,5 +95,15 @@ public class TodayMealTest {
             tmRepo.save(history);
         });
 
+    }
+
+    @Test
+    void findByCategoryTest(){
+        Members member = memRepo.findById("asdf@naver.com").orElse(null);
+        subRepo.findByMember(member).getCategory();
+        Set<Menu> allmenu = menuRepo.findByCategory(subRepo.findByMember(member).getCategory());
+        allmenu.forEach(menu->{
+            System.out.println(menu.getMenuName());
+        });
     }
 }

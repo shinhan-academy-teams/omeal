@@ -14,5 +14,8 @@ public interface TodayMealRepository extends CrudRepository<DeliveryHistory, Lon
     List<DeliveryHistory> findByMemberOrderByDeliveryNoDesc(Members member);
 
     // 시간별 배송목록
-    public List<DeliveryHistory> findAllByMemberIn(List<Members> member);
+    List<DeliveryHistory> findAllByMemberIn(List<Members> member);
+    
+    // 멤버별 배송내역
+    List<DeliveryHistory> findAllByMemberOrderByDeliveryDateDesc(Members member);
 }

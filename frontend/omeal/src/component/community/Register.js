@@ -5,7 +5,10 @@ import {
   Chip,
   FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
   RadioGroup,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,14 +16,15 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
-// import AWS from "aws-sdk";
+import AWS from "aws-sdk";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 function Register(props) {
   const memberId = useRecoilValue(SignInState);
   const [inputTitle, setInputTitle] = useState("");
   const [inputContents, setInputContents] = useState("");
-  //const [inputPhoto, setInputPhoto] = [useState("")];
+  const [selectTownName, setSelectTownName] = useState("");
 
   //사진 업로드
   const [progress, setProgress] = useState(0);
@@ -28,10 +32,10 @@ function Register(props) {
   const [showAlert, setShowAlert] = useState(false);
 
   //s3
-  const ACCESS_KEY = "AKIA2RBV2QZZZ35ERFWD";
-  const SECRET_ACCESS_KEY = "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"; //하드코딩
+  const ACCESS_KEY = "AKIA2RBV2QZZXODHE65T"; // S3 액세스키
+  const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY; //시크릿 키
   const REGION = "ap-northeast-2";
-  const S3_BUCKET = "omeal";
+  const S3_BUCKET = "omeal-jomeal";
 
   // 토글
   const [selectedOption, setSelectedOption] = useState("");
@@ -70,97 +74,135 @@ function Register(props) {
     },
   ];
 
-  // //AWS 연결
-  // AWS.config.update({
-  //   accessKeyId: ACCESS_KEY,
-  //   scretAccessKey: SECRET_ACCESS_KEY,
-  // });
+  //AWS 연결
+  AWS.config.update({
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  });
 
-  // const myBucket = new AWS.S3({
-  //   params: { Bucket: S3_BUCKET },
-  //   region: REGION,
-  // });
+  const myBucket = new AWS.S3({
+    params: { Bucket: S3_BUCKET },
+    region: REGION,
+  });
 
-  // const handlePhotoInput = (e) => {
-  //   for (let i = 0; i < e.target.files.length; i++) {
-  //     //파일갯수만큼 반복
-  //     const file = e.target.files[i];
-  //     const fileExt = file.name.split(".").pop();
+  const handlePhotoInput = (e) => {
+    for (let i = 0; i < e.target.files.length; i++) {
+      //파일갯수만큼 반복
+      const file = e.target.files[i];
+      const fileExt = file.name.split(".").pop();
 
-  //     if (
-  //       (file.type !== "image/jpeg" || fileExt !== "jpeg") &
-  //       (file.type !== "image/png" || fileExt !== "png") &
-  //       (file.type !== "image/jpg" || fileExt !== "jpg")
-  //     ) {
-  //       alert("jpg, jpeg, png파일만 업로드 가능합니다.");
-  //       return;
-  //     }
-  //     setProgress(0);
-  //     setSelectedPhoto(e.target.files);
-  //   }
-  // };
+      if (
+        (file.type !== "image/jpeg" || fileExt !== "jpeg") &
+        (file.type !== "image/png" || fileExt !== "png") &
+        (file.type !== "image/jpg" || fileExt !== "jpg")
+      ) {
+        alert("jpg, jpeg, png파일만 업로드 가능합니다.");
+        return;
+      }
+      setProgress(0);
+      setSelectedPhoto(e.target.files);
+    }
+  };
 
-  // useEffect(() => {
-  //   console.log("사진", selectedPhoto);
-  // }, [selectedPhoto]);
+  useEffect(() => {
+    console.log("사진", selectedPhoto);
+  }, [selectedPhoto]);
 
-  // var photoString = "";
-  // for (var i = 0; i < selectedPhoto.length; i++) {
-  //   console.log("사진이름", selectedPhoto[i].name);
-  //   photoString += "picture/" + selectedPhoto[i].name + "@";
-  // }
+  var photoString = "";
+  for (var i = 0; i < selectedPhoto.length; i++) {
+    photoString += "picture/" + selectedPhoto[i].name + "@";
+  }
 
-  // const uploadFile = (files) => {
-  //   console.log("~~사진 파일!!!!", files[0].name);
+  const uploadFile = (file) => {
+    const params = {
+      ACL: "public-read",
+      Body: file[0],
+      Bucket: S3_BUCKET,
+      Key: "picture/" + file[0].name,
+      ContentType: file[0].type,
+    };
 
-  //   for (let i = 0; i < files.length; i++) {
-  //     const params = {
-  //       ACL: "public-read",
-  //       Body: files[i],
-  //       Bucket: S3_BUCKET,
-  //       Key: "picture/" + files[i].name,
-  //       ContentType: files[i].type,
-  //     };
-
-  //     myBucket
-  //       .putObject(params)
-  //       .on("httpUploadProgress", (evt) => {
-  //         setProgress(Math.round((evt.loaded / evt.total) * 100));
-  //         setShowAlert(true);
-  //         setTimeout(() => {
-  //           setShowAlert(false);
-  //           setSelectedPhoto([]);
-  //         }, 3000);
-  //       })
-  //       .send((err) => {
-  //         if (err) console.log("에러", err);
-  //       });
-  //   }
-  // };
+    myBucket
+      .putObject(params)
+      .on("httpUploadProgress", (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100));
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+          setSelectedPhoto([]);
+        }, 3000);
+      })
+      .send((err) => {
+        if (err) console.log("에러", err);
+      });
+  };
 
   const onClickRegister = (e) => {
-    axios({
-      method: "post",
-      url: "/board/register",
-      data: JSON.stringify({
-        member: { memberId: memberId },
-        title: inputTitle,
-        content: inputContents,
-        //photo: photoString,
-        category: selectedOption,
-        townName: "샌드럴파크",
-      }),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((r) => {})
-      .catch((err) => {
-        console.log(err);
+    if (selectTownName.length <= 0) {
+      Swal.fire({
+        icon: "error",
+        text: "타운을 선택해주세요",
       });
+    } else if (inputTitle.length <= 0) {
+      Swal.fire({
+        icon: "error",
+        text: "제목을 입력해주세요",
+      });
+    } else if (selectedOption.length <= 0) {
+      Swal.fire({
+        icon: "error",
+        text: "카테고리를 골라주세요",
+      });
+    } else if (inputContents.length <= 0) {
+      Swal.fire({
+        icon: "error",
+        text: "게시물을 작성해주세요",
+      });
+    } else {
+      axios({
+        method: "post",
+        url: "/board/register",
+        data: JSON.stringify({
+          member: { memberId: memberId },
+          title: inputTitle,
+          content: inputContents,
+          photo: photoString,
+          category: selectedOption,
+          townName: selectTownName,
+        }),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((r) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const handleTown = (event) => {
+    setSelectTownName(event.target.value);
   };
 
   return (
     <div>
       <Box sx={{ width: "500px" }}>
+        <FormControl fullWidth sx={{ marginTop: "5px" }}>
+          <InputLabel id="demo-simple-select-label">타운 선택</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={selectTownName}
+            label="town"
+            onChange={handleTown}
+          >
+            <MenuItem value={"코리아타운"}>코리아타운</MenuItem>
+            <MenuItem value={"국밥부"}>국밥부</MenuItem>
+            <MenuItem value={"비빔연구소"}>비빔연구소</MenuItem>
+            <MenuItem value={"녹색지대"}>녹색지대</MenuItem>
+            <MenuItem value={"면사무소"}>면사무소</MenuItem>
+            <MenuItem value={"샌드럴파크"}>샌드럴파크</MenuItem>
+          </Select>
+        </FormControl>
         {/* 토글버튼 */}
         <FormControl
           sx={{
@@ -222,7 +264,9 @@ function Register(props) {
 
         {/* 사진등록 */}
         {showAlert ? (
-          <Alert severity="info">업로드 진행률:{progress}%</Alert>
+          <Alert severity="info" sx={{ margin: "5px" }}>
+            업로드 진행률:{progress}%
+          </Alert>
         ) : (
           <Typography />
         )}
@@ -234,16 +278,20 @@ function Register(props) {
             // onChange={handlePhotoInput}
             accept={"image/*"}
           />
-          {/* {selectedPhoto.length > 0 ? (
-            <Button color="primary" onClick={() => uploadFile(selectedPhoto)}>
+          {selectedPhoto.length > 0 ? (
+            <Button
+              color="primary"
+              variant="outlined"
+              sx={{ height: "55px", marginTop: 3, marginLeft: 2 }}
+              onClick={() => uploadFile(selectedPhoto)}
+            >
               업로드
             </Button>
-          ) : null} */}
+          ) : null}
         </div>
 
         <Button
           variant="contained"
-          href="/omealland/register"
           sx={{ marginTop: "30px" }}
           onClick={onClickRegister}
         >

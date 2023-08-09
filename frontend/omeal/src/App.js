@@ -22,9 +22,10 @@ import NoodleOffice from "./component/community/NoodleOffice";
 import KoreaTown from "./component/community/KoreaTown";
 import Register from "./component/community/Register";
 import OmealLand from "./component/community/OmealLand";
-
 import Feedback from "./pages/todayMeal/Feedback";
 import PostView from "./component/community/PostView";
+import DeliveryInfo from "./component/mypage/DeliveryInfo";
+
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
   const theme = createTheme({
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="card-info" element={<CardInfo />} />
             <Route path="sub-info" element={<SubInfo />} />
             <Route path="user-info" element={<UserInfo />} />
+            <Route path="delivery-info" element={<DeliveryInfo />} />
 
             {/* 커뮤니티 */}
             <Route path="omealland" element={<OmealLand />} />

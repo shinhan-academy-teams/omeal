@@ -72,9 +72,19 @@ public class Members {
         this.memberTel = userInfo.getMemberTel();
     }
 
+    // 회원 알레르기 정보 확인
+    public List<Allergy> getMemberAllergyInfo() {
+        return this.memberAllergy;
+    }
+
     // 회원 알레르기 정보 업데이트
     public void updateAllergy(List<Allergy> allergyList) {
         this.memberAllergy = allergyList;
+    }
+
+    // 회원 알레르기 유무 확인
+    public boolean hasNotAllergy() {
+        return this.memberAllergy.isEmpty();
     }
 
     public static Members toEntity(MembersDTO dto) {

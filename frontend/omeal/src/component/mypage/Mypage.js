@@ -35,6 +35,10 @@ function Mypage(props) {
   const cardInfo = () => {
     navi("/card-info");
   };
+
+  const DeliveryInfo = () => {
+    navi("/delivery-info");
+  };
   return (
     <>
       <Box
@@ -81,7 +85,9 @@ function Mypage(props) {
               구독 정보
             </Button>
             <br></br>
-            <Button variant="contained">배송 내역</Button>
+            <Button variant="contained" onClick={DeliveryInfo}>
+              배송 내역
+            </Button>
             <br></br>
             <Button variant="contained">결제 내역</Button>
           </Box>

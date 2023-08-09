@@ -28,7 +28,7 @@
   color: #61dafb;
 }
 .nav {
-  background-color: gray;
+  background-color: #ea5c2b;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,7 +36,7 @@
   height: 80;
 }
 .bottom-nav {
-  background-color: gray;
+  background-color: #ea5c2b;
   display: flex;
   justify-content: space-between;
   align-items: center;
