@@ -57,16 +57,16 @@ function Register(props) {
       label: "자유게시판",
     },
     {
-      value: "질문/답변",
+      value: "QnA",
       label: "질문/답변",
     },
     {
-      value: "오늘의 밀",
-      label: "오늘의 밀",
+      value: "오늘의밀",
+      label: "오늘의밀",
     },
     {
-      value: "맛집 추천",
-      label: "맛집 추천",
+      value: "맛집추천",
+      label: "맛집추천",
     },
     {
       value: "인기글",
@@ -110,6 +110,7 @@ function Register(props) {
 
   var photoString = "";
   for (var i = 0; i < selectedPhoto.length; i++) {
+    console.log("사진이름", selectedPhoto[i].name);
     photoString += "picture/" + selectedPhoto[i].name + "@";
   }
 
@@ -159,6 +160,8 @@ function Register(props) {
         text: "게시물을 작성해주세요",
       });
     } else {
+      console.log("사진~~~~~~~~~~~~~~~~", photoString);
+      console.log("타운~~~~~~~~~~~~~~~~", selectTownName);
       axios({
         method: "post",
         url: "/board/register",
@@ -175,12 +178,15 @@ function Register(props) {
         .then((r) => {})
         .catch((err) => {
           console.log(err);
+          console.log("사진~~~~~~~~~~~~~~!!", photoString);
+          console.log("타운~~~~~~~~~~~~~~!!", selectTownName);
         });
     }
   };
 
   const handleTown = (event) => {
     setSelectTownName(event.target.value);
+    console.log("타운명 : ", selectTownName);
   };
 
   return (
