@@ -27,7 +27,6 @@ public class TodayMealService {
     final MenuRepository menuRepo;
     final SubscriptionRepository subRepo;
     final FeedbackRepository feedbackRepo;
-    final DeliveryHistory dh;
 
     // 피드백 남기기
     public DeliveryHistory submitFeedback(@RequestBody FeedbackDTO dto) {
