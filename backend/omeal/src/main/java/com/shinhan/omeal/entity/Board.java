@@ -6,10 +6,7 @@ import com.shinhan.omeal.dto.community.BoardCategory;
 import com.shinhan.omeal.dto.community.BoardDTO;
 import com.shinhan.omeal.dto.community.ContentsDTO;
 import com.shinhan.omeal.dto.community.TownName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
 
+@Getter
 @Entity
 @Builder
 @NoArgsConstructor

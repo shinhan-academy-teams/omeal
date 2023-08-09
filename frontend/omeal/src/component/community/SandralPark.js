@@ -22,7 +22,7 @@ import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SandralPark(props) {
   const [postList, setPostList] = useState([]);
@@ -267,7 +267,11 @@ function SandralPark(props) {
                     <TableCell component="th" scope="row">
                       {post.postNo}
                     </TableCell>
-                    <TableCell align="center">{post.title}</TableCell>
+                    <TableCell align="center">
+                      <Link to={`/omealland/sandwich/PostView/${post.postNo}`}>
+                        {post.title}
+                      </Link>
+                    </TableCell>
                     <TableCell align="center">
                       {post.member.memberNick}
                     </TableCell>

@@ -1,10 +1,8 @@
 package com.shinhan.omeal.service;
 
-import com.shinhan.omeal.dto.community.BoardCategory;
-import com.shinhan.omeal.dto.community.BoardDTO;
-import com.shinhan.omeal.dto.community.ContentsDTO;
-import com.shinhan.omeal.dto.community.TownName;
+import com.shinhan.omeal.dto.community.*;
 import com.shinhan.omeal.entity.Board;
+import com.shinhan.omeal.entity.Comments;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.BoardRepository;
 import com.shinhan.omeal.repository.MembersRepository;
@@ -21,6 +19,15 @@ import java.util.stream.Collectors;
 public class BoardService {
     private final MembersRepository memRepo;
     private final BoardRepository boardRepo;
+    private final CommentService commentService;
+
+    //
+    public BoardDTO getBoardDetail(Long no){
+        Board board = boardRepo.findById(no).get();
+        List<CommentDTO> commentsList = commentService.getComments(no);
+
+        return BoardDTO.toBoardDTO(board, commentsList);
+    }
 
     // 게시판 글 게시
     @Transactional
@@ -168,4 +175,6 @@ public class BoardService {
         List<ContentsDTO> dto = boardList.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
         return dto;
     }
+
+
 }

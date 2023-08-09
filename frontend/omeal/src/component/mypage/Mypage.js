@@ -12,6 +12,10 @@ import {
 import FlutterDashIcon from "@mui/icons-material/FlutterDash";
 import FlipCameraIosIcon from "@mui/icons-material/FlipCameraIos";
 import FlightIcon from "@mui/icons-material/Flight";
+import eggImg1 from "../../assets/img/egg1.png";
+import eggImg2 from "../../assets/img/egg2.png";
+import eggImg3 from "../../assets/img/egg3.png";
+import eggImg4 from "../../assets/img/egg4.png";
 
 function Mypage(props) {
   //멤버 닉네임 & 구독 개월수
@@ -49,45 +53,13 @@ function Mypage(props) {
       >
         <div style={{ display: "flex" }}>
           {memberGrade === "날계란" ? (
-            <EggIcon
-              sx={{
-                marginBottom: 10,
-                fontSize: 150,
-                margin: "auto",
-                cursor: "pointer",
-              }}
-              onClick={userInfo}
-            ></EggIcon>
+            <img alt="" src={eggImg1}></img>
           ) : memberGrade === "반숙란" ? (
-            <FlutterDashIcon
-              sx={{
-                marginBottom: 10,
-                fontSize: 150,
-                margin: "auto",
-                cursor: "pointer",
-              }}
-              onClick={userInfo}
-            ></FlutterDashIcon>
+            <img alt="" src={eggImg2}></img>
           ) : memberGrade === "완숙란" ? (
-            <FlipCameraIosIcon
-              sx={{
-                marginBottom: 10,
-                fontSize: 150,
-                margin: "auto",
-                cursor: "pointer",
-              }}
-              onClick={userInfo}
-            ></FlipCameraIosIcon>
+            <img alt="" src={eggImg3}></img>
           ) : (
-            <FlightIcon
-              sx={{
-                marginBottom: 10,
-                fontSize: 150,
-                margin: "auto",
-                cursor: "pointer",
-              }}
-              onClick={userInfo}
-            ></FlightIcon>
+            <img alt="" src={eggImg4}></img>
           )}
 
           <Box

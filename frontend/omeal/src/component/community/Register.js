@@ -110,7 +110,6 @@ function Register(props) {
 
   var photoString = "";
   for (var i = 0; i < selectedPhoto.length; i++) {
-    console.log("사진이름", selectedPhoto[i].name);
     photoString += "picture/" + selectedPhoto[i].name + "@";
   }
 
@@ -160,8 +159,6 @@ function Register(props) {
         text: "게시물을 작성해주세요",
       });
     } else {
-      console.log("사진~~~~~~~~~~~~~~~~", photoString);
-      console.log("타운~~~~~~~~~~~~~~~~", selectTownName);
       axios({
         method: "post",
         url: "/board/register",
@@ -178,15 +175,12 @@ function Register(props) {
         .then((r) => {})
         .catch((err) => {
           console.log(err);
-          console.log("사진~~~~~~~~~~~~~~!!", photoString);
-          console.log("타운~~~~~~~~~~~~~~!!", selectTownName);
         });
     }
   };
 
   const handleTown = (event) => {
     setSelectTownName(event.target.value);
-    console.log("타운명 : ", selectTownName);
   };
 
   return (
@@ -281,7 +275,7 @@ function Register(props) {
             sx={{ width: "80%", marginTop: 3 }}
             type="file"
             placeholder="사진파일 업로드"
-            onChange={handlePhotoInput}
+            // onChange={handlePhotoInput}
             accept={"image/*"}
           />
           {selectedPhoto.length > 0 ? (
