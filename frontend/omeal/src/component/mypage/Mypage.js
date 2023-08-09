@@ -3,18 +3,31 @@ import CardImg from "../../assets/img/card.png";
 import EggIcon from "@mui/icons-material/Egg";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import {
+  ContinuousDaysState,
+  MemberGradeState,
+  MemberNickState,
+} from "../../recoil/SignInState";
+import FlutterDashIcon from "@mui/icons-material/FlutterDash";
+import FlipCameraIosIcon from "@mui/icons-material/FlipCameraIos";
+import FlightIcon from "@mui/icons-material/Flight";
 
 function Mypage(props) {
-  const navi = useNavigate();
+  //멤버 닉네임 & 구독 개월수
+  const memberNick = useRecoilValue(MemberNickState);
+  const memberGrade = useRecoilValue(MemberGradeState);
+  const continuousDay = useRecoilValue(ContinuousDaysState);
 
+  console.log(memberGrade);
+
+  const navi = useNavigate();
   const userInfo = () => {
     navi("/user-info");
   };
-
   const subInfo = () => {
     navi("/sub-info");
   };
-
   const cardInfo = () => {
     navi("/card-info");
   };
@@ -35,18 +48,51 @@ function Mypage(props) {
         autoComplete="off"
       >
         <div style={{ display: "flex" }}>
-          <EggIcon
-            sx={{
-              marginBottom: 10,
-              fontSize: 150,
-              margin: "auto",
-              cursor: "pointer",
-            }}
-            onClick={userInfo}
-          ></EggIcon>
+          {memberGrade === "날계란" ? (
+            <EggIcon
+              sx={{
+                marginBottom: 10,
+                fontSize: 150,
+                margin: "auto",
+                cursor: "pointer",
+              }}
+              onClick={userInfo}
+            ></EggIcon>
+          ) : memberGrade === "반숙란" ? (
+            <FlutterDashIcon
+              sx={{
+                marginBottom: 10,
+                fontSize: 150,
+                margin: "auto",
+                cursor: "pointer",
+              }}
+              onClick={userInfo}
+            ></FlutterDashIcon>
+          ) : memberGrade === "완숙란" ? (
+            <FlipCameraIosIcon
+              sx={{
+                marginBottom: 10,
+                fontSize: 150,
+                margin: "auto",
+                cursor: "pointer",
+              }}
+              onClick={userInfo}
+            ></FlipCameraIosIcon>
+          ) : (
+            <FlightIcon
+              sx={{
+                marginBottom: 10,
+                fontSize: 150,
+                margin: "auto",
+                cursor: "pointer",
+              }}
+              onClick={userInfo}
+            ></FlightIcon>
+          )}
+
           <Box
             sx={{
-              width: 230,
+              width: 270,
               height: 250,
               backgroundColor: "#fef7ed",
               flexDirection: "column",
@@ -55,7 +101,14 @@ function Mypage(props) {
             noValidate
             autoComplete="off"
           >
-            <h3>누구 구독중이다 새꺄</h3>
+            {continuousDay < 0 ? (
+              <h3>{memberNick}님 구독안하고있음</h3>
+            ) : (
+              <h3>
+                {memberNick}님 {continuousDay}일 째 구독 중
+              </h3>
+            )}
+
             <Button variant="contained" onClick={subInfo}>
               구독 정보
             </Button>
