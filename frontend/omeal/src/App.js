@@ -23,6 +23,7 @@ import KoreaTown from "./component/community/KoreaTown";
 import Register from "./component/community/Register";
 import OmealLand from "./component/community/OmealLand";
 import Feedback from "./pages/todayMeal/Feedback";
+import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
 
@@ -72,8 +73,10 @@ const App = () => {
 
             <Route path="today-meal" element={<TodayMeal />} />
             <Route path="today-meal/feedback" element={<Feedback />} />
-            <Route path="omealland/register" element={<Register />} />
+
+            <Route path="food-worldcup" element={<Worldcup />} />             
           </Route>
+
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
             <Route path="sign-up" element={<SignUp />} />
