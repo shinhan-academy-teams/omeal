@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -14,8 +14,9 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
 import logoImg from "../../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
+import axios from "axios";
 
 function Header(props) {
   const navi = useNavigate();
@@ -29,7 +30,7 @@ function Header(props) {
     navi("/");
   };
 
-  const memberId = useRecoilValue(SignInState);
+  const [memberId, setMemberId] = useRecoilState(SignInState);
 
   const [state, setState] = React.useState({
     right: false,
@@ -44,6 +45,21 @@ function Header(props) {
     }
 
     setState({ state, [anchor]: open });
+  };
+
+  const logout = () => {
+    axios({
+      method: "GET",
+      url: "/auth/log-out",
+    })
+      .then((response) => {
+        setMemberId("");
+        navi("/");
+      })
+      .catch((err) => {
+        console.log(memberId);
+        console.log(err);
+      });
   };
 
   const list = (anchor) => (
@@ -89,7 +105,7 @@ function Header(props) {
       </List>
 
       <List>
-        <ListItem disablePadding>
+        <ListItem disablePadding onClick={logout}>
           <ListItemButton>
             <ListItemIcon>
               <MailIcon />
