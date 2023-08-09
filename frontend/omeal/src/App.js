@@ -26,6 +26,8 @@ import Feedback from "./pages/todayMeal/Feedback";
 import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
+import Notice from "component/common/Notice";
+import FAQ from "component/common/FAQ";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -48,6 +50,8 @@ const App = () => {
         <Routes location={location}>
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
+            <Route path="notice" element={<Notice />} />
+            <Route path="faq" element={<FAQ />} />
             <Route path="subscription" element={<Subscription />} />
             <Route path="mypage" element={<Mypage />} />
             <Route path="card-info" element={<CardInfo />} />
@@ -74,7 +78,7 @@ const App = () => {
             <Route path="today-meal" element={<TodayMeal />} />
             <Route path="today-meal/feedback" element={<Feedback />} />
 
-            <Route path="food-worldcup" element={<Worldcup />} />             
+            <Route path="food-worldcup" element={<Worldcup />} />
           </Route>
 
           <Route path="/auth" element={<NoNavBar />}>
