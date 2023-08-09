@@ -32,8 +32,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  height: 80;
+  padding: 0 12px;
+  height: 56px;
 }
 .bottom-nav {
   background-color: #ea5c2b;
