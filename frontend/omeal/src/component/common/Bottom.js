@@ -40,19 +40,20 @@ function Bottom(props) {
     <div>
       <Box sx={{ width: "100%" }}>
         <BottomNavigation
-          style={{ backgroundColor: "#ea5c2b" }}
+          sx={{ backgroundColor: "#ea5c2b" }}
           showLabels
-          value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
           }}
         >
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="홈"
             icon={<HomeIcon />}
             onClick={main}
           />
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="커뮤니티"
             icon={<Diversity3Icon />}
             onClick={omealland}
@@ -69,11 +70,13 @@ function Bottom(props) {
           )}
 
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="오늘의 밀"
             icon={<MopedIcon />}
             onClick={todayMeal}
           />
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="마이페이지"
             icon={<EggIcon />}
             onClick={myPage}
