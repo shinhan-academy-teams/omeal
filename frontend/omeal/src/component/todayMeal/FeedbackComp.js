@@ -13,12 +13,13 @@ import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
 import { useState } from "react";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { FeedbackState } from "../../recoil/FeedbackState";
 
 function FeedbackComp(props) {
   const navi = useNavigate();
@@ -27,6 +28,8 @@ function FeedbackComp(props) {
 
   const [dislike, setDislike] = useState(false);
   const [like, setLike] = useState(false);
+  const [feedbackStatus, setFeedbackStatus] = useRecoilState(FeedbackState);
+  console.log("status : " + feedbackStatus);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -67,6 +70,7 @@ function FeedbackComp(props) {
         url: "/today-meal/feedback",
         method: "post",
         data: JSON.stringify({
+          deliveryNo: state.deliveryNo,
           memberId: memberId,
           menuName: state.menu,
           feedback: dislike ? "dislike" : "like",
@@ -74,7 +78,8 @@ function FeedbackComp(props) {
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => {
-          // console.log(res.data);
+          setFeedbackStatus(res.data.feedbackStatus);
+          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -104,7 +109,7 @@ function FeedbackComp(props) {
           <br />
           피드백을 남겨주시면
           <br />
-          다음 식사부터 반영하겠습니다 :)
+          다음 식사부터 반영하겠습니다
         </Typography>
       </Box>
 
