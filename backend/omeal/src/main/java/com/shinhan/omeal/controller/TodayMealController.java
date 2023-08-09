@@ -2,6 +2,7 @@ package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.todayMeal.FeedbackDTO;
 import com.shinhan.omeal.dto.todayMeal.TodayMealDTO;
+import com.shinhan.omeal.entity.DeliveryHistory;
 import com.shinhan.omeal.service.TodayMealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class TodayMealController {
 
     // 피드백 남기기
     @PostMapping(value = "/feedback", consumes = "application/json")
-    public String submitFeedback(@RequestBody FeedbackDTO dto) {
+    public DeliveryHistory submitFeedback(@RequestBody FeedbackDTO dto) {
         return tmService.submitFeedback(dto);
     }
 }
