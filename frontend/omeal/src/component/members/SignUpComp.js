@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function SignUpComp(props) {
   const navi = useNavigate();
@@ -61,7 +62,10 @@ function SignUpComp(props) {
         .then((response) => {
           setIdAvailable(response.data > 0 ? true : false);
           if (response.data === -1) {
-            alert("해당 이메일은 이미 사용중입니다.");
+            Swal.fire({
+              icon: "warning",
+              text: "해당 이메일은 이미 사용중입니다.",
+            });
           }
         })
         .catch((error) => {
@@ -96,7 +100,10 @@ function SignUpComp(props) {
         .then((response) => {
           setNickAvailable(response.data > 0 ? true : false);
           if (response.data === -1) {
-            alert("해당 닉네임은 이미 사용중입니다.");
+            Swal.fire({
+              icon: "warning",
+              text: "해당 닉네임은 이미 사용중입니다.",
+            });
           }
         })
         .catch((error) => {
