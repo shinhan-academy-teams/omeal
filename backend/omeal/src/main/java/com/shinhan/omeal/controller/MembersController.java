@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -36,8 +39,17 @@ public class MembersController {
 
     // 로그인
     @PostMapping(value = "/sign-in", consumes = "application/json", produces = "application/json")
-    public MembersDTO signIn(@RequestBody MembersDTO membersDto) {
-        return membersService.signIn(membersDto);
+    public MembersDTO signIn(@RequestBody MembersDTO membersDto, HttpServletRequest httpServletRequest) {
+        MembersDTO dto = membersService.signIn(membersDto);
+
+        if(dto!=null){ // 로그인 성공 => 세션 생성
+            httpServletRequest.getSession().invalidate(); // 세션을 생성하기 전에 기존의 세션 파기
+            HttpSession session = httpServletRequest.getSession(true); // Session이 없으면 생성
+            session.setAttribute("userDTO", dto); // 세션에 userId를 넣어줌
+            session.setMaxInactiveInterval(0); // 유효시간 무한
+        }
+
+        return dto;
     }
 
     // 회원가입
@@ -47,5 +59,15 @@ public class MembersController {
         return membersService.signUp(cardDto); // 성공시 "success"
     }
 
-
+    // 로그아웃
+    @GetMapping("/log-out")
+    public String logOut(HttpServletRequest httpServletRequest){
+        HttpSession session = httpServletRequest.getSession(false);
+        if(session==null)
+            return "Fail";
+        else {
+            session.invalidate();
+            return "Success";
+        }
+    }
 }
