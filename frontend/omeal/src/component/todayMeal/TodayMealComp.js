@@ -3,6 +3,7 @@ import {
   Divider,
   Grid,
   Paper,
+  Skeleton,
   Step,
   StepLabel,
   Stepper,
@@ -24,17 +25,21 @@ import soupImg from "../../assets/img/menuCategory/soup.png";
 import homeImg from "../../assets/img/menuCategory/home.png";
 import { FeedbackState } from "../../recoil/FeedbackState";
 import Swal from "sweetalert2";
+import { width } from "@mui/system";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
 
   const memberId = useRecoilValue(SignInState);
   const memberName = useRecoilValue(MemberNameState);
+
+  const steps = ["배송 준비중", "배송중", "배송 완료"];
+
   const [delivery, setDelivery] = useState({});
   const [elevation, setElevation] = useState(2);
-  const steps = ["배송 준비중", "배송중", "배송 완료"];
   const [activeStep, setActiveStep] = useState(-1);
-  const [categoryNo, setCategoryNo] = useState("");
+  const [categoryNo, setCategoryNo] = useState();
+
   const [feedbackStatus, setFeedbackStatus] = useRecoilState(FeedbackState);
   const [todayMealStatus, setTodayMealStatus] = useState(0);
 
@@ -56,8 +61,8 @@ function TodayMealComp(props) {
     })
       .then((response) => {
         const dto = response.data;
-        console.log("dto : " + dto);
-        if (dto !== "") {
+        console.log("dto : ", dto);
+        if (dto) {
           setDelivery(dto);
           setFeedbackStatus(dto.feedbackStatus);
         } else {
@@ -70,7 +75,7 @@ function TodayMealComp(props) {
   }, []);
 
   useEffect(() => {
-    console.log(delivery);
+    // console.log(delivery);
 
     if (delivery.status === "배송준비중") {
       setActiveStep(0);
@@ -169,12 +174,20 @@ function TodayMealComp(props) {
             alignItems="center"
           >
             <Grid item xs={6}>
-              <img
-                alt="menu"
-                src={categoryImg[categoryNo]}
-                width="200px"
-                style={{ borderRadius: "20px" }}
-              />
+              {delivery.category ? (
+                <img
+                  alt="menu"
+                  src={categoryImg[categoryNo]}
+                  width="200px"
+                  style={{ borderRadius: "20px" }}
+                />
+              ) : (
+                <Skeleton
+                  variant="rectangular"
+                  animation="wave"
+                  sx={{ width: "200px", height: "200px", borderRadius: "20px" }}
+                />
+              )}
             </Grid>
             <Grid item xs={6}>
               <Box py={3} px={2}>
@@ -185,7 +198,11 @@ function TodayMealComp(props) {
                   mt={3}
                   sx={{ letterSpacing: "0.2em" }}
                 >
-                  {delivery.menu}
+                  {delivery.menu ? (
+                    delivery.menu
+                  ) : (
+                    <Skeleton animation="wave" />
+                  )}
                 </Typography>
               </Box>
             </Grid>
