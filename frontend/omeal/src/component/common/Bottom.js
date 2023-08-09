@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -13,17 +13,20 @@ import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
+import "./Bottom.css";
 
 function Bottom(props) {
-  const navi = useNavigate();
-  const [value, setValue] = React.useState(0);
-  const memberGrade = useRecoilValue(MemberGradeState);
-
   const location = useLocation();
-  //현재 경로 알아내기
   const currentPath = location.pathname;
 
-  console.log(currentPath);
+  const navi = useNavigate();
+  const [value, setValue] = useState(currentPath);
+  const memberGrade = useRecoilValue(MemberGradeState);
+
+  const handleChange = (e, newValue) => {
+    setValue(newValue);
+    navi(newValue);
+  };
 
   const eggImgs = {
     날계란: eggImg1,
@@ -32,45 +35,28 @@ function Bottom(props) {
     훈제란: eggImg4,
   };
 
-  const myPage = () => {
-    navi("/mypage");
-  };
-
-  const todayMeal = () => {
-    navi("/today-meal");
-  };
-
-  const main = () => {
-    navi("/");
-  };
-
-  const omealland = () => {
-    navi("/omealland");
-  };
-
   return (
     <div>
       <Box sx={{ width: "100%" }}>
         <BottomNavigation
           sx={{ backgroundColor: "#ea5c2b" }}
           showLabels
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          value={value}
+          onChange={handleChange}
         >
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="홈"
             id="home"
+            value="/"
             icon={<HomeIcon />}
-            onClick={main}
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="커뮤니티"
             id="community"
+            value="/omealland"
             icon={<Diversity3Icon />}
-            onClick={omealland}
           />
           <BottomNavigationAction
             disabled
@@ -87,15 +73,15 @@ function Bottom(props) {
             sx={{ color: "white" }}
             label="오늘의 밀"
             id="omeal"
+            value="/today-meal"
             icon={<MopedIcon />}
-            onClick={todayMeal}
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="마이페이지"
             id="mypage"
+            value="/mypage"
             icon={<EggIcon />}
-            onClick={myPage}
           />
         </BottomNavigation>
       </Box>
