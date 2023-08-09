@@ -1,6 +1,5 @@
 import React from "react";
 import CardImg from "../../assets/img/card.png";
-import EggIcon from "@mui/icons-material/Egg";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -9,9 +8,6 @@ import {
   MemberGradeState,
   MemberNickState,
 } from "../../recoil/SignInState";
-import FlutterDashIcon from "@mui/icons-material/FlutterDash";
-import FlipCameraIosIcon from "@mui/icons-material/FlipCameraIos";
-import FlightIcon from "@mui/icons-material/Flight";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
