@@ -56,4 +56,13 @@ public class History {
     @Comment("구독 종료일")
     private LocalDate endDate;
 
+    public PaymentDTO getPaymentDTO() {
+        PaymentDTO dto = new PaymentDTO();
+        dto.setDate(this.payDate);
+        dto.setStartDate(this.startDate);
+        dto.setEndDate(this.endDate);
+        dto.setCategory(this.category);
+        return dto;
+    }
+
 }
