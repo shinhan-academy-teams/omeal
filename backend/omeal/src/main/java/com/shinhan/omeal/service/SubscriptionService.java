@@ -64,14 +64,13 @@ public class SubscriptionService {
     }
 
     // 구독 종료일 계산
-    private Date calEndDate(SubscriptionType type) {
-        Calendar calendar = Calendar.getInstance();
+    private LocalDate calEndDate(SubscriptionType type) {
+        LocalDate endDate = LocalDate.now();
         if(type.equals(SubscriptionType.MONTHLY)) {
-            calendar.add(Calendar.DATE,30);
+            endDate.plusDays(30);
         } else {
-            calendar.add(Calendar.DATE,6);
+            endDate.plusDays(6);
         }
-        Date endDate = new Date(calendar.getTimeInMillis());
         return endDate;
     }
 
