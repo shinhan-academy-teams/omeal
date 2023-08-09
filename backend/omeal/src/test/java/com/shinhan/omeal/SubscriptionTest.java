@@ -3,16 +3,20 @@ package com.shinhan.omeal;
 import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
+import com.shinhan.omeal.dto.subscription.SubscriptionStatus;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.entity.Allergy;
+import com.shinhan.omeal.entity.History;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import com.shinhan.omeal.repository.AllergyRepository;
 import com.shinhan.omeal.repository.MembersRepository;
+import com.shinhan.omeal.repository.SubscriptionHistoryRepository;
 import com.shinhan.omeal.repository.SubscriptionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -28,6 +32,8 @@ public class SubscriptionTest {
     MembersRepository memRepo;
     @Autowired
     AllergyRepository allergyRepo;
+    @Autowired
+    SubscriptionHistoryRepository subHistoryRepo;
 
     @Test
     void subscriptTest() { // 데이터 저장
@@ -39,7 +45,7 @@ public class SubscriptionTest {
                     .deliveryAddr("마이 스윗홈")
                     .container(DeliveryContainer.다회용기)
                     .mealTime(DeliveryTime.점심)
-                    .startDate(new Date()) // 구독 시작일 : 오늘
+                    .startDate(LocalDate.now()) // 구독 시작일 : 오늘
                     .endDate(calEndDate(SubscriptionType.MONTHLY)).build(); //
             subRepo.save(newSubscription);
         }
@@ -60,14 +66,13 @@ public class SubscriptionTest {
         return Date.from(instant);
     }
 
-    Date calEndDate(SubscriptionType type) { // 구독 종료일 계산
-        Calendar calendar = Calendar.getInstance();
+    LocalDate calEndDate(SubscriptionType type) { // 구독 종료일 계산
+        LocalDate endDate = LocalDate.now();
         if(type.equals(SubscriptionType.MONTHLY)) {
-            calendar.add(Calendar.DATE,30);
+            endDate.plusDays(30);
         } else {
-            calendar.add(Calendar.DATE,6);
+            endDate.plusDays(6);
         }
-        Date endDate = new Date(calendar.getTimeInMillis());
         return endDate;
     }
 
@@ -90,5 +95,28 @@ public class SubscriptionTest {
     @Test
     void enumTest() {
         System.out.println(Arrays.toString(SubscriptionType.values()));
+    }
+
+    @Test
+    @Transactional
+    void updateSubscriptionTest() {
+        LocalDate today = LocalDate.now();
+        subRepo.findAll().forEach(subscription -> {
+            if(subscription.getEndDate().isBefore(today)){
+                History history = History.builder()
+                        .member(subscription.getMember())
+                        .subType(subscription.getSubType())
+                        .category(subscription.getCategory())
+                        .status(SubscriptionStatus.END)
+                        .payDate(subscription.getPayDate())
+                        .startDate(subscription.getStartDate())
+                        .endDate(subscription.getEndDate())
+                        .build();
+                subHistoryRepo.save(history);
+                LocalDate newEndDate = calEndDate(subscription.getSubType());
+                subscription.updateSubscription(newEndDate);
+                subRepo.save(subscription);
+            }
+        });
     }
 }
