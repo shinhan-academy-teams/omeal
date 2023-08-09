@@ -23,8 +23,8 @@ public class CommentService {
     // 댓글 작성
     public String register(CommentDTO commentDTO) {
         Members member = memRepo.findByMemberNick(commentDTO.getMemberNick());
-        Board board = boardRepo.findById(commentDTO.getBoard_no()).get();
-        if(member==null||board==null)
+        Board board = boardRepo.findById(commentDTO.getBoardNo()).orElse(null);
+        if(member==null || board==null)
             return "Fail : No member or No board";
 
         Comments comments = Comments.toEntity(commentDTO, member, board);
@@ -40,7 +40,7 @@ public class CommentService {
             List<CommentDTO> dtoList = new LinkedList<>();
             for(Comments comments : commentsList) {
                 CommentDTO dto = comments.toDTO();
-                dto.setBoard_no(post_no);
+                dto.setBoardNo(post_no);
                 dtoList.add(dto);
             }
 

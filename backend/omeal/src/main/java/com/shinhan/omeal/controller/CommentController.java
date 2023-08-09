@@ -13,7 +13,7 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register",consumes = "application/json")
     public String register(@RequestBody CommentDTO commentDTO){
         return commentService.register(commentDTO);
     }
