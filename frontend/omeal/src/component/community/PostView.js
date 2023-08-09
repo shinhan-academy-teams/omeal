@@ -16,7 +16,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import moment from "moment/moment";
+// import moment from "moment/moment";
 import { useRecoilValue } from "recoil";
 import { MemberNickState } from "../../recoil/SignInState";
 

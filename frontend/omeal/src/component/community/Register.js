@@ -275,7 +275,7 @@ function Register(props) {
             sx={{ width: "80%", marginTop: 3 }}
             type="file"
             placeholder="사진파일 업로드"
-            // onChange={handlePhotoInput}
+            onChange={handlePhotoInput}
             accept={"image/*"}
           />
           {selectedPhoto.length > 0 ? (
