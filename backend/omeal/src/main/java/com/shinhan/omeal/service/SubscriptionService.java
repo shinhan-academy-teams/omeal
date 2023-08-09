@@ -2,12 +2,15 @@ package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
+import com.shinhan.omeal.dto.subscription.SubscriptionStatus;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.entity.Allergy;
+import com.shinhan.omeal.entity.History;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import com.shinhan.omeal.repository.AllergyRepository;
 import com.shinhan.omeal.repository.MembersRepository;
+import com.shinhan.omeal.repository.SubscriptionHistoryRepository;
 import com.shinhan.omeal.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class SubscriptionService {
     final SubscriptionRepository subRepo;
     final MembersRepository memRepo;
     final AllergyRepository allergyRepo;
+    final SubscriptionHistoryRepository historyRepo;
     
     public String subscribe(SubscriptionDTO subscriptionInfo) {
         Members member = memRepo.findById(subscriptionInfo.getMemberId()).orElse(null);
@@ -43,10 +45,21 @@ public class SubscriptionService {
                 .deliveryAddr(subscriptionInfo.getDeliveryAddr())
                 .container(subscriptionInfo.getContainer())
                 .mealTime(subscriptionInfo.getMealTime())
-                .startDate(new Date())
+                .startDate(LocalDate.now())
                 .endDate(calEndDate(subscriptionInfo.getSubType()))
                 .build();
         subRepo.save(newSubscription);
+        // 히스토리 저장
+        History newHistory = History.builder()
+                .member(member)
+                .subType(newSubscription.getSubType())
+                .category(newSubscription.getCategory())
+                .status(SubscriptionStatus.START)
+                .payDate(newSubscription.getPayDate())
+                .startDate(newSubscription.getStartDate())
+                .endDate(newSubscription.getEndDate())
+                .build();
+        historyRepo.save(newHistory);
         return "OK";
     }
 
