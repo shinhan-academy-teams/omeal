@@ -27,9 +27,15 @@ public class TodayMealService {
     final MenuRepository menuRepo;
     final SubscriptionRepository subRepo;
     final FeedbackRepository feedbackRepo;
+    final DeliveryHistory dh;
 
     // 피드백 남기기
-    public String submitFeedback(@RequestBody FeedbackDTO dto) {
+    public DeliveryHistory submitFeedback(@RequestBody FeedbackDTO dto) {
+        // 피드백 남겼을 시 Delivery_history 테이블의 feedbackStatus를 0 => 1
+        DeliveryHistory deliveryHistory = tmRepo.findById(dto.getDeliveryNo()).get();
+        deliveryHistory = DeliveryHistory.updateFeedbackStatus(deliveryHistory);
+        tmRepo.save(deliveryHistory);
+
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
         List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
         String feedbackStr = dto.getFeedback();
@@ -46,11 +52,11 @@ public class TodayMealService {
                     feedbackRepo.save(feedback);
                 }
             } else { // 클라이언트가 좋아요를 눌렀으면
-                return "do NOTHING";
+                //return "do NOTHING";
             }
         } else {
             if (feedbackStr.equals("dislike")) { // 클라이언트가 싫어요를 눌렀으면
-                return "already DISLIKED";
+                //return "already DISLIKED";
             } else { // 클라이언트가 좋아요를 눌렀으면
                 for (Menu menu : menuIdList) {
                     feedbackRepo.deleteByMemberAndMenu(member, menu);
@@ -58,7 +64,8 @@ public class TodayMealService {
             }
         }
 
-        return "SUCCESS";
+        //return "success";
+        return deliveryHistory;
     }
 
     // 하단의 '오늘의 밀' 아이콘 눌렀을 때 뜨는 첫 페이지
@@ -68,12 +75,16 @@ public class TodayMealService {
 
         // 배송내역 1건만 보여줘야 하므로
         List<DeliveryHistory> deliveryHistoryList = tmRepo.findByMemberOrderByDeliveryNoDesc(member);
-        DeliveryHistory deliveryHistory = deliveryHistoryList.get(0);
+        if(!deliveryHistoryList.isEmpty()){ // 아직 배송될 메뉴가 없을 때를 대비해서
+            DeliveryHistory deliveryHistory = deliveryHistoryList.get(0);
 
-        // TodayMealDTO에 category도 같이 넘겨주기 위해
-        SubscriptionCategory category = subRepo.findByMember(member).getCategory();
-        
-        return TodayMealDTO.toTodayMealDTO(deliveryHistory, category);
+            // TodayMealDTO에 category도 같이 넘겨주기 위해
+            SubscriptionCategory category = subRepo.findByMember(member).getCategory();
+
+            return TodayMealDTO.toTodayMealDTO(deliveryHistory, category);
+        }
+
+        return null;
     }
 
     @Transactional
