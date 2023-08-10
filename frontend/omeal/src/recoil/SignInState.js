@@ -24,3 +24,8 @@ export const ContinuousDaysState = atom({
   key: "ContinuousDaysState",
   default: "",
 });
+
+export const SubCheckState = atom({
+  key: "SubCheckState",
+  default: "",
+});

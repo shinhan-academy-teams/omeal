@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -14,8 +14,8 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
 import logoImg from "../../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { SignInState, SubCheckState } from "../../recoil/SignInState";
 import axios from "axios";
 
 function Header(props) {
@@ -23,8 +23,18 @@ function Header(props) {
   const signIn = () => {
     navi("/auth/sign-in");
   };
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const isSub = useRecoilValue(SubCheckState);
   const subscription = () => {
-    navi("/subscription");
+    if (isLogin) {
+      if (isSub) {
+        navi("/sub-info"); // 이미 구독중인 사용자가 구독신청을 누르면 → 마이페이지 구독정보로 이동
+        return;
+      }
+      navi("/subscription");
+    } else {
+      navi("/auth/sign-in");
+    }
   };
   const main = () => {
     navi("/");

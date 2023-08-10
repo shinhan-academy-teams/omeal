@@ -9,22 +9,32 @@ import EggIcon from "@mui/icons-material/Egg";
 import { useNavigate } from "react-router-dom";
 import eggImg from "../../assets/img/egg2.png";
 import { useRecoilValue } from "recoil";
-import { MemberGradeState } from "../../recoil/SignInState";
+import { MemberGradeState, SubCheckState } from "../../recoil/SignInState";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
+import { ColorLensOutlined } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 function Bottom(props) {
   const navi = useNavigate();
   const [value, setValue] = React.useState(0);
   const memberGrade = useRecoilValue(MemberGradeState);
+  const sub = useRecoilValue(SubCheckState);
 
   const myPage = () => {
     navi("/mypage");
   };
 
   const todayMeal = () => {
+    if (!sub) {
+      Swal.fire({
+        icon: "warning", // 여기다가 아이콘 종류를 쓰면 됩니다.
+        text: "구독중인 서비스가 없습니다.",
+      });
+      return;
+    }
     navi("/today-meal");
   };
 
