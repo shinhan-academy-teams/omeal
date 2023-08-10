@@ -28,6 +28,8 @@ public class MembersDTO {
 
     private int continuousDays; // 연속 구독 기간(일)
 
+    private boolean Sub; // 현재 구독 여부
+
     public static MembersDTO toMembersDtoForSignIn(Members member, int continuousDays) {
         return MembersDTO.builder()
                 .memberId(member.getMemberId())

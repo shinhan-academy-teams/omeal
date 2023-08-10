@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import NavBar from "./pages/common/NavBar";
@@ -27,6 +27,8 @@ import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
 import PayInfo from "component/mypage/PayInfo";
+import { useRecoilValue } from "recoil";
+import { SignInState } from "./recoil/SignInState";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -42,6 +44,8 @@ const App = () => {
     },
   });
 
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+
   const location = useLocation();
   return (
     <ThemeProvider theme={theme}>
@@ -49,13 +53,43 @@ const App = () => {
         <Routes location={location}>
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
+
             <Route path="subscription" element={<Subscription />} />
-            <Route path="mypage" element={<Mypage />} />
-            <Route path="card-info" element={<CardInfo />} />
-            <Route path="sub-info" element={<SubInfo />} />
-            <Route path="user-info" element={<UserInfo />} />
-            <Route path="delivery-info" element={<DeliveryInfo />} />
-            <Route path="payment-info" element={<PayInfo />} />
+              
+            <Route
+              path="mypage"
+              element={
+                isLogin ? <Mypage /> : <Navigate replace to="/auth/sign-in" />
+              }
+            />
+            <Route
+              path="card-info"
+              element={
+                isLogin ? <CardInfo /> : <Navigate replace to="/auth/sign-in" />
+              }
+            />
+            <Route
+              path="sub-info"
+              element={
+                isLogin ? <SubInfo /> : <Navigate replace to="/auth/sign-in" />
+              }
+            />
+            <Route
+              path="user-info"
+              element={
+                isLogin ? <UserInfo /> : <Navigate replace to="/auth/sign-in" />
+              }
+            />
+            <Route
+              path="delivery-info"
+              element={
+                isLogin ? (
+                  <DeliveryInfo />
+                ) : (
+                  <Navigate replace to="/auth/sign-in" />
+                )
+              }
+            />
 
             {/* 커뮤니티 */}
             <Route path="omealland" element={<OmealLand />} />
@@ -73,8 +107,22 @@ const App = () => {
             <Route path="omealland/homemeal" element={<KoreaTown />} />
             <Route path="omealland/register" element={<Register />} />
 
-            <Route path="today-meal" element={<TodayMeal />} />
-            <Route path="today-meal/feedback" element={<Feedback />} />
+            <Route
+              path="today-meal"
+              element={
+                isLogin ? (
+                  <TodayMeal />
+                ) : (
+                  <Navigate replace to="/auth/sign-in" />
+                )
+              }
+            />
+            <Route
+              path="today-meal/feedback"
+              element={
+                isLogin ? <Feedback /> : <Navigate replace to="/auth/sign-in" />
+              }
+            />
 
             <Route path="food-worldcup" element={<Worldcup />} />
           </Route>

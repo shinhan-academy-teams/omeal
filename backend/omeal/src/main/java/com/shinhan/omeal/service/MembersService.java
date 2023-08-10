@@ -66,6 +66,7 @@ public class MembersService {
         // 로그인 시 => 회원등급 업데이트 & Front에 전송까지
         Members updatedMember = subService.updateMemberGrade(member);
         int days = subService.getContinuousDays(loginId);
+        System.out.println("days = " + days);
 
         return MembersDTO.toMembersDtoForSignIn(updatedMember, days);
     }
