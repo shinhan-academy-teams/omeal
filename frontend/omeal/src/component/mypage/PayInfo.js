@@ -14,6 +14,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
+import moment from "moment";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,18 +58,22 @@ function PayInfo(props) {
             <TableHead>
               <TableRow>
                 <StyledTableCell>결제일시</StyledTableCell>
+                <StyledTableCell>결제금액</StyledTableCell>
                 <StyledTableCell>구독시작일</StyledTableCell>
                 <StyledTableCell>구독종료일</StyledTableCell>
-                <StyledTableCell>메뉴타입</StyledTableCell>
+                <StyledTableCell>구독상태</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paymentHistory.map((history, index) => (
                 <TableRow key={index}>
-                  <TableCell>{history.date}</TableCell>
+                  <TableCell>
+                    {moment(history.date).format("YYYY-MM-DD HH:mm:ss")}
+                  </TableCell>
+                  <TableCell>{history.amount.toLocaleString()} 원</TableCell>
                   <TableCell>{history.startDate}</TableCell>
                   <TableCell>{history.endDate}</TableCell>
-                  <TableCell>{history.category}</TableCell>
+                  <TableCell>{history.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
