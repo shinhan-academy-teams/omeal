@@ -1,17 +1,30 @@
 package com.shinhan.omeal.entity;
 
+import com.shinhan.omeal.dto.subscription.PaymentDTO;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
+import com.shinhan.omeal.dto.subscription.SubscriptionStatus;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "HISTORY")
+@SequenceGenerator(name = "HISTORY_SEQ_GEN", sequenceName = "HISTORY_SEQ", initialValue = 1, allocationSize = 1)
 public class History {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HISTORY_SEQ_GEN")
     @Comment("구독 번호")
     private Long subNo;
 
@@ -28,14 +41,41 @@ public class History {
     @Comment("입맛 성향에따른 식사 타입")
     private SubscriptionCategory category;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    @Comment("구독 시작일")
-    private Date startDate;
+    @Enumerated(EnumType.STRING)
+    @Comment("구독상태")
+    private SubscriptionStatus status;
+
+    @Comment("결제금액")
+    private int amount;
+
+    @Comment("결제일시")
+    private LocalDateTime payDate;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Comment("구독 시작일")
+    private LocalDate startDate;
+
+    @Column(nullable = false)
     @Comment("구독 종료일")
-    private Date endDate;
+    private LocalDate endDate;
+
+    public PaymentDTO getPaymentDTO() {
+        PaymentDTO dto = new PaymentDTO();
+        dto.setDate(this.payDate);
+        dto.setStartDate(this.startDate);
+        dto.setEndDate(this.endDate);
+        dto.setCategory(this.category);
+        return dto;
+    }
+
+    // 만료된 구독 히스토리 업데이트
+    public void updateEndHistory() {
+        this.status = SubscriptionStatus.END;
+    }
+
+    // 취소된 구독 히스토리 업데이트
+    public void updateCancelHistory() {
+        this.status = SubscriptionStatus.CANCEL;
+    }
 
 }

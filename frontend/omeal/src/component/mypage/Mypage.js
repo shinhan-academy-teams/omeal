@@ -1,6 +1,5 @@
 import React from "react";
 import CardImg from "../../assets/img/card.png";
-import EggIcon from "@mui/icons-material/Egg";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -9,9 +8,6 @@ import {
   MemberGradeState,
   MemberNickState,
 } from "../../recoil/SignInState";
-import FlutterDashIcon from "@mui/icons-material/FlutterDash";
-import FlipCameraIosIcon from "@mui/icons-material/FlipCameraIos";
-import FlightIcon from "@mui/icons-material/Flight";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
@@ -39,6 +35,11 @@ function Mypage(props) {
   const DeliveryInfo = () => {
     navi("/delivery-info");
   };
+
+  const PayInfo = () => {
+    navi("/payment-info");
+  };
+
   return (
     <>
       <Box
@@ -89,7 +90,9 @@ function Mypage(props) {
               배송 내역
             </Button>
             <br></br>
-            <Button variant="contained">결제 내역</Button>
+            <Button variant="contained" onClick={PayInfo}>
+              결제 내역
+            </Button>
           </Box>
         </div>
         <h3>연결하신 카드 정보</h3>
