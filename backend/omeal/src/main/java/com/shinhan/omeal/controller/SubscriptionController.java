@@ -23,6 +23,12 @@ public class SubscriptionController {
         return subscriptionService.subscribe(subscriptionInfo);
     }
 
+    // 구독 취소
+    @GetMapping(value = "/cancel-subscription")
+    public String cancelSubscription(String memId) {
+        return subscriptionService.cancelSubscription(memId);
+    }
+
     // 첫 배송일 안내
     @GetMapping(value = "/delivery-info")
     public LocalDate noticeFirstDelivery() {
