@@ -1,11 +1,11 @@
 import React from "react";
-import Carousel from "../component/home/Carousel";
+import MyCarousel from "../component/home/MyCarousel";
 import Intro from "../component/home/Intro";
 
 function Main(props) {
   return (
     <>
-      <Carousel />
+      <MyCarousel />
       <Intro />
     </>
   );

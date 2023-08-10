@@ -10,7 +10,6 @@ const WorldcupComp = () => {
 
   useEffect(() => {
     items.sort(() => Math.random() - 0.5);
-    console.log(items);
     setFoods(items);
     setDisplays([items[0], items[1]]);
     setRound(32);
@@ -42,24 +41,40 @@ const WorldcupComp = () => {
   };
 
   return (
-    <>
-      {round > 1 ? (
-        <Typography mb={2} variant="h5">
-          {round > 2
-            ? "【" +
-              (round - foods.length + 2) / 2 +
-              "/" +
-              round / 2 +
-              "】 " +
-              round +
-              "강"
-            : "【결 승 전】"}
-        </Typography>
-      ) : (
-        ""
-      )}
+    <Box
+      sx={{
+        backgroundImage: `url("${process.env.PUBLIC_URL}/img/worldcup/worldcup-background.png")`,
+        backgroundSize: "contain",
+        backgroundPosition: "top",
+        backgroundRepeat: "no-repeat",
 
-      <Box sx={{ display: "flex", width: "100%", height: "auto" }}>
+        height: "500px",
+        pt: "242px",
+        mt: "12px",
+      }}
+    >
+      {round > 1 && (
+        <Typography
+          variant="h3"
+          sx={{
+            mb: "72px",
+            color: round > 2 ? "#EA5C2B" : "black",
+            fontWeight: "bold",
+            textShadow: round > 2 ? "1px 1px 2px #a4a4a4" : "",
+          }}
+        >
+          {round > 2 ? round + "강" : "【 결 승 전 】"}
+        </Typography>
+      )}
+      <Box
+        sx={{
+          my: 5,
+          display: "flex",
+          width: "100%",
+          height: "auto",
+          justifyContent: "center",
+        }}
+      >
         {displays.map((d) => {
           return (
             <Paper
@@ -75,7 +90,7 @@ const WorldcupComp = () => {
                 width: "270px",
                 height: "270px",
                 backgroundColor: "skyblue",
-                backgroundImage: `url("${process.env.PUBLIC_URL}/img/food-img/${d.src}.png")`,
+                backgroundImage: `url("${process.env.PUBLIC_URL}/img/worldcup/food-img/${d.src}.png")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -90,7 +105,7 @@ const WorldcupComp = () => {
                 sx={{
                   fontSize: "24px",
                   color: "white",
-                  textShadow: "0px 0px 4px black",
+                  textShadow: "0px 0px 17px #000",
                 }}
               >
                 {d.name}
@@ -99,7 +114,13 @@ const WorldcupComp = () => {
           );
         })}
       </Box>
-    </>
+      {round > 1 && (
+        <Typography variant="h5">
+          {round > 2 &&
+            "【" + (round - foods.length + 2) / 2 + "/" + round / 2 + "】"}
+        </Typography>
+      )}
+    </Box>
   );
 };
 

@@ -26,6 +26,7 @@ import Feedback from "./pages/todayMeal/Feedback";
 import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
+import PayInfo from "component/mypage/PayInfo";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "./recoil/SignInState";
 
@@ -54,6 +55,7 @@ const App = () => {
             <Route index element={<Main />} />
 
             <Route path="subscription" element={<Subscription />} />
+              
             <Route
               path="mypage"
               element={

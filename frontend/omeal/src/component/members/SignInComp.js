@@ -101,72 +101,58 @@ function SignInComp(props) {
 
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          backgroundColor: "#FEF7ED",
-        }}
-      >
-        <Typography variant="h4" component="h4">
-          SIGN IN
-        </Typography>
-        <Grid container spacing={4} my={2} sx={{ width: "60%" }}>
-          <Grid item xs={12}>
-            <TextField
-              label="E-Mail"
-              fullWidth
-              type="text"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircle />
-                  </InputAdornment>
-                ),
-              }}
-              id="memberId"
-              name="memberId"
-              value={memberId}
-              onChange={handleId}
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Password"
-              fullWidth
-              type="password"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <KeyIcon />
-                  </InputAdornment>
-                ),
-              }}
-              id="memberPwd"
-              name="memberPwd"
-              value={memberPwd}
-              onChange={handlePwd}
-              onKeyUp={handlePwdEnter}
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <Button onClick={signIn} variant="outlined" sx={{ width: "30%" }}>
-              로그인
-            </Button>
-          </Grid>
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <Button onClick={signUp} variant="text" sx={{ width: "30%" }}>
-              회원가입
-            </Button>
-          </Grid>
+      <Typography variant="h5">SIGN IN</Typography>
+      <Grid container spacing={4} my={2} sx={{ width: "60%" }}>
+        <Grid item xs={12}>
+          <TextField
+            label="E-Mail"
+            fullWidth
+            type="text"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
+            id="memberId"
+            name="memberId"
+            value={memberId}
+            onChange={handleId}
+            variant="standard"
+          />
         </Grid>
-      </Box>
+        <Grid item xs={12}>
+          <TextField
+            label="Password"
+            fullWidth
+            type="password"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <KeyIcon />
+                </InputAdornment>
+              ),
+            }}
+            id="memberPwd"
+            name="memberPwd"
+            value={memberPwd}
+            onChange={handlePwd}
+            onKeyUp={handlePwdEnter}
+            variant="standard"
+          />
+        </Grid>
+        <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+          <Button onClick={signIn} variant="outlined" sx={{ width: "30%" }}>
+            로그인
+          </Button>
+        </Grid>
+        <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+          <Button onClick={signUp} variant="text" sx={{ width: "30%" }}>
+            회원가입
+          </Button>
+        </Grid>
+      </Grid>
     </>
   );
 }

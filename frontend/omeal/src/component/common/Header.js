@@ -1,25 +1,37 @@
-import React from "react";
-import DehazeIcon from "@mui/icons-material/Dehaze";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
-import { Button } from "@mui/material";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-
-import logoImg from "../../assets/img/logo.png";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { SignInState, SubCheckState } from "../../recoil/SignInState";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { SignInState } from "../../recoil/SignInState";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import logoImg from "../../assets/img/logo/white_logo.png";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import QuizIcon from "@mui/icons-material/Quiz";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import LogoutIcon from "@mui/icons-material/Logout";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
+  const memberId = useRecoilValue(SignInState);
+
+  const [state, setState] = useState({
+    right: false,
+  });
+
   const signIn = () => {
     navi("/auth/sign-in");
   };
@@ -45,6 +57,13 @@ function Header(props) {
   const [state, setState] = React.useState({
     right: false,
   });
+  
+  const notice = () => {
+    navi("/notice");
+  };
+  const faq = () => {
+    navi("/faq");
+  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -85,7 +104,7 @@ function Header(props) {
         <ListItem disablePadding onClick={subscription}>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <RestaurantIcon />
             </ListItemIcon>
             <ListItemText primary="구독신청" />
           </ListItemButton>
@@ -96,9 +115,9 @@ function Header(props) {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <CampaignIcon />
             </ListItemIcon>
-            <ListItemText primary="공지사항" />
+            <ListItemText primary="공지사항" onClick={notice} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -107,9 +126,9 @@ function Header(props) {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <QuizIcon />
             </ListItemIcon>
-            <ListItemText primary="FAQ" />
+            <ListItemText primary="FAQ" onClick={faq} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -118,7 +137,7 @@ function Header(props) {
         <ListItem disablePadding onClick={logout}>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <LogoutIcon />
             </ListItemIcon>
             <ListItemText primary="로그아웃" />
           </ListItemButton>
@@ -130,20 +149,28 @@ function Header(props) {
 
   return (
     <>
-      <div className="nav">
+      <div className="header" style={{ zIndex: "1" }}>
         <img
-          alt=""
+          alt="white logo"
           src={logoImg}
-          width={"30%"}
-          style={{ float: "left", cursor: "pointer" }}
+          style={{
+            marginTop: "5px",
+            height: "130%",
+            float: "left",
+            cursor: "pointer",
+          }}
           onClick={main}
-        ></img>
-
+        />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {memberId ? (
             <NotificationsNoneIcon sx={{ marginRight: 2 }} />
           ) : (
-            <Button variant="contained" onClick={signIn}>
+            <Button
+              variant="contained"
+              disableElevation
+              sx={{ color: "#ea5c2b", backgroundColor: "white" }}
+              onClick={signIn}
+            >
               로그인
             </Button>
           )}
@@ -151,7 +178,7 @@ function Header(props) {
           {["right"].map((anchor) => (
             <React.Fragment key={anchor}>
               <DehazeIcon
-                sx={{ cursor: "pointer", marginLeft: 3 }}
+                sx={{ cursor: "pointer", ml: 3, mr: "12px", color: "white" }}
                 onClick={toggleDrawer(anchor, true)}
               >
                 {anchor}
