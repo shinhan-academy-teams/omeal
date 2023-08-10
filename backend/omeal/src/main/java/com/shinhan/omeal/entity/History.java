@@ -65,4 +65,9 @@ public class History {
         return dto;
     }
 
+    // 만료된 구독 히스토리 업데이트
+    public void updateEndHistory() {
+        this.status = SubscriptionStatus.END;
+    }
+
 }

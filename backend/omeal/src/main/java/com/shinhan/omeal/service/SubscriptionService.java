@@ -68,19 +68,26 @@ public class SubscriptionService {
         LocalDate today = LocalDate.now();
         subRepo.findAll().forEach(subscription -> {
             if(subscription.getEndDate().isBefore(today)){
+                // 히스토리 업데이트
+                History endSubscription = historyRepo.findByMemberAndStatus(subscription.getMember(),SubscriptionStatus.START);
+                endSubscription.updateEndHistory();
+                historyRepo.save(endSubscription);
+                // 구독정보 갱신
+                LocalDate newEndDate = calEndDate(subscription.getSubType());
+                subscription.updateSubscription(newEndDate);
+                subRepo.save(subscription);
+                // 새구독정보 히스토리 저장
                 History history = History.builder()
                         .member(subscription.getMember())
                         .subType(subscription.getSubType())
                         .category(subscription.getCategory())
-                        .status(SubscriptionStatus.END)
+                        .status(SubscriptionStatus.START)
                         .payDate(subscription.getPayDate())
                         .startDate(subscription.getStartDate())
                         .endDate(subscription.getEndDate())
                         .build();
                 historyRepo.save(history);
-                LocalDate newEndDate = calEndDate(subscription.getSubType());
-                subscription.updateSubscription(newEndDate);
-                subRepo.save(subscription);
+
             }
         });
     }
