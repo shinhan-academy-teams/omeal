@@ -13,7 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import logoImg from "../../assets/img/logo.png";
+import logoImg from "../../assets/img/logo/white_logo.png";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import QuizIcon from "@mui/icons-material/Quiz";
@@ -116,10 +116,11 @@ function Header(props) {
     <>
       <div className="header" style={{ zIndex: "1" }}>
         <img
-          alt="omeal logo"
+          alt="white logo"
           src={logoImg}
           style={{
-            height: "100%",
+            marginTop: "5px",
+            height: "130%",
             float: "left",
             cursor: "pointer",
           }}
