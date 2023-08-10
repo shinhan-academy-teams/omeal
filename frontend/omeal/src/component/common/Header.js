@@ -114,7 +114,7 @@ function Header(props) {
 
   return (
     <>
-      <div className="header">
+      <div className="header" style={{ zIndex: "1" }}>
         <img
           alt="omeal logo"
           src={logoImg}

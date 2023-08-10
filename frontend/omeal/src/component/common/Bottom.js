@@ -37,7 +37,7 @@ function Bottom(props) {
 
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", zIndex: "1" }}>
         <BottomNavigation
           sx={{ backgroundColor: "#ea5c2b" }}
           showLabels
