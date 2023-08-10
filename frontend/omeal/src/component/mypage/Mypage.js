@@ -19,7 +19,7 @@ function Mypage(props) {
   const memberGrade = useRecoilValue(MemberGradeState);
   const continuousDay = useRecoilValue(ContinuousDaysState);
 
-  console.log(memberGrade);
+  //console.log(memberGrade);
 
   const navi = useNavigate();
   const userInfo = () => {
