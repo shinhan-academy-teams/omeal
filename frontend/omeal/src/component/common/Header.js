@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -40,7 +40,7 @@ function Header(props) {
 
   const memberId = useRecoilValue(SignInState);
 
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     right: false,
   });
 
@@ -115,13 +115,15 @@ function Header(props) {
     <>
       <div className="nav">
         <img
-          alt=""
+          alt="omeal logo"
           src={logoImg}
-          width={"30%"}
-          style={{ float: "left", cursor: "pointer" }}
+          style={{
+            height: "100%",
+            float: "left",
+            cursor: "pointer",
+          }}
           onClick={main}
-        ></img>
-
+        />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {memberId ? (
             <NotificationsNoneIcon sx={{ marginRight: 2 }} />
@@ -139,7 +141,7 @@ function Header(props) {
           {["right"].map((anchor) => (
             <React.Fragment key={anchor}>
               <DehazeIcon
-                sx={{ cursor: "pointer", marginLeft: 3, color: "white" }}
+                sx={{ cursor: "pointer", ml: 3, mr: "12px", color: "white" }}
                 onClick={toggleDrawer(anchor, true)}
               >
                 {anchor}
