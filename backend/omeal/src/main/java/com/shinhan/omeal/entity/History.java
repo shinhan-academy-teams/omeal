@@ -70,4 +70,9 @@ public class History {
         this.status = SubscriptionStatus.END;
     }
 
+    // 취소된 구독 히스토리 업데이트
+    public void updateCancelHistory() {
+        this.status = SubscriptionStatus.CANCEL;
+    }
+
 }

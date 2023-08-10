@@ -92,6 +92,19 @@ public class SubscriptionService {
         });
     }
 
+    // 구독취소
+    public String cancelSubscription(String memId) {
+        Members member = memRepo.findById(memId).orElse(null);
+        Subscription subscription = subRepo.findByMember(member);
+        // 히스토리 업데이트
+        History history = historyRepo.findByMemberAndStatus(member,SubscriptionStatus.START);
+        history.updateCancelHistory();
+        historyRepo.save(history);
+        // 구독정보 삭제
+        subRepo.delete(subscription);
+        return "OK";
+    }
+
     // 첫 배송 예정일 안내
     public LocalDate calFirstDeliveryDate() {
         LocalDate today = LocalDate.now();
