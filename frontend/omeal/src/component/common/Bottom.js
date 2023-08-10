@@ -36,7 +36,7 @@ function Bottom(props) {
   };
 
   return (
-    <div>
+    <>
       <Box sx={{ width: "100%" }}>
         <BottomNavigation
           sx={{ backgroundColor: "#ea5c2b" }}
@@ -85,7 +85,7 @@ function Bottom(props) {
           />
         </BottomNavigation>
       </Box>
-    </div>
+    </>
   );
 }
 

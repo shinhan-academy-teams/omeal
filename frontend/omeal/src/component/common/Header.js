@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import DehazeIcon from "@mui/icons-material/Dehaze";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { Button } from "@mui/material";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-
-import logoImg from "../../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import logoImg from "../../assets/img/logo.png";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import QuizIcon from "@mui/icons-material/Quiz";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -22,6 +23,12 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
+  const memberId = useRecoilValue(SignInState);
+
+  const [state, setState] = useState({
+    right: false,
+  });
+
   const signIn = () => {
     navi("/auth/sign-in");
   };
@@ -37,12 +44,6 @@ function Header(props) {
   const faq = () => {
     navi("/faq");
   };
-
-  const memberId = useRecoilValue(SignInState);
-
-  const [state, setState] = useState({
-    right: false,
-  });
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -113,7 +114,7 @@ function Header(props) {
 
   return (
     <>
-      <div className="nav">
+      <div className="header">
         <img
           alt="omeal logo"
           src={logoImg}
