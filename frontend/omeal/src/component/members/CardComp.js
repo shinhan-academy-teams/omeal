@@ -112,112 +112,100 @@ function CardComp(props) {
 
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          backgroundColor: "#FEF7ED",
-        }}
-      >
-        <Typography variant="h4" component="h4">
-          CARD REGISTER
-        </Typography>
-        <Grid container spacing={2} my={2} sx={{ width: "60%" }}>
-          <Grid item xs={12}>
-            <TextField
-              label="카드사"
-              required
-              fullWidth
-              type="text"
-              readOnly
-              id="cardCompany"
-              defaultValue="신한카드"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="카드번호"
-              required
-              fullWidth
-              type="text"
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                maxLength: 19,
-              }}
-              id="serialNumber"
-              name="serialNumber"
-              value={serialNumber}
-              onChange={handleSerialNumber}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="카드CVC"
-              required
-              fullWidth
-              type="text"
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                maxLength: 3,
-              }}
-              id="cvc"
-              name="cvc"
-              value={cvc}
-              onChange={handleCvc}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="카드 유효기간"
-              required
-              fullWidth
-              type="text"
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                maxLength: 5,
-              }}
-              id="expiryDate"
-              name="expiryDate"
-              value={expiryDate}
-              placeholder="MM/YY"
-              onChange={handleExpiryDate}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="카드 비밀번호"
-              required
-              fullWidth
-              id="cardPwd"
-              name="cardPwd"
-              value={cardPwd}
-              type="password"
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                maxLength: 4,
-              }}
-              onChange={handleCardPwd}
-            />
-          </Grid>
+      <Typography variant="h5">CARD REGISTER</Typography>
+      <Grid container spacing={2} my={2} sx={{ width: "60%" }}>
+        <Grid item xs={12}>
+          <TextField
+            label="카드사"
+            required
+            fullWidth
+            type="text"
+            id="cardCompany"
+            defaultValue="신한카드"
+            inputProps={{
+              readonly: "readonly",
+            }}
+          />
         </Grid>
-        <Button
-          sx={{ mt: 3 }}
-          type="button"
-          variant="outlined"
-          onClick={signup}
-          disabled={!buttonActive}
-        >
-          회원 가입
-        </Button>
-      </Box>
+        <Grid item xs={12}>
+          <TextField
+            label="카드번호"
+            required
+            fullWidth
+            type="text"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              maxLength: 19,
+            }}
+            id="serialNumber"
+            name="serialNumber"
+            value={serialNumber}
+            onChange={handleSerialNumber}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="카드CVC"
+            required
+            fullWidth
+            type="text"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              maxLength: 3,
+            }}
+            id="cvc"
+            name="cvc"
+            value={cvc}
+            onChange={handleCvc}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="카드 유효기간"
+            required
+            fullWidth
+            type="text"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              maxLength: 5,
+            }}
+            id="expiryDate"
+            name="expiryDate"
+            value={expiryDate}
+            placeholder="MM/YY"
+            onChange={handleExpiryDate}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="카드 비밀번호"
+            required
+            fullWidth
+            id="cardPwd"
+            name="cardPwd"
+            value={cardPwd}
+            type="password"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              maxLength: 4,
+            }}
+            onChange={handleCardPwd}
+          />
+        </Grid>
+      </Grid>
+      <Button
+        sx={{ mt: 3 }}
+        type="button"
+        variant="outlined"
+        onClick={signup}
+        disabled={!buttonActive}
+      >
+        회원 가입
+      </Button>
     </>
   );
 }

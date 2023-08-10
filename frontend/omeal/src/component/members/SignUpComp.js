@@ -165,231 +165,217 @@ function SignUpComp(props) {
 
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          backgroundColor: "#FEF7ED",
-        }}
-      >
-        <Typography variant="h4" component="h4">
-          SIGN UP
-        </Typography>
-        <Grid container spacing={2} my={2} sx={{ width: "60%" }}>
-          <Grid item xs>
-            <TextField
-              label="이메일"
-              required
-              fullWidth
-              type="email"
-              id="memberId"
-              name="memberId"
-              value={member.memberId}
-              onChange={(e) => {
-                setIdAvailable(false);
-                handleChange(e);
-                isEmailRegex(e);
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
+      <Typography variant="h5">SIGN UP</Typography>
+      <Grid container spacing={2} my={2} sx={{ width: "60%" }}>
+        <Grid item xs>
+          <TextField
+            label="이메일"
+            required
+            fullWidth
+            type="email"
+            id="memberId"
+            name="memberId"
+            value={member.memberId}
+            onChange={(e) => {
+              setIdAvailable(false);
+              handleChange(e);
+              isEmailRegex(e);
             }}
-          >
-            <Box mr={2}>
-              <Tooltip title="중복 체크" arrow placement="top">
-                <IconButton aria-label="checkIdDup" onClick={checkIdDup}>
-                  {idAvailable ? (
-                    <CheckCircleIcon sx={{ fontSize: 32, color: "olive" }} />
-                  ) : (
-                    <CheckCircleOutlineIcon
-                      sx={{ fontSize: 32, color: "black" }}
-                    />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </Grid>
-          {idRegexBool ? (
-            ""
-          ) : (
-            <Grid item xs={12} mt={-1}>
-              <Typography
-                variant="body2"
-                component="p"
-                pl={1}
-                sx={{ textAlign: "left", fontSize: "13px" }}
-              >
-                이메일 형식을 맞춰주세요
-              </Typography>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <TextField
-              label="비밀번호"
-              required
-              fullWidth
-              type="password"
-              id="memberPwd"
-              name="memberPwd"
-              value={member.memberPwd}
-              onChange={(e) => {
-                handleChange(e);
-                isPwdRegex(e);
-              }}
-            />
-          </Grid>
-          {pwdRegexBool ? (
-            ""
-          ) : (
-            <Grid item xs={12} mt={-1}>
-              <Typography
-                variant="body2"
-                component="p"
-                pl={1}
-                sx={{ textAlign: "left", fontSize: "13px" }}
-              >
-                영문과 숫자를 포함하여 6 ~ 20자리 입력해주세요
-              </Typography>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <TextField
-              label="비밀번호 확인"
-              required
-              fullWidth
-              type="password"
-              id="memberPwdCheck"
-              name="memberPwdCheck"
-              onChange={handlePwd2}
-            />
-          </Grid>
-          {samePwd ? (
-            ""
-          ) : (
-            <Grid item xs={12} mt={-1}>
-              <Typography
-                variant="body2"
-                component="p"
-                pl={1}
-                sx={{ textAlign: "left", fontSize: "13px" }}
-              >
-                동일한 비밀번호를 입력해주세요
-              </Typography>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <TextField
-              label="이름"
-              required
-              fullWidth
-              type="text"
-              id="memberName"
-              name="memberName"
-              value={member.memberName}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs>
-            <TextField
-              label="닉네임"
-              required
-              fullWidth
-              type="text"
-              id="memberNick"
-              name="memberNick"
-              value={member.memberNick}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Box mr={2}>
-              <Tooltip title="중복 체크" arrow placement="top">
-                <IconButton aria-label="checkNickDup" onClick={checkNickDup}>
-                  {nickAvailable ? (
-                    <CheckCircleIcon sx={{ fontSize: 32, color: "olive" }} />
-                  ) : (
-                    <CheckCircleOutlineIcon
-                      sx={{ fontSize: 32, color: "black" }}
-                    />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="핸드폰 번호"
-              required
-              fullWidth
-              type="tel"
-              id="memberTel"
-              name="memberTel"
-              value={member.memberTel}
-              placeholder="010-1234-5678"
-              onChange={(e) => {
-                handleChange(e);
-                isTelRegex(e);
-              }}
-            />
-          </Grid>
-          {telRegexBool ? (
-            ""
-          ) : (
-            <Grid item xs={12} mt={-1}>
-              <Typography
-                variant="body2"
-                component="p"
-                pl={1}
-                sx={{ textAlign: "left", fontSize: "13px" }}
-              >
-                핸드폰 번호 형식을 맞춰주세요
-              </Typography>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <TextField
-              label="주소"
-              required
-              fullWidth
-              type="text"
-              id="memberAddr"
-              name="memberAddr"
-              value={member.memberAddr}
-              placeholder="서울시 중구 남대문로10길 29"
-              onChange={handleChange}
-            />
-          </Grid>
+          />
         </Grid>
-        <Button
-          sx={{ mt: 3 }}
-          type="button"
-          variant="outlined"
-          onClick={next}
-          disabled={!buttonActive}
+        <Grid
+          item
+          xs={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
         >
-          Next
-        </Button>
-      </Box>
+          <Box mr={2}>
+            <Tooltip title="중복 체크" arrow placement="top">
+              <IconButton aria-label="checkIdDup" onClick={checkIdDup}>
+                {idAvailable ? (
+                  <CheckCircleIcon sx={{ fontSize: 32, color: "#EA5C2B" }} />
+                ) : (
+                  <CheckCircleOutlineIcon
+                    sx={{ fontSize: 32, color: "black" }}
+                  />
+                )}
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Grid>
+        {idRegexBool ? (
+          ""
+        ) : (
+          <Grid item xs={12} mt={-1}>
+            <Typography
+              variant="body2"
+              component="p"
+              pl={1}
+              sx={{ textAlign: "left", fontSize: "13px" }}
+            >
+              이메일 형식을 맞춰주세요
+            </Typography>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <TextField
+            label="비밀번호"
+            required
+            fullWidth
+            type="password"
+            id="memberPwd"
+            name="memberPwd"
+            value={member.memberPwd}
+            onChange={(e) => {
+              handleChange(e);
+              isPwdRegex(e);
+            }}
+          />
+        </Grid>
+        {pwdRegexBool ? (
+          ""
+        ) : (
+          <Grid item xs={12} mt={-1}>
+            <Typography
+              variant="body2"
+              component="p"
+              pl={1}
+              sx={{ textAlign: "left", fontSize: "13px" }}
+            >
+              영문과 숫자를 포함하여 6 ~ 20자리 입력해주세요
+            </Typography>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <TextField
+            label="비밀번호 확인"
+            required
+            fullWidth
+            type="password"
+            id="memberPwdCheck"
+            name="memberPwdCheck"
+            onChange={handlePwd2}
+          />
+        </Grid>
+        {samePwd ? (
+          ""
+        ) : (
+          <Grid item xs={12} mt={-1}>
+            <Typography
+              variant="body2"
+              component="p"
+              pl={1}
+              sx={{ textAlign: "left", fontSize: "13px" }}
+            >
+              동일한 비밀번호를 입력해주세요
+            </Typography>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <TextField
+            label="이름"
+            required
+            fullWidth
+            type="text"
+            id="memberName"
+            name="memberName"
+            value={member.memberName}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs>
+          <TextField
+            label="닉네임"
+            required
+            fullWidth
+            type="text"
+            id="memberNick"
+            name="memberNick"
+            value={member.memberNick}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Box mr={2}>
+            <Tooltip title="중복 체크" arrow placement="top">
+              <IconButton aria-label="checkNickDup" onClick={checkNickDup}>
+                {nickAvailable ? (
+                  <CheckCircleIcon sx={{ fontSize: 32, color: "#EA5C2B" }} />
+                ) : (
+                  <CheckCircleOutlineIcon
+                    sx={{ fontSize: 32, color: "black" }}
+                  />
+                )}
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="핸드폰 번호"
+            required
+            fullWidth
+            type="tel"
+            id="memberTel"
+            name="memberTel"
+            value={member.memberTel}
+            placeholder="010-1234-5678"
+            onChange={(e) => {
+              handleChange(e);
+              isTelRegex(e);
+            }}
+          />
+        </Grid>
+        {telRegexBool ? (
+          ""
+        ) : (
+          <Grid item xs={12} mt={-1}>
+            <Typography
+              variant="body2"
+              component="p"
+              pl={1}
+              sx={{ textAlign: "left", fontSize: "13px" }}
+            >
+              핸드폰 번호 형식을 맞춰주세요
+            </Typography>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <TextField
+            label="주소"
+            required
+            fullWidth
+            type="text"
+            id="memberAddr"
+            name="memberAddr"
+            value={member.memberAddr}
+            placeholder="서울시 중구 남대문로10길 29"
+            onChange={handleChange}
+          />
+        </Grid>
+      </Grid>
+      <Button
+        sx={{ mt: 3 }}
+        type="button"
+        variant="outlined"
+        onClick={next}
+        disabled={!buttonActive}
+      >
+        Next
+      </Button>
     </>
   );
 }
