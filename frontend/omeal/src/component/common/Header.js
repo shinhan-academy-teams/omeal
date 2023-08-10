@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { SignInState, SubCheckState } from "../../recoil/SignInState";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
 import {
   Box,
   Button,
@@ -26,9 +24,9 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
-  const memberId = useRecoilValue(SignInState);
+  const [memberId, setMemberId] = useRecoilState(SignInState);
 
-  const [state, setState] = useState({
+  const [state, setState] = React.useState({
     right: false,
   });
 
@@ -52,12 +50,6 @@ function Header(props) {
     navi("/");
   };
 
-  const [memberId, setMemberId] = useRecoilState(SignInState);
-
-  const [state, setState] = React.useState({
-    right: false,
-  });
-  
   const notice = () => {
     navi("/notice");
   };

@@ -28,7 +28,7 @@ import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
 import PayInfo from "component/mypage/PayInfo";
 import { useRecoilValue } from "recoil";
-import { SignInState } from "./recoil/SignInState";
+import { SignInState, SubCheckState } from "./recoil/SignInState";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -45,6 +45,7 @@ const App = () => {
   });
 
   const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const isSub = useRecoilValue(SubCheckState);
 
   const location = useLocation();
   return (
@@ -54,8 +55,13 @@ const App = () => {
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
 
-            <Route path="subscription" element={<Subscription />} />
-              
+            <Route
+              path="subscription"
+              element={
+                isSub ? <Navigate replace to="/sub-info" /> : <Subscription />
+              }
+            />
+
             <Route
               path="mypage"
               element={
