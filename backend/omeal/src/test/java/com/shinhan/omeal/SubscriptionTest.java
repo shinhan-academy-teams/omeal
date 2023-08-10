@@ -69,9 +69,9 @@ public class SubscriptionTest {
     LocalDate calEndDate(SubscriptionType type) { // 구독 종료일 계산
         LocalDate endDate = LocalDate.now();
         if(type.equals(SubscriptionType.MONTHLY)) {
-            endDate.plusDays(30);
+            endDate = endDate.plusDays(30);
         } else {
-            endDate.plusDays(6);
+            endDate = endDate.plusDays(6);
         }
         return endDate;
     }
@@ -114,6 +114,7 @@ public class SubscriptionTest {
                         .build();
                 subHistoryRepo.save(history);
                 LocalDate newEndDate = calEndDate(subscription.getSubType());
+                System.out.println(newEndDate);
                 subscription.updateSubscription(newEndDate);
                 subRepo.save(subscription);
             }

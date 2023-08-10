@@ -102,9 +102,9 @@ public class SubscriptionService {
     private LocalDate calEndDate(SubscriptionType type) {
         LocalDate endDate = LocalDate.now();
         if(type.equals(SubscriptionType.MONTHLY)) {
-            endDate.plusDays(30);
+            endDate = endDate.plusDays(30);
         } else {
-            endDate.plusDays(6);
+            endDate = endDate.plusDays(6);
         }
         return endDate;
     }
