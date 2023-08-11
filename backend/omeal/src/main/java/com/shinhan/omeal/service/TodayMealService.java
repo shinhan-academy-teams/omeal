@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,45 +28,61 @@ public class TodayMealService {
     final MenuRepository menuRepo;
     final SubscriptionRepository subRepo;
     final FeedbackRepository feedbackRepo;
-    final DeliveryHistory dh;
+
+    // 피드백 읽어오기
+    public FeedbackDTO getFeedback(String memberId, String menuName) {
+        FeedbackDTO dto = new FeedbackDTO();
+
+        Members member = memRepo.findById(memberId).orElse(null);
+        List<Menu> menuIdList = menuRepo.findByMenuName(menuName);
+
+        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
+
+        if (oneFbFromDB != null) {
+            dto = FeedbackDTO.builder()
+                    .feedback(oneFbFromDB.getFeedback())
+                    .feedbackContent(oneFbFromDB.getFeedbackContent())
+                    .build();
+        }
+
+        return dto;
+    }
 
     // 피드백 남기기
-    public DeliveryHistory submitFeedback(@RequestBody FeedbackDTO dto) {
-        // 피드백 남겼을 시 Delivery_history 테이블의 feedbackStatus를 0 => 1
-        DeliveryHistory deliveryHistory = tmRepo.findById(dto.getDeliveryNo()).get();
-        deliveryHistory = DeliveryHistory.updateFeedbackStatus(deliveryHistory);
-        tmRepo.save(deliveryHistory);
+    public String submitFeedback(@RequestBody FeedbackDTO dto) {
+        String result = "";
 
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
         List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
-        String feedbackStr = dto.getFeedback();
 
-        // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
-        if (feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0)) == null) { // 없으면
-            if (feedbackStr.equals("dislike")) { // 클라이언트가 싫어요를 눌렀으면
+        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0)); // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
+
+        if (oneFbFromDB == null) { // 없으면
+            for (Menu menu : menuIdList) {
+                Feedback feedback = Feedback.builder()
+                        .member(member)
+                        .menu(menu)
+                        .feedback(dto.getFeedback())
+                        .feedbackContent(dto.getFeedbackContent())
+                        .build();
+                feedbackRepo.save(feedback);
+            }
+            result = "SUCCESS(insert)";
+        } else { // 있으면
+            if (oneFbFromDB.getFeedback().equals(dto.getFeedback())
+                    && oneFbFromDB.getFeedbackContent().equals(dto.getFeedbackContent())) { // 피드백이 같으면
+                result = "do NOTHING";
+            } else { // 다르면
                 for (Menu menu : menuIdList) {
-                    Feedback feedback = Feedback.builder()
-                            .member(member)
-                            .menu(menu)
-                            .build();
-
+                    Feedback feedback = feedbackRepo.findByMemberAndMenu(member, menu);
+                    feedback.updateFeedback(dto.getFeedback(), dto.getFeedbackContent());
                     feedbackRepo.save(feedback);
                 }
-            } else { // 클라이언트가 좋아요를 눌렀으면
-                //return "do NOTHING";
-            }
-        } else {
-            if (feedbackStr.equals("dislike")) { // 클라이언트가 싫어요를 눌렀으면
-                //return "already DISLIKED";
-            } else { // 클라이언트가 좋아요를 눌렀으면
-                for (Menu menu : menuIdList) {
-                    feedbackRepo.deleteByMemberAndMenu(member, menu);
-                }
+                result = "SUCCESS(update)";
             }
         }
 
-        //return "success";
-        return deliveryHistory;
+        return result;
     }
 
     // 하단의 '오늘의 밀' 아이콘 눌렀을 때 뜨는 첫 페이지
@@ -175,16 +192,22 @@ public class TodayMealService {
     // 배송 현황을 배송중으로 업데이트
     private void inProgressDelivery(List<Members> membersByTime) {
         tmRepo.findAllByMemberIn(membersByTime).forEach(history -> {
-            history.updateDeliveryStatus(DeliveryStatus.배송중);
-            tmRepo.save(history);
+            LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
+            if(todayDelivery.equals(LocalDate.now())){
+                history.updateDeliveryStatus(DeliveryStatus.배송중);
+                tmRepo.save(history);
+            }
         });
     }
 
     // 배송 현황을 배송완료로 업데이트
     private void completeDelivery(List<Members> membersByTime) {
         tmRepo.findAllByMemberIn(membersByTime).forEach(history -> {
-            history.updateDeliveryStatus(DeliveryStatus.배송완료);
-            tmRepo.save(history);
+            LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
+            if(todayDelivery.equals(LocalDate.now())){
+                history.updateDeliveryStatus(DeliveryStatus.배송완료);
+                tmRepo.save(history);
+            }
         });
     }
 

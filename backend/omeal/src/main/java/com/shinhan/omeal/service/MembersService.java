@@ -67,7 +67,9 @@ public class MembersService {
         Members updatedMember = subService.updateMemberGrade(member);
         int days = subService.getContinuousDays(loginId);
 
-        return MembersDTO.toMembersDtoForSignIn(updatedMember, days);
+        MembersDTO dto = MembersDTO.toMembersDtoForSignIn(updatedMember, days);
+        dto.setMemberRole(member.getMemberRole());
+        return dto;
     }
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)

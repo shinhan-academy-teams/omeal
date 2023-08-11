@@ -2,12 +2,15 @@ package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.members.MemberGrade;
 import com.shinhan.omeal.dto.subscription.SubscriptionDTO;
+import com.shinhan.omeal.dto.subscription.SubscriptionStatus;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
 import com.shinhan.omeal.entity.Allergy;
+import com.shinhan.omeal.entity.History;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import com.shinhan.omeal.repository.AllergyRepository;
 import com.shinhan.omeal.repository.MembersRepository;
+import com.shinhan.omeal.repository.SubscriptionHistoryRepository;
 import com.shinhan.omeal.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class SubscriptionService {
     final SubscriptionRepository subRepo;
     final MembersRepository memRepo;
     final AllergyRepository allergyRepo;
+    final SubscriptionHistoryRepository historyRepo;
     
     public String subscribe(SubscriptionDTO subscriptionInfo) {
         Members member = memRepo.findById(subscriptionInfo.getMemberId()).orElse(null);
@@ -43,10 +45,65 @@ public class SubscriptionService {
                 .deliveryAddr(subscriptionInfo.getDeliveryAddr())
                 .container(subscriptionInfo.getContainer())
                 .mealTime(subscriptionInfo.getMealTime())
-                .startDate(new Date())
+                .startDate(LocalDate.now())
                 .endDate(calEndDate(subscriptionInfo.getSubType()))
                 .build();
         subRepo.save(newSubscription);
+        // 히스토리 저장
+        History newHistory = History.builder()
+                .member(member)
+                .subType(newSubscription.getSubType())
+                .category(newSubscription.getCategory())
+                .status(SubscriptionStatus.START)
+                .amount(calPaymentAmount(newSubscription.getSubType()))
+                .payDate(newSubscription.getPayDate())
+                .startDate(newSubscription.getStartDate())
+                .endDate(newSubscription.getEndDate())
+                .build();
+        historyRepo.save(newHistory);
+        return "OK";
+    }
+
+    // 구독정보 갱신
+    public void updateSubscriptionInfo() {
+        LocalDate today = LocalDate.now();
+        subRepo.findAll().forEach(subscription -> {
+            if(subscription.getEndDate().isBefore(today)){
+                // 히스토리 업데이트
+                History endSubscription = historyRepo.findByMemberAndStatus(subscription.getMember(),SubscriptionStatus.START);
+                endSubscription.updateEndHistory();
+                historyRepo.save(endSubscription);
+                // 구독정보 갱신
+                LocalDate newEndDate = calEndDate(subscription.getSubType());
+                subscription.updateSubscription(newEndDate);
+                subRepo.save(subscription);
+                // 새구독정보 히스토리 저장
+                History history = History.builder()
+                        .member(subscription.getMember())
+                        .subType(subscription.getSubType())
+                        .category(subscription.getCategory())
+                        .status(SubscriptionStatus.START)
+                        .amount(calDiscountedAmount(subscription.getMember().getMemberGrade(),subscription.getSubType()))
+                        .payDate(subscription.getPayDate())
+                        .startDate(subscription.getStartDate())
+                        .endDate(subscription.getEndDate())
+                        .build();
+                historyRepo.save(history);
+
+            }
+        });
+    }
+
+    // 구독취소
+    public String cancelSubscription(String memId) {
+        Members member = memRepo.findById(memId).orElse(null);
+        Subscription subscription = subRepo.findByMember(member);
+        // 히스토리 업데이트
+        History history = historyRepo.findByMemberAndStatus(member,SubscriptionStatus.START);
+        history.updateCancelHistory();
+        historyRepo.save(history);
+        // 구독정보 삭제
+        subRepo.delete(subscription);
         return "OK";
     }
 
@@ -64,15 +121,33 @@ public class SubscriptionService {
     }
 
     // 구독 종료일 계산
-    private Date calEndDate(SubscriptionType type) {
-        Calendar calendar = Calendar.getInstance();
+    private LocalDate calEndDate(SubscriptionType type) {
+        LocalDate endDate = LocalDate.now();
         if(type.equals(SubscriptionType.MONTHLY)) {
-            calendar.add(Calendar.DATE,30);
+            endDate = endDate.plusDays(30);
         } else {
-            calendar.add(Calendar.DATE,6);
+            endDate = endDate.plusDays(6);
         }
-        Date endDate = new Date(calendar.getTimeInMillis());
         return endDate;
+    }
+
+    // 기본 결제금액 계산
+    private int calPaymentAmount(SubscriptionType type) {
+        if(type.equals(SubscriptionType.MONTHLY)) {
+            return 190000;
+        }
+        return 52000;
+    }
+
+    // 등급별 할인 결제금액 계산
+    private int calDiscountedAmount(MemberGrade grade, SubscriptionType type){
+        int amount = calPaymentAmount(type);
+        switch (grade) {
+            case 반숙란: return (int)(amount*0.95);
+            case 완숙란: return (int)(amount*0.90);
+            case 훈제란: return (int)(amount*0.85);
+            default: return amount;
+        }
     }
 
     // 입력 받은 알레르기 정보를 DB에 있는 데이터와 매핑

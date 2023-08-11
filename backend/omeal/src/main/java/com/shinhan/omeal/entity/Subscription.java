@@ -12,9 +12,9 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -58,17 +58,15 @@ public class Subscription {
 
     @CreationTimestamp
     @Comment("결제 일시")
-    private Timestamp payDate;
+    private LocalDateTime payDate;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
     @Comment("구독 시작일")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
     @Comment("구독 종료일")
-    private Date endDate;
+    private LocalDate endDate;
 
     // 마이페이지 - 구독 정보만 가져오기
     public List<String> getSubDTO(){
@@ -88,6 +86,13 @@ public class Subscription {
     // 구독 회원 알레르기 정보 가져오기
     public List<Allergy> getMemberAllergyInfo() {
         return this.member.getMemberAllergyInfo();
+    }
+
+    // 구독 회원 정보 갱신
+    public void updateSubscription(LocalDate endDate) {
+        this.startDate = LocalDate.now();
+        this.endDate = endDate;
+        this.payDate = LocalDateTime.now();
     }
 
 }

@@ -14,6 +14,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
+import moment from "moment";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -64,7 +65,9 @@ function DeliveryInfo(props) {
             <TableBody>
               {deliveryHistory.map((history, index) => (
                 <TableRow key={index}>
-                  <TableCell>{history.date}</TableCell>
+                  <TableCell>
+                    {moment(history.date).format("YYYY-MM-DD HH:mm")}
+                  </TableCell>
                   <TableCell>{history.deliveryAddr}</TableCell>
                   <TableCell>{history.menu}</TableCell>
                   <TableCell>{history.status}</TableCell>

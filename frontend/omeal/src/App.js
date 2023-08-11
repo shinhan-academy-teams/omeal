@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import NavBar from "./pages/common/NavBar";
@@ -26,6 +26,19 @@ import Feedback from "./pages/todayMeal/Feedback";
 import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
+import PayInfo from "component/mypage/PayInfo";
+import Notice from "component/common/Notice";
+import FAQ from "component/common/FAQ";
+import { useRecoilValue } from "recoil";
+import {
+  MemberRoleState,
+  SignInState,
+  SubCheckState,
+} from "./recoil/SignInState";
+import AdminMeun from "pages/admin/AdminMenu";
+import ManageMember from "pages/admin/ManageMember";
+import ManageDishes from "pages/admin/ManageDishes";
+import ManageSales from "pages/admin/ManageSales";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -41,6 +54,10 @@ const App = () => {
     },
   });
 
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const isSub = useRecoilValue(SubCheckState);
+  const isAdmin = useRecoilValue(MemberRoleState) === "ADMIN" ? true : false;
+
   const location = useLocation();
   return (
     <ThemeProvider theme={theme}>
@@ -48,22 +65,43 @@ const App = () => {
         <Routes location={location}>
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
-            <Route path="subscription" element={<Subscription />} />
-            <Route path="mypage" element={<Mypage />} />
-            <Route path="card-info" element={<CardInfo />} />
-            <Route path="sub-info" element={<SubInfo />} />
-            <Route path="user-info" element={<UserInfo />} />
-            <Route path="delivery-info" element={<DeliveryInfo />} />
+            <Route path="notice" element={<Notice />} />
+            <Route path="faq" element={<FAQ />} />
+
+            {/* 구독신청 */}
+            <Route
+              path="subscription"
+              element={
+                isSub ? (
+                  <Navigate replace to="/mypage/sub-info" />
+                ) : (
+                  <Subscription />
+                )
+              }
+            />
+
+            {/* 마이페이지 */}
+            <Route path="mypage">
+              <Route
+                path=""
+                element={
+                  isLogin ? <Mypage /> : <Navigate replace to="/auth/sign-in" />
+                }
+              />
+              <Route path="card-info" element={<CardInfo />} />
+              <Route path="sub-info" element={<SubInfo />} />
+              <Route path="user-info" element={<UserInfo />} />
+              <Route path="delivery-info" element={<DeliveryInfo />} />
+              <Route path="payment-info" element={<PayInfo />} />
+            </Route>
 
             {/* 커뮤니티 */}
             <Route path="omealland" element={<OmealLand />} />
             <Route path="omealland/sandwich" element={<SandralPark />} />
-
             <Route
               path="omealland/sandwich/PostView/:no"
               element={<PostView />}
             />
-
             <Route path="omealland/bibimbap" element={<BibimLab />} />
             <Route path="omealland/ricesoup" element={<RiceSoupMinistry />} />
             <Route path="omealland/salad" element={<GreenZone />} />
@@ -71,10 +109,34 @@ const App = () => {
             <Route path="omealland/homemeal" element={<KoreaTown />} />
             <Route path="omealland/register" element={<Register />} />
 
-            <Route path="today-meal" element={<TodayMeal />} />
-            <Route path="today-meal/feedback" element={<Feedback />} />
+            {/* 오늘의밀 */}
+            <Route path="today-meal">
+              <Route
+                path=""
+                element={
+                  isLogin ? (
+                    <TodayMeal />
+                  ) : (
+                    <Navigate replace to="/auth/sign-in" />
+                  )
+                }
+              />
+              <Route path="feedback" element={<Feedback />} />
+            </Route>
 
-            <Route path="food-worldcup" element={<Worldcup />} />             
+            <Route path="food-worldcup" element={<Worldcup />} />
+
+            {/* 관리자 페이지 */}
+            {isAdmin ? (
+              <Route path="manage">
+                <Route path="" element={<AdminMeun />} />
+                <Route path="member" element={<ManageMember />} />
+                <Route path="dishes" element={<ManageDishes />} />
+                <Route path="sales" element={<ManageSales />} />
+              </Route>
+            ) : (
+              <Route index element={<Main />} />
+            )}
           </Route>
 
           <Route path="/auth" element={<NoNavBar />}>
@@ -87,4 +149,5 @@ const App = () => {
     </ThemeProvider>
   );
 };
+
 export default App;

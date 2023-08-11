@@ -2,7 +2,6 @@ package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.todayMeal.FeedbackDTO;
 import com.shinhan.omeal.dto.todayMeal.TodayMealDTO;
-import com.shinhan.omeal.entity.DeliveryHistory;
 import com.shinhan.omeal.service.TodayMealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +19,15 @@ public class TodayMealController {
         return tmService.getDeliveryInfo(memberId);
     }
 
+    // 피드백 읽어오기
+    @GetMapping(value = "/feedback")
+    public FeedbackDTO getFeedback(String memberId, String menuName) {
+        return tmService.getFeedback(memberId, menuName);
+    }
+
     // 피드백 남기기
     @PostMapping(value = "/feedback", consumes = "application/json")
-    public DeliveryHistory submitFeedback(@RequestBody FeedbackDTO dto) {
+    public String submitFeedback(@RequestBody FeedbackDTO dto) {
         return tmService.submitFeedback(dto);
     }
 }

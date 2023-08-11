@@ -6,12 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Component
 @ToString
 @Getter
 @Entity
@@ -48,26 +46,10 @@ public class DeliveryHistory {
     @Comment("배송 일시")
     private LocalDateTime deliveryDate;
 
-    @ColumnDefault("0")
-    @Comment("피드백 유무")
-    private Integer feedbackStatus;
 
     // 배송 현황 업데이트
     public void updateDeliveryStatus(DeliveryStatus status) {
         this.status = status;
-    }
-
-    // 피드백 업데이트
-    public static DeliveryHistory updateFeedbackStatus(DeliveryHistory deliveryHistory){
-        return DeliveryHistory.builder()
-                .deliveryNo(deliveryHistory.getDeliveryNo())
-                .deliveryAddr(deliveryHistory.getDeliveryAddr())
-                .deliveryDate(deliveryHistory.getDeliveryDate())
-                .menu(deliveryHistory.getMenu())
-                .status(deliveryHistory.getStatus())
-                .member(deliveryHistory.getMember())
-                .feedbackStatus(1) // 피드백 완료
-                .build();
     }
 
     public DeliveryHistoryDTO getDeliveryHistoryDTO() {

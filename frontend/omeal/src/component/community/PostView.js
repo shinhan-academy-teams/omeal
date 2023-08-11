@@ -99,10 +99,10 @@ function PostView() {
             <TableHead>
               <TableRow>
                 <TableCell align="center">내용</TableCell>
-                <TableCell align="center" sx={{ width: "10%" }}>
+                <TableCell align="center" sx={{ width: "22%" }}>
                   작성자
                 </TableCell>
-                <TableCell align="center" sx={{ width: "40%" }}>
+                <TableCell align="center" sx={{ width: "20%" }}>
                   작성일자
                 </TableCell>
               </TableRow>
@@ -112,7 +112,9 @@ function PostView() {
                 <TableRow>
                   <TableCell>{row.content}</TableCell>
                   <TableCell>{row.memberNick}</TableCell>
-                  <TableCell>{row.regDate}</TableCell>
+                  <TableCell>
+                    {new Date(row.regDate).toISOString().split("T")[0]}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

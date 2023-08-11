@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -6,81 +6,100 @@ import HomeIcon from "@mui/icons-material/Home";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import MopedIcon from "@mui/icons-material/Moped";
 import EggIcon from "@mui/icons-material/Egg";
-import { useNavigate } from "react-router-dom";
-import eggImg from "../../assets/img/egg2.png";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { MemberGradeState } from "../../recoil/SignInState";
+import { MemberGradeState, SubCheckState } from "../../recoil/SignInState";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
+import "./Bottom.css";
+import { ColorLensOutlined } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 function Bottom(props) {
-  const navi = useNavigate();
-  const [value, setValue] = React.useState(0);
-  const memberGrade = useRecoilValue(MemberGradeState);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-  const myPage = () => {
-    navi("/mypage");
-  };
+  const navi = useNavigate();
+  const [value, setValue] = useState(currentPath);
+  const memberGrade = useRecoilValue(MemberGradeState);
+  const sub = useRecoilValue(SubCheckState);
 
   const todayMeal = () => {
+    if (!sub) {
+      Swal.fire({
+        icon: "warning", // 여기다가 아이콘 종류를 쓰면 됩니다.
+        text: "구독중인 서비스가 없습니다.",
+      });
+      return;
+    }
     navi("/today-meal");
   };
 
-  const main = () => {
-    navi("/");
+  const handleChange = (e, newValue) => {
+    setValue(newValue);
+    navi(newValue);
   };
 
-  const omealland = () => {
-    navi("/omealland");
+  const eggImgs = {
+    날계란: eggImg1,
+    반숙란: eggImg2,
+    완숙란: eggImg3,
+    훈제란: eggImg4,
   };
 
   return (
-    <div>
-      <Box sx={{ width: "100%" }}>
+    <>
+      <Box sx={{ width: "100%", zIndex: "1" }}>
         <BottomNavigation
-          style={{ backgroundColor: "#ea5c2b" }}
+          sx={{ backgroundColor: "#ea5c2b" }}
           showLabels
           value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          onChange={handleChange}
         >
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="홈"
+            id="home"
+            value="/"
             icon={<HomeIcon />}
-            onClick={main}
           />
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="커뮤니티"
+            id="community"
+            value="/omealland"
             icon={<Diversity3Icon />}
-            onClick={omealland}
           />
-
-          {memberGrade === "날계란" ? (
-            <img alt="" src={eggImg1}></img>
-          ) : memberGrade === "반숙란" ? (
-            <img alt="" src={eggImg2}></img>
-          ) : memberGrade === "완숙란" ? (
-            <img alt="" src={eggImg3}></img>
-          ) : (
-            <img alt="" src={eggImg4}></img>
-          )}
-
           <BottomNavigationAction
+            disabled
+            label=""
+            icon={
+              <img
+                alt="egg grade"
+                width="48px"
+                src={memberGrade ? eggImgs[memberGrade] : eggImgs["날계란"]}
+              />
+            }
+          />
+          <BottomNavigationAction
+            sx={{ color: "white" }}
             label="오늘의 밀"
+            id="omeal"
+            value="/today-meal"
             icon={<MopedIcon />}
-            onClick={todayMeal}
           />
           <BottomNavigationAction
+            sx={{ color: "white" }}
             label="마이페이지"
+            id="mypage"
+            value="/mypage"
             icon={<EggIcon />}
-            onClick={myPage}
           />
         </BottomNavigation>
       </Box>
-    </div>
+    </>
   );
 }
 

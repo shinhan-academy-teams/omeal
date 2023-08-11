@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -91,6 +92,8 @@ public class TodayMealTest {
             membersByTime.add(subscription.getMember());
         });
         tmRepo.findAllByMemberIn(membersByTime).forEach(history->{
+            LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
+            System.out.println(todayDelivery.equals(LocalDate.now()));
             history.updateDeliveryStatus(DeliveryStatus.배송완료);
             tmRepo.save(history);
         });

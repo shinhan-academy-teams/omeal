@@ -1,39 +1,80 @@
-import React from "react";
-import DehazeIcon from "@mui/icons-material/Dehaze";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
-import { Button } from "@mui/material";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-
-import logoImg from "../../assets/img/logo.png";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  ContinuousDaysState,
+  MemberGradeState,
+  MemberNameState,
+  MemberNickState,
+  MemberRoleState,
+  SignInState,
+  SubCheckState,
+} from "../../recoil/SignInState";
+import axios from "axios";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import logoImg from "../../assets/img/logo/white_logo.png";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import QuizIcon from "@mui/icons-material/Quiz";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import LogoutIcon from "@mui/icons-material/Logout";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
+
+  const [memberGrade, setMemberGrade] = useRecoilState(MemberGradeState);
+  const [memberNick, setMemberNick] = useRecoilState(MemberNickState);
+  const [memberName, setMemberName] = useRecoilState(MemberNameState);
+  const [continuousDaysState, setContinuousDaysState] =
+    useRecoilState(ContinuousDaysState);
+  const [subCheckState, setSubCheckState] = useRecoilState(SubCheckState);
+  const [memberRoleState, setMemberRoleState] = useRecoilState(MemberRoleState);
+  const [memberId, setMemberId] = useRecoilState(SignInState);
+  const [state, setState] = useState({
+    right: false,
+  });
+
   const signIn = () => {
     navi("/auth/sign-in");
   };
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const isSub = subCheckState;
+
   const subscription = () => {
-    navi("/subscription");
+    if (isLogin) {
+      if (isSub) {
+        navi("/mypage/sub-info"); // 이미 구독중인 사용자가 구독신청을 누르면 → 마이페이지 구독정보로 이동
+        return;
+      }
+      navi("/subscription");
+    } else {
+      navi("/auth/sign-in");
+    }
   };
   const main = () => {
     navi("/");
   };
 
-  const memberId = useRecoilValue(SignInState);
-
-  const [state, setState] = React.useState({
-    right: false,
-  });
+  const notice = () => {
+    navi("/notice");
+  };
+  const faq = () => {
+    navi("/faq");
+  };
+  const mypage = () => {
+    navi("/mypage");
+  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -44,6 +85,26 @@ function Header(props) {
     }
 
     setState({ state, [anchor]: open });
+  };
+
+  const logout = () => {
+    axios({
+      method: "GET",
+      url: "/auth/log-out",
+    })
+      .then((response) => {
+        setMemberId("");
+        setContinuousDaysState("");
+        setMemberGrade("");
+        setMemberName("");
+        setMemberNick("");
+        setMemberRoleState("");
+        setSubCheckState("");
+        navi("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const list = (anchor) => (
@@ -59,7 +120,7 @@ function Header(props) {
         <ListItem disablePadding onClick={subscription}>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <RestaurantIcon />
             </ListItemIcon>
             <ListItemText primary="구독신청" />
           </ListItemButton>
@@ -70,9 +131,9 @@ function Header(props) {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <CampaignIcon />
             </ListItemIcon>
-            <ListItemText primary="공지사항" />
+            <ListItemText primary="공지사항" onClick={notice} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -81,18 +142,18 @@ function Header(props) {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <QuizIcon />
             </ListItemIcon>
-            <ListItemText primary="FAQ" />
+            <ListItemText primary="FAQ" onClick={faq} />
           </ListItemButton>
         </ListItem>
       </List>
 
       <List>
-        <ListItem disablePadding>
+        <ListItem disablePadding onClick={logout}>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon />
+              <LogoutIcon />
             </ListItemIcon>
             <ListItemText primary="로그아웃" />
           </ListItemButton>
@@ -104,20 +165,50 @@ function Header(props) {
 
   return (
     <>
-      <div className="nav">
+      <div className="header" style={{ zIndex: "1" }}>
         <img
-          alt=""
+          alt="white logo"
           src={logoImg}
-          width={"30%"}
-          style={{ float: "left", cursor: "pointer" }}
+          style={{
+            marginTop: "5px",
+            height: "130%",
+            float: "left",
+            cursor: "pointer",
+          }}
           onClick={main}
-        ></img>
-
+        />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {memberId ? (
-            <NotificationsNoneIcon sx={{ marginRight: 2 }} />
+            <Typography
+              variant="body1"
+              sx={{
+                pt: "3px",
+                color: "#FEF7ED",
+                cursor: "pointer",
+                ":hover": { textDecoration: "underline" },
+              }}
+              onClick={mypage}
+            >
+              {memberNick} 님
+            </Typography>
           ) : (
-            <Button variant="contained" onClick={signIn}>
+            <Button
+              variant="outlined"
+              disableElevation
+              sx={{
+                borderRadius: "20px",
+                p: "3px 15px",
+                color: "#EA5C2B",
+                backgroundColor: "white",
+                border: "2px solid #FEF7ED",
+                ":hover": {
+                  color: "white",
+                  backgroundColor: "#EA5C2B",
+                  border: "2px solid #FEF7ED",
+                },
+              }}
+              onClick={signIn}
+            >
               로그인
             </Button>
           )}
@@ -125,7 +216,7 @@ function Header(props) {
           {["right"].map((anchor) => (
             <React.Fragment key={anchor}>
               <DehazeIcon
-                sx={{ cursor: "pointer", marginLeft: 3 }}
+                sx={{ cursor: "pointer", ml: 3, mr: "12px", color: "white" }}
                 onClick={toggleDrawer(anchor, true)}
               >
                 {anchor}
