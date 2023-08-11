@@ -7,6 +7,7 @@ import {
   Divider,
   ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   Paper,
   Typography,
@@ -72,16 +73,12 @@ function Mypage(props) {
           )}
         </div>
         <List
-          style={{ padding: 0 }}
+          style={{ padding: 0, backgroundColor: "#FEF7ED" }}
           sx={{ width: "100%", bgcolor: "background.paper" }}
+          aria-label="contacts"
         >
-          <Paper
-            elevation={elevation}
-            onMouseEnter={() => setElevation(8)}
-            onMouseLeave={() => setElevation(2)}
-            sx={{ cursor: "pointer", backgroundColor: "#FEF7ED" }}
-          >
-            <ListItem alignItems="center" onClick={subInfo}>
+          <ListItem alignItems="center">
+            <ListItemButton onClick={subInfo}>
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src="/img/avatar-img/subinfo.png" />
               </ListItemAvatar>
@@ -98,16 +95,11 @@ function Mypage(props) {
                   </React.Fragment>
                 }
               />
-            </ListItem>
-          </Paper>
+            </ListItemButton>
+          </ListItem>
           <Divider />
-          <Paper
-            elevation={elevation}
-            onMouseEnter={() => setElevation(8)}
-            onMouseLeave={() => setElevation(2)}
-            sx={{ cursor: "pointer", backgroundColor: "#FEF7ED" }}
-          >
-            <ListItem alignItems="flex-start" onClick={DeliveryInfo}>
+          <ListItem alignItems="flex-start">
+            <ListItemButton onClick={DeliveryInfo}>
               <ListItemAvatar>
                 <Avatar src="/img/avatar-img/delivery.png" />
               </ListItemAvatar>
@@ -124,16 +116,11 @@ function Mypage(props) {
                   </React.Fragment>
                 }
               />
-            </ListItem>
-          </Paper>
+            </ListItemButton>
+          </ListItem>
           <Divider />
-          <Paper
-            elevation={elevation}
-            onMouseEnter={() => setElevation(8)}
-            onMouseLeave={() => setElevation(2)}
-            sx={{ cursor: "pointer", backgroundColor: "#FEF7ED" }}
-          >
-            <ListItem alignItems="flex-start">
+          <ListItem alignItems="flex-start">
+            <ListItemButton>
               <ListItemAvatar>
                 <Avatar src="/img/avatar-img/payment.png" />
               </ListItemAvatar>
@@ -150,8 +137,8 @@ function Mypage(props) {
                   </React.Fragment>
                 }
               />
-            </ListItem>
-          </Paper>
+            </ListItemButton>
+          </ListItem>
         </List>
       </div>
 
