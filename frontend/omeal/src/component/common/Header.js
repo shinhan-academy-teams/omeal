@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
+import { MemberNickState, SignInState } from "../../recoil/SignInState";
 import {
   Box,
   Button,
@@ -12,10 +12,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import logoImg from "../../assets/img/logo/white_logo.png";
 import DehazeIcon from "@mui/icons-material/Dehaze";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import QuizIcon from "@mui/icons-material/Quiz";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -24,6 +24,7 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 function Header(props) {
   const navi = useNavigate();
   const memberId = useRecoilValue(SignInState);
+  const memberNick = useRecoilValue(MemberNickState);
 
   const [state, setState] = useState({
     right: false,
@@ -43,6 +44,9 @@ function Header(props) {
   };
   const faq = () => {
     navi("/faq");
+  };
+  const mypage = () => {
+    navi("/mypage");
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -128,7 +132,18 @@ function Header(props) {
         />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {memberId ? (
-            <NotificationsNoneIcon sx={{ marginRight: 2 }} />
+            <Typography
+              variant="body1"
+              sx={{
+                pt: "3px",
+                color: "#FEF7ED",
+                cursor: "pointer",
+                ":hover": { textDecoration: "underline" },
+              }}
+              onClick={mypage}
+            >
+              {memberNick} 님
+            </Typography>
           ) : (
             <Button
               variant="outlined"
