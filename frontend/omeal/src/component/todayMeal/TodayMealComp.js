@@ -23,6 +23,7 @@ import saladImg from "../../assets/img/menuCategory/salad.png";
 import sandwichImg from "../../assets/img/menuCategory/sandwich.png";
 import soupImg from "../../assets/img/menuCategory/soup.png";
 import homeImg from "../../assets/img/menuCategory/home.png";
+import Swal from "sweetalert2";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
@@ -61,6 +62,18 @@ function TodayMealComp(props) {
         console.log(error);
       });
   }, []);
+
+  const goFeedback = () => {
+    if (delivery.status === "배송완료") {
+      navi("/today-meal/feedback", { state: delivery });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "식사가 " + steps[activeStep] + "입니다.",
+        text: "배송 완료 후에 피드백을 남길 수 있습니다.",
+      });
+    }
+  };
 
   useEffect(() => {
     if (delivery.status === "배송준비중") {
@@ -143,9 +156,7 @@ function TodayMealComp(props) {
             height: "auto",
             borderRadius: "20px",
           }}
-          onClick={() => {
-            navi("/today-meal/feedback", { state: delivery });
-          }}
+          onClick={goFeedback}
         >
           <Grid
             container
@@ -174,7 +185,6 @@ function TodayMealComp(props) {
               <Box py={3} px={2}>
                 <Typography variant="h6">오늘의 밀</Typography>
                 <Divider variant="middle" sx={{ borderBottomWidth: 3 }} />
-
                 <Typography
                   variant="body1"
                   mt={3}
