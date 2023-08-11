@@ -19,6 +19,7 @@ import {
   AddrAtom,
   AllergyAtom,
   ContainerTypeAtom,
+  DoorPwdAtom,
   FoodCategoryAtom,
   SubAddrAtom,
   SubTimeAtom,
@@ -26,6 +27,7 @@ import {
 } from "../../recoil/SubscriptionState";
 import axios from "axios";
 import { SignInState } from "../../recoil/SignInState";
+import Swal from "sweetalert2";
 
 function Subscription(props) {
   const [activeStep, setActiveStep] = useState(0); //스텝
@@ -36,9 +38,13 @@ function Subscription(props) {
   const [containerType] = useRecoilState(ContainerTypeAtom);
   const [foodCategory] = useRecoilState(FoodCategoryAtom);
   const [Allergy] = useRecoilState(AllergyAtom);
+  const [doorPwd] = useRecoilState(DoorPwdAtom);
   const [addr] = useRecoilState(AddrAtom);
   const [subAddr] = useRecoilState(SubAddrAtom);
   const [subTime] = useRecoilState(SubTimeAtom);
+
+  console.log("고른 음식종류 : " + foodCategory);
+  console.log("현재 페이지 번호 :  " + detailStep);
 
   // 회원 아이디
   const memberId = useRecoilValue(SignInState);
@@ -46,6 +52,40 @@ function Subscription(props) {
   const steps = ["오밀플랜", "배송 정보", "결제"];
 
   const handleNext = () => {
+    // 1. DeliveryCycle에서 구독주기 선택 안했을 경우 => Alert
+    if (detailStep === 1) {
+      if (subType === "") {
+        Swal.fire({
+          icon: "warning",
+          text: "주간, 월간 중 하나를 선택해주세요",
+        });
+        return detailStep === 1;
+      }
+    }
+
+    // 3. FoodCategory에서 음식 선택 안했을 경우 => Alert
+    if (detailStep === 3) {
+      if (foodCategory === "") {
+        Swal.fire({
+          icon: "warning",
+          text: "원하는 음식을 선택해주세요",
+        });
+        return detailStep === 3;
+      }
+    }
+
+    // ★우선 개발 편의를 위해 주석 처리함
+    // 6. DeliveryInfo에서 주소, 상세주소, (비밀번호) 입력 안했을 경우 => Alert
+    // if (detailStep === 6) {
+    //   if (doorPwd === "" || addr === "" || subAddr === "") {
+    //     Swal.fire({
+    //       icon: "warning",
+    //       text: "주소와 상세 주소를 모두 입력해주세요",
+    //     });
+    //     return detailStep === 6;
+    //   }
+    // }
+
     setDetailStep((preDetailStep) => preDetailStep + 1);
     if (detailStep === 4) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
@@ -165,7 +205,7 @@ function Notice(props) {
     {
       1: "주간/월간 구독 서비스를 즐겨보세요.",
       2: "오밀을 즐기기 위해 안전한 포장 용기에 담아 보내드려요.",
-      3: "원하는 음식을 선택해주세요.",
+      //3: "원하는 음식을 선택해주세요.",
       4: "알러지 재료 음식은 미리 제외해드려요.",
     },
   ];
@@ -218,11 +258,17 @@ function Complete(props) {
       />
       <Box
         sx={{
-          width: 450,
-          height: 180,
+          alignContent: "center",
+          alignItems: "center",
+          display: "flex",
+          flexDirection: "column",
+          // width: 450,
+          // height: 180,
           backgroundColor: "#FEF7ED",
           borderRadius: "20px",
           marginTop: "80px",
+          marginLeft: 10,
+          marginRight: 10,
         }}
       >
         <Typography
@@ -236,7 +282,7 @@ function Complete(props) {
         </Typography>
         <Typography
           variant="h6"
-          style={{ color: "#FF7F3F", padding: "0px 0px 25px" }}
+          style={{ color: "#FF7F3F", padding: "10px 0px 25px" }}
         >
           다음주에 만나요:)
         </Typography>

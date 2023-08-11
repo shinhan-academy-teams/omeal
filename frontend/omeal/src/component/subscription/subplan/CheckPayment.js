@@ -2,13 +2,19 @@ import { Box, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { SubTypeAtom } from "../../../recoil/SubscriptionState";
+import {
+  FoodCategoryAtom,
+  SubTypeAtom,
+} from "../../../recoil/SubscriptionState";
 
 function CheckPayment(props) {
   const [deliveryDate, setdeliveryDate] = useState();
   const subType = useRecoilValue(SubTypeAtom);
+  const foodCategory = useRecoilValue(FoodCategoryAtom);
   const [mealFee, setMealFee] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
+
+  console.log(foodCategory);
 
   useEffect(() => {
     axios

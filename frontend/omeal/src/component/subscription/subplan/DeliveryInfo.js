@@ -12,13 +12,18 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { AddrAtom, SubAddrAtom } from "../../../recoil/SubscriptionState";
+import {
+  AddrAtom,
+  DoorPwdAtom,
+  SubAddrAtom,
+} from "../../../recoil/SubscriptionState";
 
 function DeliveryInfo(props) {
-  const [doorPwd, setDoorPwd] = useState("");
   const [show, setShow] = useState(false);
   const [request, setRequest] = useState("");
 
+  // 필수로 입력해야 하는 정보(doorPwd, addr, subAddr)에 대해선 Recoil로 관리해서 유효성검사 했음
+  const [doorPwd, setDoorPwd] = useRecoilState(DoorPwdAtom);
   const [addr, setAddr] = useRecoilState(AddrAtom);
   const [subAddr, setSubAddr] = useRecoilState(SubAddrAtom);
 
@@ -45,8 +50,6 @@ function DeliveryInfo(props) {
         "& > :not(style)": {
           m: 2,
           width: "450px",
-          // display: "flex",
-          // justifyContent: "center",
         },
       }}
       noValidate

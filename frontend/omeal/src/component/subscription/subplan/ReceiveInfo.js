@@ -1,9 +1,12 @@
-import { Box, TextField } from "@mui/material";
+import { Box, CircularProgress, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function ReceiveInfo(props) {
   const [memberInfo, setMemberInfo] = useState({});
+
+  // 로딩
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -15,29 +18,33 @@ function ReceiveInfo(props) {
           받는사람: response.data.memberName,
           연락처: response.data.memberTel,
         });
+        setIsLoading(false);
       })
       .catch(function (error) {});
   }, []);
 
   return (
-    <Box
-      component="form"
-      sx={{
-        "& > :not(style)": { m: 2, width: "450px" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      {Object.keys(memberInfo).map((key) => (
-        <TextField
-          key={key}
-          id="outlined-basic"
-          label={key}
-          variant="outlined"
-          defaultValue={memberInfo[key]}
-        />
-      ))}
-    </Box>
+    <>
+      {isLoading === true && <CircularProgress />}
+      <Box
+        component="form"
+        sx={{
+          "& > :not(style)": { m: 2, width: "450px" },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        {Object.keys(memberInfo).map((key) => (
+          <TextField
+            key={key}
+            id="outlined-basic"
+            label={key}
+            variant="outlined"
+            defaultValue={memberInfo[key]}
+          />
+        ))}
+      </Box>
+    </>
   );
 }
 
