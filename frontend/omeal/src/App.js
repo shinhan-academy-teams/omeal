@@ -28,7 +28,15 @@ import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
 import PayInfo from "component/mypage/PayInfo";
 import { useRecoilValue } from "recoil";
-import { SignInState, SubCheckState } from "./recoil/SignInState";
+import {
+  MemberRoleState,
+  SignInState,
+  SubCheckState,
+} from "./recoil/SignInState";
+import AdminMeun from "pages/admin/AdminMenu";
+import ManageMember from "pages/admin/ManageMember";
+import ManageDishes from "pages/admin/ManageDishes";
+import ManageSales from "pages/admin/ManageSales";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -46,6 +54,7 @@ const App = () => {
 
   const isLogin = useRecoilValue(SignInState) === "" ? false : true;
   const isSub = useRecoilValue(SubCheckState);
+  const isAdmin = useRecoilValue(MemberRoleState) === "ADMIN" ? true : false;
 
   const location = useLocation();
   return (
@@ -131,6 +140,18 @@ const App = () => {
             />
 
             <Route path="food-worldcup" element={<Worldcup />} />
+
+            {/* 관리자 페이지 */}
+            {isAdmin ? (
+              <Route path="manage">
+                <Route path="" element={<AdminMeun />} />
+                <Route path="member" element={<ManageMember />} />
+                <Route path="dishes" element={<ManageDishes />} />
+                <Route path="sales" element={<ManageSales />} />
+              </Route>
+            ) : (
+              <Route index element={<Main />} />
+            )}
           </Route>
 
           <Route path="/auth" element={<NoNavBar />}>

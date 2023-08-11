@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { SignInState, SubCheckState } from "../../recoil/SignInState";
+import {
+  ContinuousDaysState,
+  MemberGradeState,
+  MemberNameState,
+  MemberNickState,
+  MemberRoleState,
+  SignInState,
+  SubCheckState,
+} from "../../recoil/SignInState";
 import axios from "axios";
 import {
   Box,
@@ -24,6 +32,14 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
+
+  const [memberGrade, setMemberGrade] = useRecoilState(MemberGradeState);
+  const [memberNick, setMemberNick] = useRecoilState(MemberNickState);
+  const [memberName, setMemberName] = useRecoilState(MemberNameState);
+  const [continuousDaysState, setContinuousDaysState] =
+    useRecoilState(ContinuousDaysState);
+  const [subCheckState, setSubCheckState] = useRecoilState(SubCheckState);
+  const [memberRoleState, setMemberRoleState] = useRecoilState(MemberRoleState);
   const [memberId, setMemberId] = useRecoilState(SignInState);
 
   const [state, setState] = React.useState({
@@ -34,7 +50,8 @@ function Header(props) {
     navi("/auth/sign-in");
   };
   const isLogin = useRecoilValue(SignInState) === "" ? false : true;
-  const isSub = useRecoilValue(SubCheckState);
+  const isSub = subCheckState;
+
   const subscription = () => {
     if (isLogin) {
       if (isSub) {
@@ -75,10 +92,15 @@ function Header(props) {
     })
       .then((response) => {
         setMemberId("");
+        setContinuousDaysState("");
+        setMemberGrade("");
+        setMemberName("");
+        setMemberNick("");
+        setMemberRoleState("");
+        setSubCheckState("");
         navi("/");
       })
       .catch((err) => {
-        console.log(memberId);
         console.log(err);
       });
   };
