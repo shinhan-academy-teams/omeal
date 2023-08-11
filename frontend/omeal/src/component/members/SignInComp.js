@@ -16,6 +16,7 @@ import {
   MemberNameState,
   MemberNickState,
   SignInState,
+  SubCheckState,
 } from "../../recoil/SignInState";
 import { Grid, Typography } from "@mui/material";
 
@@ -27,6 +28,7 @@ function SignInComp(props) {
   const setMemberNick = useSetRecoilState(MemberNickState);
   const setMemberName = useSetRecoilState(MemberNameState);
   const setContinuousDaysState = useSetRecoilState(ContinuousDaysState);
+  const setSubCheckState = useSetRecoilState(SubCheckState);
   const navi = useNavigate();
 
   const handleId = (e) => {
@@ -88,6 +90,7 @@ function SignInComp(props) {
           setMemberNick(result.memberNick);
           setMemberName(result.memberName);
           setContinuousDaysState(result.continuousDays);
+          setSubCheckState(result.sub);
           navi("/"); // 홈 화면으로 이동
         }
       })

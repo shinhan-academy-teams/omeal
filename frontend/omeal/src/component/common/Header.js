@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { MemberNickState, SignInState } from "../../recoil/SignInState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { MemberNickState, SignInState, SubCheckState } from "../../recoil/SignInState";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -23,9 +24,8 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
-  const memberId = useRecoilValue(SignInState);
   const memberNick = useRecoilValue(MemberNickState);
-
+  const [memberId, setMemberId] = useRecoilState(SignInState);
   const [state, setState] = useState({
     right: false,
   });
@@ -33,12 +33,23 @@ function Header(props) {
   const signIn = () => {
     navi("/auth/sign-in");
   };
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const isSub = useRecoilValue(SubCheckState);
   const subscription = () => {
-    navi("/subscription");
+    if (isLogin) {
+      if (isSub) {
+        navi("/sub-info"); // 이미 구독중인 사용자가 구독신청을 누르면 → 마이페이지 구독정보로 이동
+        return;
+      }
+      navi("/subscription");
+    } else {
+      navi("/auth/sign-in");
+    }
   };
   const main = () => {
     navi("/");
   };
+
   const notice = () => {
     navi("/notice");
   };
@@ -58,6 +69,21 @@ function Header(props) {
     }
 
     setState({ state, [anchor]: open });
+  };
+
+  const logout = () => {
+    axios({
+      method: "GET",
+      url: "/auth/log-out",
+    })
+      .then((response) => {
+        setMemberId("");
+        navi("/");
+      })
+      .catch((err) => {
+        console.log(memberId);
+        console.log(err);
+      });
   };
 
   const list = (anchor) => (
@@ -103,7 +129,7 @@ function Header(props) {
       </List>
 
       <List>
-        <ListItem disablePadding>
+        <ListItem disablePadding onClick={logout}>
           <ListItemButton>
             <ListItemIcon>
               <LogoutIcon />

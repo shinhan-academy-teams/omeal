@@ -65,6 +65,8 @@ public class History {
         dto.setStartDate(this.startDate);
         dto.setEndDate(this.endDate);
         dto.setCategory(this.category);
+        dto.setStatus(convertStatus(this.status));
+        dto.setAmount(this.amount);
         return dto;
     }
 
@@ -76,6 +78,17 @@ public class History {
     // 취소된 구독 히스토리 업데이트
     public void updateCancelHistory() {
         this.status = SubscriptionStatus.CANCEL;
+    }
+
+    // 클라이언트에 전송될 구독상태
+    private String convertStatus(SubscriptionStatus status) {
+        if(status.equals(SubscriptionStatus.START)){
+            return "구독중";
+        }
+        if(status.equals(SubscriptionStatus.CANCEL)){
+            return "취소";
+        }
+        return "완료";
     }
 
 }

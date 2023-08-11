@@ -145,7 +145,7 @@ function TodayMealComp(props) {
           </>
         )}
       </Box>
-      <Tooltip title="피드백 남기기" arrow placement="top">
+      <Tooltip title={toolTipTitle} arrow placement="top">
         <Paper
           elevation={elevation}
           onMouseEnter={() => setElevation(8)}
