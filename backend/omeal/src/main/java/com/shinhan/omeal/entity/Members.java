@@ -117,4 +117,22 @@ public class Members {
         this.memberGrade = memberGrade;
     }
 
+    public MembersDTO toDTO(){
+        return MembersDTO.builder()
+                .memberId(this.memberId)
+                .memberGrade(this.memberGrade)
+                .memberNick(this.memberNick)
+                .memberName(this.memberName)
+                .memberTel(this.memberTel)
+                .memberAddr(this.memberAddr)
+                .card(this.card)
+                .memberRole(this.memberRole)
+                .memberAllergy(this.memberAllergy)
+                .build();
+    }
+
+    public void updateMemberRole(MemberRole role){
+        this.memberRole = role;
+    }
+
 }
