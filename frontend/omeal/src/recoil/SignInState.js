@@ -38,3 +38,9 @@ export const SubCheckState = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const MemberRoleState = atom({
+  key: "MemberRoleState",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

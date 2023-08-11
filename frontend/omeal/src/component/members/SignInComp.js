@@ -17,6 +17,7 @@ import {
   MemberNickState,
   SignInState,
   SubCheckState,
+  MemberRoleState,
 } from "../../recoil/SignInState";
 import { Grid, Typography } from "@mui/material";
 
@@ -29,6 +30,7 @@ function SignInComp(props) {
   const setMemberName = useSetRecoilState(MemberNameState);
   const setContinuousDaysState = useSetRecoilState(ContinuousDaysState);
   const setSubCheckState = useSetRecoilState(SubCheckState);
+  const setMemberRoleState = useSetRecoilState(MemberRoleState);
   const navi = useNavigate();
 
   const handleId = (e) => {
@@ -76,7 +78,6 @@ function SignInComp(props) {
     })
       .then((res) => {
         const result = res.data;
-        // console.log("result : " + result.memberGrade);
 
         if (result === "") {
           // 로그인 실패시 Back에서 null 보내게끔 했고, Front에선 ""로 인식하더라고
@@ -91,6 +92,7 @@ function SignInComp(props) {
           setMemberName(result.memberName);
           setContinuousDaysState(result.continuousDays);
           setSubCheckState(result.sub);
+          setMemberRoleState(result.memberRole);
           navi("/"); // 홈 화면으로 이동
         }
       })
