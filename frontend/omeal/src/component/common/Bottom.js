@@ -14,7 +14,6 @@ import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
 import "./Bottom.css";
-import { ColorLensOutlined } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 function Bottom(props) {
@@ -26,18 +25,17 @@ function Bottom(props) {
   const memberGrade = useRecoilValue(MemberGradeState);
   const sub = useRecoilValue(SubCheckState);
 
-  const todayMeal = () => {
-    if (!sub) {
-      Swal.fire({
-        icon: "warning", // 여기다가 아이콘 종류를 쓰면 됩니다.
-        text: "구독중인 서비스가 없습니다.",
-      });
-      return;
-    }
-    navi("/today-meal");
-  };
-
   const handleChange = (e, newValue) => {
+    if (newValue === "/today-meal") {
+      if (!sub) {
+        Swal.fire({
+          icon: "warning",
+          text: "구독중인 서비스가 없습니다.",
+        });
+        return;
+      }
+    }
+
     setValue(newValue);
     navi(newValue);
   };
