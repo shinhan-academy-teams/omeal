@@ -30,5 +30,17 @@ public class Feedback {
     @Comment("피드백한 메뉴")
     private Menu menu;
 
+    @Column(nullable = false)
+    @Comment("좋아요/싫어요")
+    private String feedback;
+
+    @Comment("피드백 기타 의견")
+    private String feedbackContent;
+
+    // 피드백 업데이트 메서드
+    public void updateFeedback(String feedback, String feedbackContent) {
+        this.feedback = feedback;
+        this.feedbackContent = feedbackContent;
+    }
 
 }

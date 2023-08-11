@@ -15,7 +15,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { MemberNameState, SignInState } from "../../recoil/SignInState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import noodleImg from "../../assets/img/menuCategory/noodle.png";
 import bibimbapImg from "../../assets/img/menuCategory/bibimbap.png";
@@ -23,9 +23,7 @@ import saladImg from "../../assets/img/menuCategory/salad.png";
 import sandwichImg from "../../assets/img/menuCategory/sandwich.png";
 import soupImg from "../../assets/img/menuCategory/soup.png";
 import homeImg from "../../assets/img/menuCategory/home.png";
-import { FeedbackState } from "../../recoil/FeedbackState";
 import Swal from "sweetalert2";
-import { width } from "@mui/system";
 
 function TodayMealComp(props) {
   const navi = useNavigate();
@@ -39,11 +37,6 @@ function TodayMealComp(props) {
   const [elevation, setElevation] = useState(2);
   const [activeStep, setActiveStep] = useState(-1);
   const [categoryNo, setCategoryNo] = useState();
-
-  const [feedbackStatus, setFeedbackStatus] = useRecoilState(FeedbackState);
-  const [todayMealStatus, setTodayMealStatus] = useState(0);
-
-  const [toolTipTitle, setToolTipTitle] = useState("피드백 남기기");
 
   // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
   const categoryImg = [
@@ -63,27 +56,26 @@ function TodayMealComp(props) {
     })
       .then((response) => {
         const dto = response.data;
-        console.log("dto : ", dto);
-        if (dto) {
-          setDelivery(dto);
-          setFeedbackStatus(dto.feedbackStatus);
-        } else {
-          setTodayMealStatus(1);
-        }
-
-        // 툴팁 title 바꾸기
-        if (todayMealStatus === 1) {
-          setToolTipTitle("오늘은 이미 의견을 남겨주셨어요!");
-        }
+        setDelivery(dto);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  useEffect(() => {
-    // console.log(delivery);
+  const goFeedback = () => {
+    if (delivery.status === "배송완료") {
+      navi("/today-meal/feedback", { state: delivery });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "식사가 " + steps[activeStep] + "입니다.",
+        text: "배송 완료 후에 피드백을 남길 수 있습니다.",
+      });
+    }
+  };
 
+  useEffect(() => {
     if (delivery.status === "배송준비중") {
       setActiveStep(0);
     } else if (delivery.status === "배송중") {
@@ -164,14 +156,7 @@ function TodayMealComp(props) {
             height: "auto",
             borderRadius: "20px",
           }}
-          onClick={() => {
-            feedbackStatus === 0
-              ? navi("/today-meal/feedback", { state: delivery })
-              : Swal.fire({
-                  icon: "warning",
-                  text: "오늘은 이미 의견을 남겨주셨습니다!",
-                });
-          }}
+          onClick={goFeedback}
         >
           <Grid
             container
@@ -206,7 +191,12 @@ function TodayMealComp(props) {
                   sx={{ letterSpacing: "0.2em" }}
                 >
                   {delivery.menu ? (
-                    delivery.menu
+                    delivery.menu.split("|").map((item, idx) => (
+                      <React.Fragment key={idx}>
+                        {item}
+                        <br />
+                      </React.Fragment>
+                    ))
                   ) : (
                     <Skeleton animation="wave" />
                   )}
