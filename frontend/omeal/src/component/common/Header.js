@@ -36,7 +36,8 @@ function Header(props) {
   const [memberGrade, setMemberGrade] = useRecoilState(MemberGradeState);
   const [memberNick, setMemberNick] = useRecoilState(MemberNickState);
   const [memberName, setMemberName] = useRecoilState(MemberNameState);
-  const [continuousDaysState, setContinuousDaysState] = useRecoilState(ContinuousDaysState);
+  const [continuousDaysState, setContinuousDaysState] =
+    useRecoilState(ContinuousDaysState);
   const [subCheckState, setSubCheckState] = useRecoilState(SubCheckState);
   const [memberRoleState, setMemberRoleState] = useRecoilState(MemberRoleState);
   const [memberId, setMemberId] = useRecoilState(SignInState);
@@ -53,7 +54,7 @@ function Header(props) {
   const subscription = () => {
     if (isLogin) {
       if (isSub) {
-        navi("/sub-info"); // 이미 구독중인 사용자가 구독신청을 누르면 → 마이페이지 구독정보로 이동
+        navi("/mypage/sub-info"); // 이미 구독중인 사용자가 구독신청을 누르면 → 마이페이지 구독정보로 이동
         return;
       }
       navi("/subscription");

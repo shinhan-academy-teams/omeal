@@ -72,7 +72,11 @@ const App = () => {
             <Route
               path="subscription"
               element={
-                isSub ? <Navigate replace to="/sub-info" /> : <Subscription />
+                isSub ? (
+                  <Navigate replace to="/mypage/sub-info" />
+                ) : (
+                  <Subscription />
+                )
               }
             />
 
