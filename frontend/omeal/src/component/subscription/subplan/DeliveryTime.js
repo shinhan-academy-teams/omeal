@@ -22,7 +22,7 @@ function DeliveryTime(props) {
   }, []);
 
   return (
-    <Box sx={{ width: 450 }}>
+    <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
       <ToggleButtonGroup
         color="primary"
         value={subTime}
@@ -36,13 +36,9 @@ function DeliveryTime(props) {
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
-      <br />
-      <br />
-      <pre>
-        * 아침 : 08:00 이전 / 점심 : 12:00 이전 / 저녁 : 19:00 이전에
-        배달됩니다.
-      </pre>
     </Box>
+    // * 아침 : 08:00 이전 / 점심 : 12:00 이전 / 저녁 : 19:00 이전에
+    // 배달됩니다.
   );
 }
 
