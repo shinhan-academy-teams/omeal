@@ -131,9 +131,20 @@ function Header(props) {
             <NotificationsNoneIcon sx={{ marginRight: 2 }} />
           ) : (
             <Button
-              variant="contained"
+              variant="outlined"
               disableElevation
-              sx={{ color: "#ea5c2b", backgroundColor: "white" }}
+              sx={{
+                borderRadius: "20px",
+                p: "3px 15px",
+                color: "#EA5C2B",
+                backgroundColor: "white",
+                border: "2px solid #FEF7ED",
+                ":hover": {
+                  color: "white",
+                  backgroundColor: "#EA5C2B",
+                  border: "2px solid #FEF7ED",
+                },
+              }}
               onClick={signIn}
             >
               로그인
