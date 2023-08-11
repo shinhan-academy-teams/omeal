@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import DehazeIcon from "@mui/icons-material/Dehaze";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { Button } from "@mui/material";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-
-import logoImg from "../../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { SignInState, SubCheckState } from "../../recoil/SignInState";
+import axios from "axios";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import logoImg from "../../assets/img/logo/white_logo.png";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import QuizIcon from "@mui/icons-material/Quiz";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -22,27 +24,38 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 function Header(props) {
   const navi = useNavigate();
+  const [memberId, setMemberId] = useRecoilState(SignInState);
+
+  const [state, setState] = React.useState({
+    right: false,
+  });
+
   const signIn = () => {
     navi("/auth/sign-in");
   };
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const isSub = useRecoilValue(SubCheckState);
   const subscription = () => {
-    navi("/subscription");
+    if (isLogin) {
+      if (isSub) {
+        navi("/sub-info"); // 이미 구독중인 사용자가 구독신청을 누르면 → 마이페이지 구독정보로 이동
+        return;
+      }
+      navi("/subscription");
+    } else {
+      navi("/auth/sign-in");
+    }
   };
   const main = () => {
     navi("/");
   };
+
   const notice = () => {
     navi("/notice");
   };
   const faq = () => {
     navi("/faq");
   };
-
-  const memberId = useRecoilValue(SignInState);
-
-  const [state, setState] = useState({
-    right: false,
-  });
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -53,6 +66,21 @@ function Header(props) {
     }
 
     setState({ state, [anchor]: open });
+  };
+
+  const logout = () => {
+    axios({
+      method: "GET",
+      url: "/auth/log-out",
+    })
+      .then((response) => {
+        setMemberId("");
+        navi("/");
+      })
+      .catch((err) => {
+        console.log(memberId);
+        console.log(err);
+      });
   };
 
   const list = (anchor) => (
@@ -98,7 +126,7 @@ function Header(props) {
       </List>
 
       <List>
-        <ListItem disablePadding>
+        <ListItem disablePadding onClick={logout}>
           <ListItemButton>
             <ListItemIcon>
               <LogoutIcon />
@@ -113,12 +141,13 @@ function Header(props) {
 
   return (
     <>
-      <div className="nav">
+      <div className="header" style={{ zIndex: "1" }}>
         <img
-          alt="omeal logo"
+          alt="white logo"
           src={logoImg}
           style={{
-            height: "100%",
+            marginTop: "5px",
+            height: "130%",
             float: "left",
             cursor: "pointer",
           }}

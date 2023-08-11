@@ -43,6 +43,8 @@ function TodayMealComp(props) {
   const [feedbackStatus, setFeedbackStatus] = useRecoilState(FeedbackState);
   const [todayMealStatus, setTodayMealStatus] = useState(0);
 
+  const [toolTipTitle, setToolTipTitle] = useState("피드백 남기기");
+
   // 멤버의 category에 맞게 이미지 나타나게 하기 위한 배열
   const categoryImg = [
     noodleImg,
@@ -67,6 +69,11 @@ function TodayMealComp(props) {
           setFeedbackStatus(dto.feedbackStatus);
         } else {
           setTodayMealStatus(1);
+        }
+
+        // 툴팁 title 바꾸기
+        if (todayMealStatus === 1) {
+          setToolTipTitle("오늘은 이미 의견을 남겨주셨어요!");
         }
       })
       .catch((error) => {
@@ -146,7 +153,7 @@ function TodayMealComp(props) {
           </>
         )}
       </Box>
-      <Tooltip title="피드백 남기기" arrow placement="top">
+      <Tooltip title={toolTipTitle} arrow placement="top">
         <Paper
           elevation={elevation}
           onMouseEnter={() => setElevation(8)}

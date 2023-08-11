@@ -2,6 +2,7 @@ import {
   Box,
   FormControl,
   FormLabel,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -11,13 +12,18 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { AddrAtom, SubAddrAtom } from "../../../recoil/SubscriptionState";
+import {
+  AddrAtom,
+  DoorPwdAtom,
+  SubAddrAtom,
+} from "../../../recoil/SubscriptionState";
 
 function DeliveryInfo(props) {
-  const [doorPwd, setDoorPwd] = useState("");
   const [show, setShow] = useState(false);
   const [request, setRequest] = useState("");
 
+  // 필수로 입력해야 하는 정보(doorPwd, addr, subAddr)에 대해선 Recoil로 관리해서 유효성검사 했음
+  const [doorPwd, setDoorPwd] = useRecoilState(DoorPwdAtom);
   const [addr, setAddr] = useRecoilState(AddrAtom);
   const [subAddr, setSubAddr] = useRecoilState(SubAddrAtom);
 
@@ -41,7 +47,10 @@ function DeliveryInfo(props) {
     <Box
       component="form"
       sx={{
-        "& > :not(style)": { m: 1, width: "450px" },
+        "& > :not(style)": {
+          m: 2,
+          width: "450px",
+        },
       }}
       noValidate
       autoComplete="off"
@@ -62,10 +71,14 @@ function DeliveryInfo(props) {
       />
 
       <FormControl>
-        <FormLabel id="demo-radio-buttons-group-label">
+        <FormLabel
+          id="demo-radio-buttons-group-label"
+          style={{ display: "flex" }}
+        >
           공동현관 출입 여부
         </FormLabel>
         <ToggleButtonGroup
+          style={{ marginBottom: 15 }}
           color="primary"
           exclusive
           value={doorPwd}
@@ -73,6 +86,7 @@ function DeliveryInfo(props) {
           aria-label="text alignment"
         >
           <ToggleButton
+            style={{ width: "100%" }}
             value="yesPwd"
             aria-label="yesPwd"
             onClick={() => setShow(true)}
@@ -80,6 +94,7 @@ function DeliveryInfo(props) {
             비밀번호
           </ToggleButton>
           <ToggleButton
+            style={{ width: "100%" }}
             value="noPwd"
             aria-label="noPwd"
             onClick={() => setShow(false)}
@@ -88,13 +103,7 @@ function DeliveryInfo(props) {
           </ToggleButton>
         </ToggleButtonGroup>
         {show && (
-          <div id="divshow" style={{ display: "block" }}>
-            <TextField
-              id="outlined-basic"
-              label="비밀번호"
-              variant="outlined"
-            />
-          </div>
+          <TextField id="outlined-basic" label="비밀번호" variant="outlined" />
         )}
       </FormControl>
       <FormControl>

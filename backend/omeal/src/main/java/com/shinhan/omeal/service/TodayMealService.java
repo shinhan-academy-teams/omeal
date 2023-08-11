@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,7 +28,6 @@ public class TodayMealService {
     final MenuRepository menuRepo;
     final SubscriptionRepository subRepo;
     final FeedbackRepository feedbackRepo;
-    final DeliveryHistory dh;
 
     // 피드백 남기기
     public DeliveryHistory submitFeedback(@RequestBody FeedbackDTO dto) {
@@ -175,16 +175,22 @@ public class TodayMealService {
     // 배송 현황을 배송중으로 업데이트
     private void inProgressDelivery(List<Members> membersByTime) {
         tmRepo.findAllByMemberIn(membersByTime).forEach(history -> {
-            history.updateDeliveryStatus(DeliveryStatus.배송중);
-            tmRepo.save(history);
+            LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
+            if(todayDelivery.equals(LocalDate.now())){
+                history.updateDeliveryStatus(DeliveryStatus.배송중);
+                tmRepo.save(history);
+            }
         });
     }
 
     // 배송 현황을 배송완료로 업데이트
     private void completeDelivery(List<Members> membersByTime) {
         tmRepo.findAllByMemberIn(membersByTime).forEach(history -> {
-            history.updateDeliveryStatus(DeliveryStatus.배송완료);
-            tmRepo.save(history);
+            LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
+            if(todayDelivery.equals(LocalDate.now())){
+                history.updateDeliveryStatus(DeliveryStatus.배송완료);
+                tmRepo.save(history);
+            }
         });
     }
 

@@ -18,37 +18,49 @@ import {
   ContinuousDaysState,
   MemberGradeState,
   MemberNickState,
+  SubCheckState,
 } from "../../recoil/SignInState";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
 import { List } from "reactstrap";
+import Swal from "sweetalert2";
 
 function Mypage(props) {
   //멤버 닉네임 & 구독 개월수
   const memberNick = useRecoilValue(MemberNickState);
   const memberGrade = useRecoilValue(MemberGradeState);
   const continuousDay = useRecoilValue(ContinuousDaysState);
-
+  const sub = useRecoilValue(SubCheckState);
   const [elevation, setElevation] = useState(2);
-
-  //console.log(memberGrade);
 
   const navi = useNavigate();
   const userInfo = () => {
     navi("/user-info");
   };
   const subInfo = () => {
-    navi("/sub-info");
+    if (!sub) {
+      Swal.fire({
+        icon: "warning",
+        text: "구독중인 서비스가 없습니다.",
+      });
+      return;
+    }
+    navi("/mypage/sub-info");
   };
   const cardInfo = () => {
-    navi("/card-info");
+    navi("/mypage/card-info");
   };
 
   const DeliveryInfo = () => {
-    navi("/delivery-info");
+    navi("/mypage/delivery-info");
   };
+
+  const PayInfo = () => {
+    navi("/mypage/payment-info");
+  };
+
   return (
     <>
       <div style={{ width: "100%" }}>

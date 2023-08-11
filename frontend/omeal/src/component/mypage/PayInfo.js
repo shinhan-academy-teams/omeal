@@ -23,21 +23,22 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function DeliveryInfo(props) {
+function PayInfo(props) {
   // 회원 아이디
   const memberId = useRecoilValue(SignInState);
-  const [deliveryHistory, setDeliveryHistory] = useState([]);
+  const [paymentHistory, setPaymentHistory] = useState([]);
 
   useEffect(() => {
     axios
-      .get("/mypage/delivery-info", {
+      .get("/mypage/payment-info", {
         params: { memId: memberId },
       })
       .then(function (response) {
-        setDeliveryHistory(response.data);
+        setPaymentHistory(response.data);
       })
       .catch(function (error) {});
   }, []);
+
   return (
     <>
       <Box
@@ -51,25 +52,27 @@ function DeliveryInfo(props) {
         noValidate
         autoComplete="off"
       >
-        <Typography variant="h4">배송내역</Typography>
+        <Typography variant="h4">결제내역</Typography>
         <TableContainer>
           <Table size="small" aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>배송일시</StyledTableCell>
-                <StyledTableCell>주소</StyledTableCell>
-                <StyledTableCell>메뉴</StyledTableCell>
-                <StyledTableCell>배송현황</StyledTableCell>
+                <StyledTableCell>결제일시</StyledTableCell>
+                <StyledTableCell>결제금액</StyledTableCell>
+                <StyledTableCell>구독시작일</StyledTableCell>
+                <StyledTableCell>구독종료일</StyledTableCell>
+                <StyledTableCell>구독상태</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {deliveryHistory.map((history, index) => (
+              {paymentHistory.map((history, index) => (
                 <TableRow key={index}>
                   <TableCell>
-                    {moment(history.date).format("YYYY-MM-DD HH:mm")}
+                    {moment(history.date).format("YYYY-MM-DD HH:mm:ss")}
                   </TableCell>
-                  <TableCell>{history.deliveryAddr}</TableCell>
-                  <TableCell>{history.menu}</TableCell>
+                  <TableCell>{history.amount.toLocaleString()} 원</TableCell>
+                  <TableCell>{history.startDate}</TableCell>
+                  <TableCell>{history.endDate}</TableCell>
                   <TableCell>{history.status}</TableCell>
                 </TableRow>
               ))}
@@ -81,4 +84,4 @@ function DeliveryInfo(props) {
   );
 }
 
-export default DeliveryInfo;
+export default PayInfo;
