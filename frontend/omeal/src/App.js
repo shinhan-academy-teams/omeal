@@ -123,16 +123,15 @@ const App = () => {
             <Route path="food-worldcup" element={<Worldcup />} />
 
             {/* 관리자 페이지 */}
-            {isAdmin ? (
-              <Route path="manage">
-                <Route path="" element={<AdminMeun />} />
-                <Route path="member" element={<ManageMember />} />
-                <Route path="dishes" element={<ManageDishes />} />
-                <Route path="sales" element={<ManageSales />} />
-              </Route>
-            ) : (
-              <Route index element={<Main />} />
-            )}
+            <Route path="manage">
+              <Route
+                path=""
+                element={isAdmin ? <AdminMeun /> : <Navigate replace to="/" />}
+              />
+              <Route path="member" element={<ManageMember />} />
+              <Route path="dishes" element={<ManageDishes />} />
+              <Route path="sales" element={<ManageSales />} />
+            </Route>
           </Route>
 
           <Route path="/auth" element={<NoNavBar />}>
