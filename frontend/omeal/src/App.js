@@ -27,6 +27,8 @@ import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
 import PayInfo from "component/mypage/PayInfo";
+import Notice from "component/common/Notice";
+import FAQ from "component/common/FAQ";
 import { useRecoilValue } from "recoil";
 import { SignInState, SubCheckState } from "./recoil/SignInState";
 
@@ -54,6 +56,8 @@ const App = () => {
         <Routes location={location}>
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
+            <Route path="notice" element={<Notice />} />
+            <Route path="faq" element={<FAQ />} />
 
             {/* 구독신청 */}
             <Route
