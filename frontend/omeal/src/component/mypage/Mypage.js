@@ -34,18 +34,18 @@ function Mypage(props) {
       });
       return;
     }
-    navi("/sub-info");
+    navi("/mypage/sub-info");
   };
   const cardInfo = () => {
-    navi("/card-info");
+    navi("/mypage/card-info");
   };
 
   const DeliveryInfo = () => {
-    navi("/delivery-info");
+    navi("/mypage/delivery-info");
   };
 
   const PayInfo = () => {
-    navi("/payment-info");
+    navi("/mypage/payment-info");
   };
 
   return (
