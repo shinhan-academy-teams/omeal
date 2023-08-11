@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Grid,
   IconButton,
   Paper,
@@ -13,13 +14,13 @@ import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
 import { useState } from "react";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { FeedbackState } from "../../recoil/FeedbackState";
+import { useEffect } from "react";
 
 function FeedbackComp(props) {
   const navi = useNavigate();
@@ -28,8 +29,7 @@ function FeedbackComp(props) {
 
   const [dislike, setDislike] = useState(false);
   const [like, setLike] = useState(false);
-  const [feedbackStatus, setFeedbackStatus] = useRecoilState(FeedbackState);
-  console.log("status : " + feedbackStatus);
+  const [content, setContent] = useState("");
 
   const Toast = Swal.mixin({
     toast: true,
@@ -63,6 +63,37 @@ function FeedbackComp(props) {
     }
   };
 
+  // 기타 의견 작성
+  const handleContent = (e) => {
+    setContent(e.target.value);
+  };
+
+  // 피드백 읽어오기
+  useEffect(() => {
+    axios({
+      url: "/today-meal/feedback",
+      method: "get",
+      params: {
+        memberId: memberId,
+        menuName: state.menu,
+      },
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (res.data.feedback === "like") {
+          setDislike(false);
+          setLike(true);
+        } else {
+          setLike(false);
+          setDislike(true);
+        }
+        setContent(res.data.feedbackContent);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   // 피드백 제출
   const submitFeedback = () => {
     if (dislike || like) {
@@ -70,27 +101,24 @@ function FeedbackComp(props) {
         url: "/today-meal/feedback",
         method: "post",
         data: JSON.stringify({
-          deliveryNo: state.deliveryNo,
           memberId: memberId,
           menuName: state.menu,
           feedback: dislike ? "dislike" : "like",
+          feedbackContent: content,
         }),
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => {
-          setFeedbackStatus(res.data.feedbackStatus);
-          console.log(res.data);
+          Toast.fire({
+            icon: "success",
+            title: "소중한 피드백 감사합니다!",
+          }).then(() => {
+            navi("/today-meal");
+          });
         })
         .catch((err) => {
           console.log(err);
         });
-
-      Toast.fire({
-        icon: "success",
-        title: "소중한 피드백 감사합니다!",
-      }).then(() => {
-        navi("/today-meal");
-      });
     }
   };
 
@@ -175,17 +203,20 @@ function FeedbackComp(props) {
             fullWidth
             placeholder="기타 의견을 작성해주세요"
             sx={{ mt: 2 }}
+            onChange={handleContent}
+            value={content}
           />
         </Grid>
         <Grid item xs={2}>
           <Tooltip title="피드백 제출" arrow placement="top">
-            <IconButton
+            <Button
+              variant="outlined"
               aria-label="submitFeedback"
-              sx={{ mt: 2 }}
+              sx={{ mt: "36px" }}
               onClick={submitFeedback}
             >
-              <TaskAltIcon sx={{ fontSize: 40 }} />
-            </IconButton>
+              <SendIcon />
+            </Button>
           </Tooltip>
         </Grid>
       </Grid>

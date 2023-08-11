@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const SubTypeAtom = atom({
   key: "SubTypeAtom",
-  default: "WEEKLY",
+  default: "",
 });
 
 export const ContainerTypeAtom = atom({
@@ -33,4 +33,9 @@ export const SubAddrAtom = atom({
 export const SubTimeAtom = atom({
   key: "SubTimeAtom",
   default: "아침",
+});
+
+export const DoorPwdAtom = atom({
+  key: "DoorPwdAtom",
+  default: "",
 });

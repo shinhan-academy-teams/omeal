@@ -21,10 +21,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import logoImg from "../../assets/img/logo/white_logo.png";
 import DehazeIcon from "@mui/icons-material/Dehaze";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import QuizIcon from "@mui/icons-material/Quiz";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -36,13 +36,11 @@ function Header(props) {
   const [memberGrade, setMemberGrade] = useRecoilState(MemberGradeState);
   const [memberNick, setMemberNick] = useRecoilState(MemberNickState);
   const [memberName, setMemberName] = useRecoilState(MemberNameState);
-  const [continuousDaysState, setContinuousDaysState] =
-    useRecoilState(ContinuousDaysState);
+  const [continuousDaysState, setContinuousDaysState] = useRecoilState(ContinuousDaysState);
   const [subCheckState, setSubCheckState] = useRecoilState(SubCheckState);
   const [memberRoleState, setMemberRoleState] = useRecoilState(MemberRoleState);
   const [memberId, setMemberId] = useRecoilState(SignInState);
-
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     right: false,
   });
 
@@ -72,6 +70,9 @@ function Header(props) {
   };
   const faq = () => {
     navi("/faq");
+  };
+  const mypage = () => {
+    navi("/mypage");
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -177,12 +178,34 @@ function Header(props) {
         />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {memberId ? (
-            <NotificationsNoneIcon sx={{ marginRight: 2 }} />
+            <Typography
+              variant="body1"
+              sx={{
+                pt: "3px",
+                color: "#FEF7ED",
+                cursor: "pointer",
+                ":hover": { textDecoration: "underline" },
+              }}
+              onClick={mypage}
+            >
+              {memberNick} 님
+            </Typography>
           ) : (
             <Button
-              variant="contained"
+              variant="outlined"
               disableElevation
-              sx={{ color: "#ea5c2b", backgroundColor: "white" }}
+              sx={{
+                borderRadius: "20px",
+                p: "3px 15px",
+                color: "#EA5C2B",
+                backgroundColor: "white",
+                border: "2px solid #FEF7ED",
+                ":hover": {
+                  color: "white",
+                  backgroundColor: "#EA5C2B",
+                  border: "2px solid #FEF7ED",
+                },
+              }}
               onClick={signIn}
             >
               로그인

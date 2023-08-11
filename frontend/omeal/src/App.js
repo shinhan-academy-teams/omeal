@@ -27,6 +27,8 @@ import Worldcup from "./pages/worldcup/Worldcup";
 import PostView from "./component/community/PostView";
 import DeliveryInfo from "./component/mypage/DeliveryInfo";
 import PayInfo from "component/mypage/PayInfo";
+import Notice from "component/common/Notice";
+import FAQ from "component/common/FAQ";
 import { useRecoilValue } from "recoil";
 import {
   MemberRoleState,
@@ -63,7 +65,10 @@ const App = () => {
         <Routes location={location}>
           <Route path="/" element={<NavBar />}>
             <Route index element={<Main />} />
+            <Route path="notice" element={<Notice />} />
+            <Route path="faq" element={<FAQ />} />
 
+            {/* 구독신청 */}
             <Route
               path="subscription"
               element={
@@ -71,50 +76,28 @@ const App = () => {
               }
             />
 
-            <Route
-              path="mypage"
-              element={
-                isLogin ? <Mypage /> : <Navigate replace to="/auth/sign-in" />
-              }
-            />
-            <Route
-              path="card-info"
-              element={
-                isLogin ? <CardInfo /> : <Navigate replace to="/auth/sign-in" />
-              }
-            />
-            <Route
-              path="sub-info"
-              element={
-                isLogin ? <SubInfo /> : <Navigate replace to="/auth/sign-in" />
-              }
-            />
-            <Route
-              path="user-info"
-              element={
-                isLogin ? <UserInfo /> : <Navigate replace to="/auth/sign-in" />
-              }
-            />
-            <Route
-              path="delivery-info"
-              element={
-                isLogin ? (
-                  <DeliveryInfo />
-                ) : (
-                  <Navigate replace to="/auth/sign-in" />
-                )
-              }
-            />
+            {/* 마이페이지 */}
+            <Route path="mypage">
+              <Route
+                path=""
+                element={
+                  isLogin ? <Mypage /> : <Navigate replace to="/auth/sign-in" />
+                }
+              />
+              <Route path="card-info" element={<CardInfo />} />
+              <Route path="sub-info" element={<SubInfo />} />
+              <Route path="user-info" element={<UserInfo />} />
+              <Route path="delivery-info" element={<DeliveryInfo />} />
+              <Route path="payment-info" element={<PayInfo />} />
+            </Route>
 
             {/* 커뮤니티 */}
             <Route path="omealland" element={<OmealLand />} />
             <Route path="omealland/sandwich" element={<SandralPark />} />
-
             <Route
               path="omealland/sandwich/PostView/:no"
               element={<PostView />}
             />
-
             <Route path="omealland/bibimbap" element={<BibimLab />} />
             <Route path="omealland/ricesoup" element={<RiceSoupMinistry />} />
             <Route path="omealland/salad" element={<GreenZone />} />
@@ -122,22 +105,20 @@ const App = () => {
             <Route path="omealland/homemeal" element={<KoreaTown />} />
             <Route path="omealland/register" element={<Register />} />
 
-            <Route
-              path="today-meal"
-              element={
-                isLogin ? (
-                  <TodayMeal />
-                ) : (
-                  <Navigate replace to="/auth/sign-in" />
-                )
-              }
-            />
-            <Route
-              path="today-meal/feedback"
-              element={
-                isLogin ? <Feedback /> : <Navigate replace to="/auth/sign-in" />
-              }
-            />
+            {/* 오늘의밀 */}
+            <Route path="today-meal">
+              <Route
+                path=""
+                element={
+                  isLogin ? (
+                    <TodayMeal />
+                  ) : (
+                    <Navigate replace to="/auth/sign-in" />
+                  )
+                }
+              />
+              <Route path="feedback" element={<Feedback />} />
+            </Route>
 
             <Route path="food-worldcup" element={<Worldcup />} />
 
@@ -164,4 +145,5 @@ const App = () => {
     </ThemeProvider>
   );
 };
+
 export default App;

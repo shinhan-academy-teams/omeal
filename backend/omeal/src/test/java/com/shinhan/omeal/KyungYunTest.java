@@ -26,26 +26,72 @@ public class KyungYunTest {
     @Autowired
     MenuRepository menuRepo;
     @Autowired
-    FeedbackRepository fbRepo;
+    FeedbackRepository feedbackRepo;
 
-    // 피드백 남기기
+    // 피드백 읽어오기
 //    @Test
-    @Transactional
-    void submitFeedback() {
-        FeedbackDTO dto = new FeedbackDTO("test41@mail.com", "감자샐러드샌드위치", "like");
+    void getFeedback() {
+        FeedbackDTO dto = FeedbackDTO.builder()
+                .memberId("test4@mail.com")
+                .menuName("돼지고기국수")
+                .build();
+
+        FeedbackDTO feedbackDTO = null;
 
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
         List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
-        for (Menu menu : menuIdList) {
-            Feedback feedback = Feedback.builder()
-                    .member(member)
-                    .menu(menu)
+
+        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
+
+        if (oneFbFromDB != null) {
+            feedbackDTO = FeedbackDTO.builder()
+                    .feedback(oneFbFromDB.getFeedback())
+                    .feedbackContent(oneFbFromDB.getFeedbackContent())
                     .build();
-
-            System.out.println(feedback);
-
-            fbRepo.save(feedback);
         }
+
+        System.out.println(feedbackDTO);
+    }
+
+    // 피드백 남기기
+//    @Test
+    void submitFeedback() {
+        FeedbackDTO dto = FeedbackDTO.builder()
+                .memberId("test4@mail.com")
+                .menuName("육회비빔밥")
+                .feedback("dislike")
+                .feedbackContent("아쉬워용")
+                .build();
+
+        Members member = memRepo.findById(dto.getMemberId()).orElse(null);
+        List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
+
+        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
+        // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
+        if (oneFbFromDB == null) { // 없으면
+            for (Menu menu : menuIdList) {
+                Feedback feedback = Feedback.builder()
+                        .member(member)
+                        .menu(menu)
+                        .feedback(dto.getFeedback())
+                        .feedbackContent(dto.getFeedbackContent())
+                        .build();
+                feedbackRepo.save(feedback);
+            }
+            System.out.println("SUCCESS(insert)");
+        } else { // 있으면
+            if (oneFbFromDB.getFeedback().equals(dto.getFeedback()) && oneFbFromDB.getFeedbackContent().equals(dto.getFeedbackContent())) { // 피드백이 같으면
+                System.out.println("do NOTHING");
+            } else { // 다르면
+                for (Menu menu : menuIdList) {
+                    Feedback feedback = feedbackRepo.findByMemberAndMenu(member, menu);
+                    feedback.updateFeedback(dto.getFeedback(), dto.getFeedbackContent());
+                    feedbackRepo.save(feedback);
+                }
+            }
+        }
+
+        System.out.println("SUCCESS(update)");
     }
 
     // 회원의 연속 기간 가져오기

@@ -13,5 +13,7 @@ public class PaymentDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private SubscriptionCategory category;
+    private String status;
+    private int amount;
 
 }
