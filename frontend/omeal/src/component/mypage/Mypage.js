@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import CardImg from "../../assets/img/card.png";
 import {
   Avatar,
-  Box,
-  Button,
   Divider,
   ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  Paper,
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -33,11 +30,10 @@ function Mypage(props) {
   const memberGrade = useRecoilValue(MemberGradeState);
   const continuousDay = useRecoilValue(ContinuousDaysState);
   const sub = useRecoilValue(SubCheckState);
-  const [elevation, setElevation] = useState(2);
 
   const navi = useNavigate();
   const userInfo = () => {
-    navi("/user-info");
+    navi("/mypage/user-info");
   };
   const subInfo = () => {
     if (!sub) {
@@ -64,7 +60,10 @@ function Mypage(props) {
   return (
     <>
       <div style={{ width: "100%" }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{ display: "flex", alignItems: "center" }}
+          onClick={userInfo}
+        >
           {memberGrade === "날계란" ? (
             <img alt="" src={eggImg1} width={50}></img>
           ) : memberGrade === "반숙란" ? (
@@ -132,7 +131,7 @@ function Mypage(props) {
           </ListItem>
           <Divider />
           <ListItem alignItems="flex-start">
-            <ListItemButton>
+            <ListItemButton onClick={PayInfo}>
               <ListItemAvatar>
                 <Avatar src="/img/avatar-img/payment.png" />
               </ListItemAvatar>

@@ -43,9 +43,6 @@ function Subscription(props) {
   const [subAddr] = useRecoilState(SubAddrAtom);
   const [subTime] = useRecoilState(SubTimeAtom);
 
-  console.log("고른 음식종류 : " + foodCategory);
-  console.log("현재 페이지 번호 :  " + detailStep);
-
   // 회원 아이디
   const memberId = useRecoilValue(SignInState);
 
