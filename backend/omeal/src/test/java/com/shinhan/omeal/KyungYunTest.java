@@ -1,6 +1,7 @@
 package com.shinhan.omeal;
 
 import com.shinhan.omeal.dto.todayMeal.FeedbackDTO;
+import com.shinhan.omeal.dto.todayMeal.MenusDTO;
 import com.shinhan.omeal.entity.Feedback;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Menu;
@@ -12,8 +13,8 @@ import com.shinhan.omeal.repository.SubscriptionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -32,25 +33,30 @@ public class KyungYunTest {
 //    @Test
     void getFeedback() {
         FeedbackDTO dto = FeedbackDTO.builder()
-                .memberId("test4@mail.com")
-                .menuName("돼지고기국수")
+                .memberId("test5@mail.com")
+                .menus(new MenusDTO[]{new MenusDTO("닭날개조림"), new MenusDTO("콩반찬")})
                 .build();
 
-        FeedbackDTO feedbackDTO = null;
+        MenusDTO[] result = new MenusDTO[dto.getMenus().length];
 
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
-        List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
+        for (int i=0; i<dto.getMenus().length; i++) {
+            MenusDTO menuDTO = dto.getMenus()[i];
 
-        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
+            List<Menu> menuIdList = menuRepo.findByMenuName(menuDTO.getMenuName());
+            Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
 
-        if (oneFbFromDB != null) {
-            feedbackDTO = FeedbackDTO.builder()
-                    .feedback(oneFbFromDB.getFeedback())
-                    .feedbackContent(oneFbFromDB.getFeedbackContent())
-                    .build();
+            if (oneFbFromDB != null) {
+                MenusDTO m = MenusDTO.builder()
+                        .menuName(menuDTO.getMenuName())
+                        .feedback(oneFbFromDB.getFeedback())
+                        .feedbackContent(oneFbFromDB.getFeedbackContent())
+                        .build();
+                result[i] = m;
+            }
         }
 
-        System.out.println(feedbackDTO);
+        System.out.println("arr: " + Arrays.toString(result));
     }
 
     // 피드백 남기기
@@ -58,40 +64,43 @@ public class KyungYunTest {
     void submitFeedback() {
         FeedbackDTO dto = FeedbackDTO.builder()
                 .memberId("test4@mail.com")
-                .menuName("육회비빔밥")
-                .feedback("dislike")
-                .feedbackContent("아쉬워용")
+                .menus(new MenusDTO[]{new MenusDTO("닭날개조림", "like", "무야호"), new MenusDTO("콩반찬", "dislike", "무야호")})
                 .build();
 
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
-        List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
 
-        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
-        // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
-        if (oneFbFromDB == null) { // 없으면
-            for (Menu menu : menuIdList) {
-                Feedback feedback = Feedback.builder()
-                        .member(member)
-                        .menu(menu)
-                        .feedback(dto.getFeedback())
-                        .feedbackContent(dto.getFeedbackContent())
-                        .build();
-                feedbackRepo.save(feedback);
-            }
-            System.out.println("SUCCESS(insert)");
-        } else { // 있으면
-            if (oneFbFromDB.getFeedback().equals(dto.getFeedback()) && oneFbFromDB.getFeedbackContent().equals(dto.getFeedbackContent())) { // 피드백이 같으면
-                System.out.println("do NOTHING");
-            } else { // 다르면
+        for (MenusDTO menuDTO : dto.getMenus()) {
+            System.out.println(menuDTO);
+
+            List<Menu> menuIdList = menuRepo.findByMenuName(menuDTO.getMenuName());
+
+            Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
+            // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
+            if (oneFbFromDB == null) { // 없으면
                 for (Menu menu : menuIdList) {
-                    Feedback feedback = feedbackRepo.findByMemberAndMenu(member, menu);
-                    feedback.updateFeedback(dto.getFeedback(), dto.getFeedbackContent());
+                    Feedback feedback = Feedback.builder()
+                            .member(member)
+                            .menu(menu)
+                            .feedback(menuDTO.getFeedback())
+                            .feedbackContent(menuDTO.getFeedbackContent())
+                            .build();
                     feedbackRepo.save(feedback);
                 }
+                System.out.println("SUCCESS(insert)");
+            } else { // 있으면
+                if (oneFbFromDB.getFeedback().equals(menuDTO.getFeedback()) && oneFbFromDB.getFeedbackContent().equals(menuDTO.getFeedbackContent())) { // 피드백이 같으면
+                    System.out.println("do NOTHING");
+                } else { // 다르면
+                    for (Menu menu : menuIdList) {
+                        Feedback feedback = feedbackRepo.findByMemberAndMenu(member, menu);
+                        feedback.updateFeedback(menuDTO.getFeedback(), menuDTO.getFeedbackContent());
+                        feedbackRepo.save(feedback);
+                    }
+                }
             }
-        }
 
-        System.out.println("SUCCESS(update)");
+            System.out.println("SUCCESS(update)");
+        }
     }
 
     // 회원의 연속 기간 가져오기
@@ -105,7 +114,7 @@ public class KyungYunTest {
             System.out.println(input + " : 구독하지 않은 회원임.");
         } else {
             int days = subRepo.findContinuousDaysByMemberId(input);
-            System.out.println("memberId: "+input+", 연속 구독 기간(일): "+days);
+            System.out.println("memberId: " + input + ", 연속 구독 기간(일): " + days);
         }
     }
 
@@ -115,7 +124,7 @@ public class KyungYunTest {
         String input = "노찌롱";
 
         Members member = memRepo.findByMemberNick(input);
-        if(member == null) {
+        if (member == null) {
             System.out.println("닉네임 중복 아님. 아이디 사용 가능.");
         } else {
             System.out.println("닉네임 중복. " + member);
@@ -128,7 +137,7 @@ public class KyungYunTest {
         String input = "kky417@kakao.com";
 
         Members member = memRepo.findById(input).orElse(null);
-        if(member == null) {
+        if (member == null) {
             System.out.println("아이디 중복 아님. 아이디 사용 가능.");
         } else {
             System.out.println("아이디 중복. " + member);
