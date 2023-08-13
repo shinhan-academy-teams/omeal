@@ -39,6 +39,7 @@ import AdminMeun from "pages/admin/AdminMenu";
 import ManageMember from "pages/admin/ManageMember";
 import ManageDishes from "pages/admin/ManageDishes";
 import ManageSales from "pages/admin/ManageSales";
+import AdminNavBar from "pages/common/AdminNavBar";
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -125,25 +126,26 @@ const App = () => {
             </Route>
 
             <Route path="food-worldcup" element={<Worldcup />} />
-
-            {/* 관리자 페이지 */}
-            {isAdmin ? (
-              <Route path="manage">
-                <Route path="" element={<AdminMeun />} />
-                <Route path="member" element={<ManageMember />} />
-                <Route path="dishes" element={<ManageDishes />} />
-                <Route path="sales" element={<ManageSales />} />
-              </Route>
-            ) : (
-              <Route index element={<Main />} />
-            )}
           </Route>
 
+          {/* 회원가입 및 로그인 */}
           <Route path="/auth" element={<NoNavBar />}>
             <Route path="sign-in" element={<SignIn />} />
             <Route path="sign-up" element={<SignUp />} />
             <Route path="card-register" element={<CardRegister />} />
           </Route>
+
+          {/* 관리자 페이지 */}
+          {isAdmin ? (
+            <Route path="manage" element={<AdminNavBar />}>
+              <Route path="" element={<AdminMeun />} />
+              <Route path="member" element={<ManageMember />} />
+              <Route path="dishes" element={<ManageDishes />} />
+              <Route path="sales" element={<ManageSales />} />
+            </Route>
+          ) : (
+            <Route index element={<Main />} />
+          )}
         </Routes>
       </Container>
     </ThemeProvider>
