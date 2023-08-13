@@ -77,7 +77,7 @@ function Bottom(props) {
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
-            label="커뮤니티"
+            label="오밀랜드"
             id="community"
             value="/omealland"
             icon={<Diversity3Icon />}
@@ -95,7 +95,7 @@ function Bottom(props) {
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
-            label="오늘의 밀"
+            label="오늘의밀"
             id="omeal"
             value="/today-meal"
             icon={<MopedIcon />}
