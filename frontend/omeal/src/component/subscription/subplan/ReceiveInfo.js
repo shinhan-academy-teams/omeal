@@ -1,5 +1,6 @@
-import { Box, CircularProgress, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import axios from "axios";
+import SmallCircularProgress from "component/common/SmallCircularProgress";
 import React, { useEffect, useState } from "react";
 
 function ReceiveInfo(props) {
@@ -25,7 +26,7 @@ function ReceiveInfo(props) {
 
   return (
     <>
-      {isLoading === true && <CircularProgress />}
+      {isLoading === true && <SmallCircularProgress />}
       <Box
         component="form"
         sx={{
