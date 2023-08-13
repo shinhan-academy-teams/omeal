@@ -15,6 +15,7 @@ import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
 import "./Bottom.css";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 function Bottom(props) {
   const location = useLocation();
@@ -24,6 +25,17 @@ function Bottom(props) {
   const [value, setValue] = useState(currentPath);
   const memberGrade = useRecoilValue(MemberGradeState);
   const sub = useRecoilValue(SubCheckState);
+
+  useEffect(() => {
+    let url = currentPath;
+    const position = currentPath.indexOf("/", 1);
+    if (position !== -1) {
+      url = currentPath.substring(0, position);
+    }
+    if ((currentPath === url || currentPath.includes(url)) && value !== url) {
+      setValue(url);
+    }
+  }, [currentPath, value]);
 
   const handleChange = (e, newValue) => {
     if (newValue === "/today-meal") {
