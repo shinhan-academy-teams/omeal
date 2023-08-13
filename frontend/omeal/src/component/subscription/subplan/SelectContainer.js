@@ -20,6 +20,8 @@ import { ContainerTypeAtom } from "../../../recoil/SubscriptionState";
 import axios from "axios";
 import multiUseContainer from "../../../assets/img/subscription/multi_use_container.png";
 import disposableContainer from "../../../assets/img/subscription/disposable_container.png";
+import SmallCircularProgress from "component/common/SmallCircularProgress";
+import { selectedStyle } from "style";
 
 function SelectContainer(props) {
   const [containerType, setContainerType] = useRecoilState(ContainerTypeAtom);
@@ -35,8 +37,6 @@ function SelectContainer(props) {
     }
     console.log("카드 클릭함 : " + value);
   };
-
-  const selectedStyle = "0px 4px 8px rgba(1, 1, 1, 1)";
 
   // 로딩
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +55,7 @@ function SelectContainer(props) {
 
   return (
     <>
-      {isLoading === true && <CircularProgress />}
+      {isLoading === true && <SmallCircularProgress />}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
