@@ -45,7 +45,7 @@ function Subscription(props) {
 
   // 회원 아이디
   const memberId = useRecoilValue(SignInState);
-
+  console.log("페이지 넘버 : " + detailStep);
   const steps = ["오밀플랜", "배송 정보", "결제"];
 
   const handleNext = () => {
@@ -71,17 +71,16 @@ function Subscription(props) {
       }
     }
 
-    // ★우선 개발 편의를 위해 주석 처리함
     // 6. DeliveryInfo에서 주소, 상세주소, (비밀번호) 입력 안했을 경우 => Alert
-    // if (detailStep === 6) {
-    //   if (doorPwd === "" || addr === "" || subAddr === "") {
-    //     Swal.fire({
-    //       icon: "warning",
-    //       text: "주소와 상세 주소를 모두 입력해주세요",
-    //     });
-    //     return detailStep === 6;
-    //   }
-    // }
+    if (detailStep === 6) {
+      if (addr === "" || subAddr === "") {
+        Swal.fire({
+          icon: "warning",
+          text: "주소와 상세 주소를 모두 입력해주세요",
+        });
+        return detailStep === 6;
+      }
+    }
 
     setDetailStep((preDetailStep) => preDetailStep + 1);
     if (detailStep === 4) {
@@ -90,16 +89,22 @@ function Subscription(props) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
     } else if (detailStep === 8) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
-      axios
-        .post("/subscribe", {
-          memberId: memberId,
-          subType: subType,
-          container: containerType,
-          category: foodCategory,
-          deliveryAddr: addr + " " + subAddr,
-          mealTime: subTime,
-          memberAllergy: Allergy,
-        })
+
+      const data = {
+        memberId: memberId,
+        subType: subType,
+        container: containerType,
+        category: foodCategory,
+        deliveryAddr: addr + " " + subAddr,
+        mealTime: subTime,
+        memberAllergy: Allergy,
+      };
+      axios({
+        method: "POST",
+        url: "/subscribe",
+        data: JSON.stringify(data),
+        headers: { "Content-Type": `application/json` },
+      })
         .then(function (response) {
           console.log(response.data);
         })

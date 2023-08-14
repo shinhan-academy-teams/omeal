@@ -1,6 +1,10 @@
 import {
   Box,
+  Card,
+  CardContent,
+  CardMedia,
   Chip,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
@@ -9,11 +13,16 @@ import {
   Select,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
   useTheme,
 } from "@mui/material";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { AllergyAtom } from "../../../recoil/SubscriptionState";
+import a from "../../../assets/img/foodAllergy/1.png";
+import b from "../../../assets/img/foodAllergy/2.png";
+import c from "../../../assets/img/foodAllergy/3.png";
+import d from "../../../assets/img/foodAllergy/4.png";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -61,9 +70,33 @@ function SelectAllergy(props) {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-      <Grid container spacing={2} style={{ margin: "20px 0px" }}>
+      <Grid container spacing={2}>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
+          <Card
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={d}
+              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+            ></CardMedia>
+            <Divider></Divider>
+          </Card>
+          <Grid item xs={1} />
+        </Grid>
         <Grid item xs={3}>
           <ToggleButtonGroup
+            sx={{
+              paddingTop: 1,
+              paddingLeft: 8,
+              borderColor: "rgb(0 0 0 / 25%)",
+              height: 55,
+            }}
             color="primary"
             exclusive
             onChange={handleChange}
