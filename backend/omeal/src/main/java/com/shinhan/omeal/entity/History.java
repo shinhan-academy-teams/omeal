@@ -45,6 +45,9 @@ public class History {
     @Comment("구독상태")
     private SubscriptionStatus status;
 
+    @Comment("결제금액")
+    private int amount;
+
     @Comment("결제일시")
     private LocalDateTime payDate;
 
