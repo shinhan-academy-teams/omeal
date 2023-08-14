@@ -21,7 +21,6 @@ public class BoardController {
     // 글 게시
     @PostMapping("/register")
     public String boardRegister(@RequestBody BoardDTO dto) {
-        System.out.println("___________________________"+dto);
         return boardService.post(dto);
     }
 
@@ -61,13 +60,6 @@ public class BoardController {
         else{
             return boardService.getContentsCategory(townname, option);
         }
-    }
-
-    //게시글 내용
-    @GetMapping("/{townname}/detail/{no}")
-    public BoardDTO getBoardDetail(@PathVariable Long no) {
-
-        return boardService.getBoardDetail(no);
     }
 
     // 마을 + 옵션 + 카테고리 + 검색어
