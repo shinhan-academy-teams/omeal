@@ -40,6 +40,8 @@ import ManageMember from "pages/admin/ManageMember";
 import ManageDishes from "pages/admin/ManageDishes";
 import ManageSales from "pages/admin/ManageSales";
 import AdminNavBar from "pages/common/AdminNavBar";
+import JSConfetti from "js-confetti";
+export const jsConfetti = new JSConfetti();
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
