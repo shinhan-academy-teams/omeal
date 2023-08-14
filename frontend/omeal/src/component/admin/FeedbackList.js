@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import CircularProgress from "../common/CircularProgress";
+import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 
+const likeColumns = [
+  { field: "menuNo", headerName: "음식 번호", width: 80 },
+  { field: "menuName", headerName: "음식 이름", width: 200 },
+  { field: "count", headerName: "좋아요", width: 70 },
+];
+
+const dislikeColumns = [
+  { field: "menuNo", headerName: "음식 번호", width: 80 },
+  { field: "menuName", headerName: "음식 이름", width: 200 },
+  { field: "count", headerName: "싫어요", width: 70 },
+];
+
 function FeedbackList(props) {
-  const [likekData, setLikeData] = useState([]);
-  const [dislikekData, setDislikeData] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [likeData, setLikeData] = useState([]);
+  const [dislikeData, setDislikeData] = useState([]);
 
   useEffect(() => {
     axios({
@@ -18,8 +26,11 @@ function FeedbackList(props) {
       method: "GET",
     })
       .then((res) => {
-        setLikeData(res.data["like"]);
-        setDislikeData(res.data["dislike"]);
+        const like = res.data["like"];
+        const dislike = res.data["dislike"];
+        setLikeData(like);
+        setDislikeData(dislike);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -29,57 +40,39 @@ function FeedbackList(props) {
   return (
     <div>
       <h1>좋아요 Top 5</h1>
-      <div>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 400 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">음식 이름</TableCell>
-                <TableCell align="center">좋아요</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {likekData.map((row, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row" align="center">
-                    {row.menuName}
-                  </TableCell>
-                  <TableCell align="center">{row.count}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <div style={{ height: 400, width: "100%" }}>
+        {isLoading && <CircularProgress />}
+        {!isLoading && (
+          <DataGrid
+            rows={likeData}
+            getRowId={(row) => row.menuNo}
+            columns={likeColumns}
+            pageSize={5}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+          />
+        )}
       </div>
       <hr />
       <h1>싫어요 Top 5</h1>
-      <div>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 400 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">음식 이름</TableCell>
-                <TableCell align="center">싫어요</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {dislikekData.map((row, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row" align="center">
-                    {row.menuName}
-                  </TableCell>
-                  <TableCell align="center">{row.count}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <div style={{ height: 400, width: "100%" }}>
+        {isLoading && <CircularProgress />}
+        {!isLoading && (
+          <DataGrid
+            rows={dislikeData}
+            getRowId={(row) => row.menuNo}
+            columns={dislikeColumns}
+            pageSize={5}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+          />
+        )}
       </div>
     </div>
   );
