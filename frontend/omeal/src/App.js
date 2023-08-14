@@ -99,7 +99,7 @@ const App = () => {
             <Route path="omealland" element={<OmealLand />} />
             <Route path="omealland/sandwich" element={<SandralPark />} />
             <Route
-              path="omealland/sandwich/PostView/:no"
+              path="omealland/PostView/:no"
               element={<PostView />}
             />
             <Route path="omealland/bibimbap" element={<BibimLab />} />
