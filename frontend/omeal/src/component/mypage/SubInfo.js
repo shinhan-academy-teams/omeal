@@ -23,6 +23,7 @@ function SubInfo(props) {
     })
       .then((res) => {
         setSubrInfo(res.data);
+        console.log(subInfo);
       })
       .catch((error) => {
         console.log(error);
@@ -66,68 +67,81 @@ function SubInfo(props) {
         component="form"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
-          width: 450,
-          height: 600,
+          width: "100%",
+          height: "100%",
           backgroundColor: "#fef7ed",
+          margin: "auto",
+          color: "#ea5c2b",
         }}
         noValidate
         autoComplete="off"
       >
-        <Typography variant="h5" className="backColor" color="secondary">
-          구독 정보
-        </Typography>
-        <TextField
-          className="backColor"
-          label="구독 종류"
-          color="secondary"
-          focused
-          value={subInfo.subType}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <br></br>
-        <TextField
-          className="backColor"
-          label="식사 종류"
-          color="secondary"
-          focused
-          value={subInfo.category}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <br></br>
-        <TextField
-          className="backColor"
-          label="용기 종류"
-          color="secondary"
-          focused
-          value={subInfo.container}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <br></br>
-        <TextField
-          className="backColor"
-          label="알러지 음식"
-          color="secondary"
-          focused
-          value={subInfo.memberAllergy}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <br></br>
-        <Button
-          className="backColor"
-          color="secondary"
-          variant="contained"
-          onClick={cancelSubscription}
-        >
-          구독 해지
-        </Button>
+        <div style={{ margin: "30%" }}>
+          <Typography
+            variant="h5"
+            className="backColor"
+            sx={{ backgroundColor: "#fef7ed" }}
+          >
+            구독 정보
+          </Typography>
+          <TextField
+            className="backColor"
+            label="구독 종류"
+            focused
+            value={subInfo.subType}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <br></br>
+          <TextField
+            className="backColor"
+            label="배송 시간"
+            focused
+            value={subInfo.subTime}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <br></br>
+          <TextField
+            className="backColor"
+            label="식사 타입"
+            focused
+            value={subInfo.category}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <br></br>
+          <TextField
+            className="backColor"
+            label="용기 종류"
+            focused
+            value={subInfo.container}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <br></br>
+          <TextField
+            className="backColor"
+            label="알러지 음식"
+            focused
+            value={subInfo.memberAllergy}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <br></br>
+          <Button
+            className="backColor"
+            variant="contained"
+            onClick={cancelSubscription}
+          >
+            구독 해지
+          </Button>
+        </div>
       </Box>
     </>
   );
