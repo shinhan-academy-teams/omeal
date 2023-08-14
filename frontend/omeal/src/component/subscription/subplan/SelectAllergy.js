@@ -23,6 +23,7 @@ import a from "../../../assets/img/foodAllergy/1.png";
 import b from "../../../assets/img/foodAllergy/2.png";
 import c from "../../../assets/img/foodAllergy/3.png";
 import d from "../../../assets/img/foodAllergy/4.png";
+import { useState } from "react";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -56,9 +57,11 @@ function getStyles(name, Allergy, theme) {
 function SelectAllergy(props) {
   const theme = useTheme();
   const [Allergy, setAllergy] = useRecoilState(AllergyAtom);
+  const [isAllergy, setIsAllergy] = useState(false);
 
   const handleChange = (event, newAlignment) => {
     setAllergy([]);
+    setIsAllergy(newAlignment);
   };
 
   const handleChange2 = (event, newAlignment) => {
@@ -89,6 +92,7 @@ function SelectAllergy(props) {
           </Card>
           <Grid item xs={1} />
         </Grid>
+
         <Grid item xs={3}>
           <ToggleButtonGroup
             sx={{
@@ -100,6 +104,7 @@ function SelectAllergy(props) {
             color="primary"
             exclusive
             onChange={handleChange}
+            value={isAllergy}
             aria-label="Platform"
           >
             <ToggleButton value="true">없어요</ToggleButton>
@@ -116,6 +121,7 @@ function SelectAllergy(props) {
               multiple
               value={Allergy}
               onChange={handleChange2}
+              disabled={isAllergy}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
               renderValue={(selected) => (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
