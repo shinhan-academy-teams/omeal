@@ -55,6 +55,7 @@ public class SubscriptionService {
                 .subType(newSubscription.getSubType())
                 .category(newSubscription.getCategory())
                 .status(SubscriptionStatus.START)
+                .amount(calPaymentAmount(newSubscription.getSubType()))
                 .payDate(newSubscription.getPayDate())
                 .startDate(newSubscription.getStartDate())
                 .endDate(newSubscription.getEndDate())
@@ -82,6 +83,7 @@ public class SubscriptionService {
                         .subType(subscription.getSubType())
                         .category(subscription.getCategory())
                         .status(SubscriptionStatus.START)
+                        .amount(calDiscountedAmount(subscription.getMember().getMemberGrade(),subscription.getSubType()))
                         .payDate(subscription.getPayDate())
                         .startDate(subscription.getStartDate())
                         .endDate(subscription.getEndDate())
@@ -127,6 +129,25 @@ public class SubscriptionService {
             endDate = endDate.plusDays(6);
         }
         return endDate;
+    }
+
+    // 기본 결제금액 계산
+    private int calPaymentAmount(SubscriptionType type) {
+        if(type.equals(SubscriptionType.MONTHLY)) {
+            return 190000;
+        }
+        return 52000;
+    }
+
+    // 등급별 할인 결제금액 계산
+    private int calDiscountedAmount(MemberGrade grade, SubscriptionType type){
+        int amount = calPaymentAmount(type);
+        switch (grade) {
+            case 반숙란: return (int)(amount*0.95);
+            case 완숙란: return (int)(amount*0.90);
+            case 훈제란: return (int)(amount*0.85);
+            default: return amount;
+        }
     }
 
     // 입력 받은 알레르기 정보를 DB에 있는 데이터와 매핑
