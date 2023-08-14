@@ -54,9 +54,10 @@ function UserInfo(props) {
         component="form"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
-          width: 450,
-          height: 600,
+          width: "100%",
+          height: "100%",
           backgroundColor: "#fef7ed",
+          color: "#ea5c2b",
         }}
         noValidate
         autoComplete="off"
