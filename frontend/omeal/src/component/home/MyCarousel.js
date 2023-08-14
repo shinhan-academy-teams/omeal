@@ -24,7 +24,7 @@ function MyCarousel(props) {
   ];
 
   return (
-    <Carousel sx={{ width: "100%", height: "100%" }}>
+    <Carousel sx={{ width: "100%", height: "530px" }}>
       {items.map((item, i) => (
         <Item key={i} item={item} />
       ))}
@@ -37,16 +37,12 @@ function Item(props) {
 
   return (
     <Paper elevation={0} sx={{ display: "flex", flexDirection: "column" }}>
-      <img
-        src={props.item.img}
-        alt={props.item.name}
-        style={{ position: "relative" }}
-      />
+      <img src={props.item.img} alt={props.item.name} />
       <Button
         variant="contained"
         className="CheckButton"
         size="large"
-        sx={{ position: "absolute", top: 425, left: 200 }}
+        sx={{ width: "300px", margin: "-75px auto 30px" }}
         onClick={() => {
           navi(props.item.url);
         }}

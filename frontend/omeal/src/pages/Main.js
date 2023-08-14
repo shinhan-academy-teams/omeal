@@ -5,6 +5,7 @@ import { MemberRoleState } from "recoil/SignInState";
 import { useRecoilValue } from "recoil";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 
 function Main(props) {
   const memberRoleState = useRecoilValue(MemberRoleState);
@@ -20,7 +21,16 @@ function Main(props) {
   return (
     <>
       <MyCarousel />
-      <Intro />
+      <Box
+        sx={{
+          width: "95%",
+          height: "35%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Intro />
+      </Box>
     </>
   );
 }
