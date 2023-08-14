@@ -16,7 +16,7 @@ function OmealLand(props) {
         component="form"
         sx={{
           width: 600,
-          height: 740,
+          height: 840,
           backgroundColor: "#fef7ed",
         }}
         noValidate
@@ -43,7 +43,7 @@ function OmealLand(props) {
             cursor: "pointer",
             position: "fixed",
             top: "18%",
-            left: "39%",
+            left: "41.2%",
             opacity: 0,
           }}
         ></button>
@@ -59,7 +59,7 @@ function OmealLand(props) {
             cursor: "pointer",
             position: "fixed",
             top: "18%",
-            left: "54%",
+            left: "53%",
             opacity: 0,
           }}
         ></button>
@@ -75,7 +75,7 @@ function OmealLand(props) {
             cursor: "pointer",
             position: "fixed",
             top: "47%",
-            left: "31.8%",
+            left: "35.3%",
             opacity: 0,
           }}
         ></button>
@@ -91,7 +91,7 @@ function OmealLand(props) {
             cursor: "pointer",
             position: "fixed",
             top: "47%",
-            left: "61.2%",
+            left: "59%",
             opacity: 0,
           }}
         ></button>
@@ -107,7 +107,7 @@ function OmealLand(props) {
             cursor: "pointer",
             position: "fixed",
             top: "77%",
-            left: "39%",
+            left: "41.2%",
             opacity: 0,
           }}
         ></button>
@@ -123,7 +123,7 @@ function OmealLand(props) {
             cursor: "pointer",
             position: "fixed",
             top: "77%",
-            left: "53.8%",
+            left: "53%",
             opacity: 0,
           }}
         ></button>

@@ -35,6 +35,10 @@ function BibimLab(props) {
     navi("/omealland/register");
   };
 
+  const handleView = (postNo) => {
+    navi("/omealland/PostView/" + postNo);
+  };
+
   //처음 전체 게시물
   useEffect(() => {
     axios
@@ -174,7 +178,7 @@ function BibimLab(props) {
   return (
     <div>
       {/* 비빔연구소 */}
-      <Box sx={{ width: "500px" }}>
+      <Box sx={{ width: "500px", margin: "50px" }}>
         <FormControl sx={{ width: "100px", paddingRight: "10px" }}>
           <InputLabel id="select-search-label">검색조건</InputLabel>
           <Select
@@ -262,6 +266,9 @@ function BibimLab(props) {
                   <TableRow
                     key={post.postNo}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    onClick={() => {
+                      handleView(post.postNo);
+                    }}
                   >
                     <TableCell component="th" scope="row">
                       {post.postNo}

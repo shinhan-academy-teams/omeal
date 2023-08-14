@@ -22,7 +22,7 @@ import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function SandralPark(props) {
   const [postList, setPostList] = useState([]);
@@ -35,6 +35,9 @@ function SandralPark(props) {
     navi("/omealland/register");
   };
 
+  const handleView = (postNo) => {
+    navi("/omealland/PostView/" + postNo);
+  };
   //처음 전체 게시물
   useEffect(() => {
     axios
@@ -175,7 +178,7 @@ function SandralPark(props) {
   return (
     <div>
       {/* 샌드럴파크 */}
-      <Box sx={{ width: "500px" }}>
+      <Box sx={{ width: "500px", margin:"50px"}}>
         <FormControl sx={{ width: "100px", paddingRight: "10px" }}>
           <InputLabel id="select-search-label">검색조건</InputLabel>
           <Select
@@ -263,15 +266,14 @@ function SandralPark(props) {
                   <TableRow
                     key={post.postNo}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    onClick={() => {
+                      handleView(post.postNo);
+                    }}
                   >
                     <TableCell component="th" scope="row">
                       {post.postNo}
                     </TableCell>
-                    <TableCell align="center">
-                      <Link to={`/omealland/sandwich/PostView/${post.postNo}`}>
-                        {post.title}
-                      </Link>
-                    </TableCell>
+                    <TableCell align="center">{post.title}</TableCell>
                     <TableCell align="center">
                       {post.member.memberNick}
                     </TableCell>

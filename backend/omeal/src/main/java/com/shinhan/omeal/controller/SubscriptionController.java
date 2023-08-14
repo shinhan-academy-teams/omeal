@@ -18,7 +18,7 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     // 구독 정보 저장
-    @PostMapping(value = "/subscribe")
+    @PostMapping(value = "/subscribe", consumes = "application/json")
     public String subscribe(@RequestBody SubscriptionDTO subscriptionInfo) {
         return subscriptionService.subscribe(subscriptionInfo);
     }

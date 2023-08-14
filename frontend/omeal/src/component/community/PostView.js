@@ -38,20 +38,32 @@ function PostView() {
   useEffect(() => {
     axios({
       method: "get",
-      url: `/board/샌드럴파크/detail/${no}`,
-    }).then((res) => {
-      const dto = res.data;
-      //console.log(dto.regDate);
-      //   console.log("BoardDTO가 넘어오면 : " + dto);
-      //   console.log("commentList : " + dto.commentsList[0].content);
-      //console.log("member : " + dto.commentsList[1].regDate);
+      url: `/board/content`,
+      params: {
+        postNo: no,
+      },
+    })
+      .then((res) => {
+        const dto = res.data;
+        console.log(dto);
+        setTitle(dto.title);
+        setContent(dto.content);
+        setMemberNick(dto.memberNick);
+        setRegDate(dto.regDate);
+        setList(dto.commentsList);
 
-      setList(dto.commentsList);
-      setTitle(dto.title);
-      setContent(dto.content);
-      setMemberNick(dto.memberNick);
-      setRegDate(dto.regDate);
-    });
+        //사진 있을때
+        if (dto.photo) {
+          const photo = (
+            "https://omeal-jomeal.s3.ap-northeast-2.amazonaws.com/" + dto.photo
+          ).replace("@", "");
+
+          setPhoto(photo);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -85,8 +97,8 @@ function PostView() {
         component="form"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
-          width: 450,
-          height: 600,
+          width: 600,
+          height: 830,
           backgroundColor: "#fef7ed",
         }}
         noValidate
@@ -94,7 +106,10 @@ function PostView() {
       >
         <Stack spacing={2} margin={2}>
           <Item>{title}</Item>
-          <Item sx={{ height: 400 }}>{content}</Item>
+          <Item sx={{ height: 300 }}>{content}</Item>
+          <Item sx={{ textAlign: "center" }}>
+            <img src={`${photo}`} alt="사진없음"></img>
+          </Item>
           <Table aria-label="caption table">
             <TableHead>
               <TableRow>
