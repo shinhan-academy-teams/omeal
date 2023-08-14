@@ -15,6 +15,7 @@ public class UserSubInfoDTO {
     private String category;                // 성향
     private String container;               // 용기
     private List<String> memberAllergy;    //알러지
+    private String subTime;                // 구독 시간
 
     @Builder
     public UserSubInfoDTO(List<String> sub, List<String> memberAllergy){
@@ -22,6 +23,7 @@ public class UserSubInfoDTO {
         this.category=sub.get(1);
         this.container=sub.get(2);
         this.memberAllergy=memberAllergy;
+        this.subTime = sub.get(3);
     }
 
 }

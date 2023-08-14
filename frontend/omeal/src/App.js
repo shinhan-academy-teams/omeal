@@ -138,16 +138,15 @@ const App = () => {
           </Route>
 
           {/* 관리자 페이지 */}
-          {isAdmin ? (
-            <Route path="manage" element={<AdminNavBar />}>
-              <Route path="" element={<AdminMeun />} />
+            <Route path="manage">
+              <Route
+                path=""
+                element={isAdmin ? <AdminMeun /> : <Navigate replace to="/" />}
+              />
               <Route path="member" element={<ManageMember />} />
               <Route path="dishes" element={<ManageDishes />} />
               <Route path="sales" element={<ManageSales />} />
             </Route>
-          ) : (
-            <Route index element={<Main />} />
-          )}
         </Routes>
       </Container>
     </ThemeProvider>
