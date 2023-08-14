@@ -36,22 +36,26 @@ function PostView() {
   };
 
   useEffect(() => {
+
     axios({
       method: "get",
-      url: `/board/샌드럴파크/detail/${no}`,
-    }).then((res) => {
-      const dto = res.data;
-      //console.log(dto.regDate);
-      //   console.log("BoardDTO가 넘어오면 : " + dto);
-      //   console.log("commentList : " + dto.commentsList[0].content);
-      //console.log("member : " + dto.commentsList[1].regDate);
-
-      setList(dto.commentsList);
-      setTitle(dto.title);
-      setContent(dto.content);
-      setMemberNick(dto.memberNick);
-      setRegDate(dto.regDate);
-    });
+      url: `/board/content`,
+      params: {
+        postNo: no,
+      },
+    })
+      .then((res) => {
+        const dto = res.data;
+        console.log(dto);
+        setTitle(dto.title);
+        setContent(dto.content);
+        setMemberNick(dto.memberNick);
+        setRegDate(dto.regDate);
+        setList(dto.commentsList);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
 
   const Item = styled(Paper)(({ theme }) => ({
