@@ -6,20 +6,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { useRecoilValue } from "recoil";
-import { MemberRoleState } from "recoil/SignInState";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Intro(props) {
-  const navi = useNavigate();
-  const memberRoleState = useRecoilValue(MemberRoleState);
-  useEffect(() => {
-    if (memberRoleState === "ADMIN") {
-      navi("/manage");
-      return;
-    }
-  }, []);
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
       <ListItem alignItems="flex-start">
