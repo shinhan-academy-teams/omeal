@@ -36,7 +36,6 @@ function PostView() {
   };
 
   useEffect(() => {
-
     axios({
       method: "get",
       url: `/board/content`,
@@ -52,6 +51,15 @@ function PostView() {
         setMemberNick(dto.memberNick);
         setRegDate(dto.regDate);
         setList(dto.commentsList);
+
+        //사진 있을때
+        if (dto.photo) {
+          const photo = (
+            "https://omeal-jomeal.s3.ap-northeast-2.amazonaws.com/" + dto.photo
+          ).replace("@", "");
+
+          setPhoto(photo);
+        }
       })
       .catch((err) => {
         console.log("error", err);
@@ -89,8 +97,8 @@ function PostView() {
         component="form"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
-          width: 450,
-          height: 600,
+          width: 600,
+          height: 830,
           backgroundColor: "#fef7ed",
         }}
         noValidate
@@ -98,7 +106,10 @@ function PostView() {
       >
         <Stack spacing={2} margin={2}>
           <Item>{title}</Item>
-          <Item sx={{ height: 400 }}>{content}</Item>
+          <Item sx={{ height: 300 }}>{content}</Item>
+          <Item sx={{ textAlign: "center" }}>
+            <img src={`${photo}`} alt="사진없음"></img>
+          </Item>
           <Table aria-label="caption table">
             <TableHead>
               <TableRow>
