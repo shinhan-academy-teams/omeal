@@ -2,14 +2,18 @@ import React from "react";
 import Carousel from "react-material-ui-carousel";
 import { Button, Paper } from "@mui/material";
 import { useNavigate } from "react-router";
+import { useRecoilValue } from "recoil";
+import { SignInState } from "recoil/SignInState";
 
 function MyCarousel(props) {
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+
   var items = [
     {
       name: "banner1",
       img: "/img/carousel-img/page1.png",
       button: "오늘의 밀 서비스 구독하기",
-      url: "/subscription",
+      url: isLogin ? "/subscription" : "/auth/sign-in",
     },
     {
       name: "banner2",
