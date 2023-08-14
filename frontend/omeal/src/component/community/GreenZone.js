@@ -35,6 +35,10 @@ function GreenZone(props) {
     navi("/omealland/register");
   };
 
+  const handleView = (postNo) => {
+    navi("/omealland/PostView/" + postNo);
+  };
+
   //처음 전체 게시물
   useEffect(() => {
     axios
@@ -262,6 +266,9 @@ function GreenZone(props) {
                   <TableRow
                     key={post.postNo}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    onClick={() => {
+                      handleView(post.postNo);
+                    }}
                   >
                     <TableCell component="th" scope="row">
                       {post.postNo}

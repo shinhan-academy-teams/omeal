@@ -35,6 +35,9 @@ function SandralPark(props) {
     navi("/omealland/register");
   };
 
+  const handleView = (postNo) => {
+    navi("/omealland/PostView/" + postNo);
+  };
   //처음 전체 게시물
   useEffect(() => {
     axios
@@ -263,15 +266,14 @@ function SandralPark(props) {
                   <TableRow
                     key={post.postNo}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    onClick={() => {
+                      handleView(post.postNo);
+                    }}
                   >
                     <TableCell component="th" scope="row">
                       {post.postNo}
                     </TableCell>
-                    <TableCell align="center">
-                      <Link to={`/omealland/sandwich/PostView/${post.postNo}`}>
-                        {post.title}
-                      </Link>
-                    </TableCell>
+                    <TableCell align="center">{post.title}</TableCell>
                     <TableCell align="center">
                       {post.member.memberNick}
                     </TableCell>
