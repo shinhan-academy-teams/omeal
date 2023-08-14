@@ -4,6 +4,7 @@ import com.shinhan.omeal.dto.delivery.DeliveryStatus;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.todayMeal.FeedbackDTO;
+import com.shinhan.omeal.dto.todayMeal.MenusDTO;
 import com.shinhan.omeal.dto.todayMeal.TodayMealDTO;
 import com.shinhan.omeal.entity.*;
 import com.shinhan.omeal.repository.*;
@@ -30,59 +31,68 @@ public class TodayMealService {
     final FeedbackRepository feedbackRepo;
 
     // 피드백 읽어오기
-    public FeedbackDTO getFeedback(String memberId, String menuName) {
-        FeedbackDTO dto = new FeedbackDTO();
-
-        Members member = memRepo.findById(memberId).orElse(null);
-        List<Menu> menuIdList = menuRepo.findByMenuName(menuName);
-
-        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
-
-        if (oneFbFromDB != null) {
-            dto = FeedbackDTO.builder()
-                    .feedback(oneFbFromDB.getFeedback())
-                    .feedbackContent(oneFbFromDB.getFeedbackContent())
-                    .build();
-        }
-
-        return dto;
-    }
-
-    // 피드백 남기기
-    public String submitFeedback(@RequestBody FeedbackDTO dto) {
-        String result = "";
+    public MenusDTO[] getFeedback(FeedbackDTO dto) {
+        MenusDTO[] result = new MenusDTO[dto.getMenus().length];
 
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
-        List<Menu> menuIdList = menuRepo.findByMenuName(dto.getMenuName());
+        for (int i=0; i<dto.getMenus().length; i++) {
+            MenusDTO menuDTO = dto.getMenus()[i];
 
-        Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0)); // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
+            List<Menu> menuIdList = menuRepo.findByMenuName(menuDTO.getMenuName());
+            Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
 
-        if (oneFbFromDB == null) { // 없으면
-            for (Menu menu : menuIdList) {
-                Feedback feedback = Feedback.builder()
-                        .member(member)
-                        .menu(menu)
-                        .feedback(dto.getFeedback())
-                        .feedbackContent(dto.getFeedbackContent())
+            if (oneFbFromDB != null) {
+                MenusDTO m = MenusDTO.builder()
+                        .menuName(menuDTO.getMenuName())
+                        .feedback(oneFbFromDB.getFeedback())
+                        .feedbackContent(oneFbFromDB.getFeedbackContent())
                         .build();
-                feedbackRepo.save(feedback);
-            }
-            result = "SUCCESS(insert)";
-        } else { // 있으면
-            if (oneFbFromDB.getFeedback().equals(dto.getFeedback())
-                    && oneFbFromDB.getFeedbackContent().equals(dto.getFeedbackContent())) { // 피드백이 같으면
-                result = "do NOTHING";
-            } else { // 다르면
-                for (Menu menu : menuIdList) {
-                    Feedback feedback = feedbackRepo.findByMemberAndMenu(member, menu);
-                    feedback.updateFeedback(dto.getFeedback(), dto.getFeedbackContent());
-                    feedbackRepo.save(feedback);
-                }
-                result = "SUCCESS(update)";
+                result[i] = m;
             }
         }
 
         return result;
+    }
+
+    // 피드백 남기기
+    public String submitFeedback(@RequestBody FeedbackDTO dto) {
+        StringBuilder result = new StringBuilder();
+        Members member = memRepo.findById(dto.getMemberId()).orElse(null);
+
+        for (MenusDTO menuDTO : dto.getMenus()) {
+            result.append(menuDTO.getMenuName()).append(": ");
+
+            List<Menu> menuIdList = menuRepo.findByMenuName(menuDTO.getMenuName());
+
+            Feedback oneFbFromDB = feedbackRepo.findByMemberAndMenu(member, menuIdList.get(0));
+            // 피드백 테이블에서 회원 정보와 메뉴 이름으로 조회
+            if (oneFbFromDB == null) { // 없으면
+                for (Menu menu : menuIdList) {
+                    Feedback feedback = Feedback.builder()
+                            .member(member)
+                            .menu(menu)
+                            .feedback(menuDTO.getFeedback())
+                            .feedbackContent(menuDTO.getFeedbackContent())
+                            .build();
+                    feedbackRepo.save(feedback);
+                }
+                result.append("SUCCESS(insert)");
+            } else { // 있으면
+                if (oneFbFromDB.getFeedback().equals(menuDTO.getFeedback()) && oneFbFromDB.getFeedbackContent().equals(menuDTO.getFeedbackContent())) { // 피드백이 같으면
+                    result.append("do NOTHING");
+                } else { // 다르면
+                    for (Menu menu : menuIdList) {
+                        Feedback feedback = feedbackRepo.findByMemberAndMenu(member, menu);
+                        feedback.updateFeedback(menuDTO.getFeedback(), menuDTO.getFeedbackContent());
+                        feedbackRepo.save(feedback);
+                    }
+                    result.append("SUCCESS(update)");
+                }
+            }
+            result.append("\n");
+        }
+
+        return result.toString();
     }
 
     // 하단의 '오늘의 밀' 아이콘 눌렀을 때 뜨는 첫 페이지

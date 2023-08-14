@@ -14,8 +14,8 @@ import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
 import "./Bottom.css";
-import { ColorLensOutlined } from "@mui/icons-material";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 function Bottom(props) {
   const location = useLocation();
@@ -26,18 +26,28 @@ function Bottom(props) {
   const memberGrade = useRecoilValue(MemberGradeState);
   const sub = useRecoilValue(SubCheckState);
 
-  const todayMeal = () => {
-    if (!sub) {
-      Swal.fire({
-        icon: "warning", // 여기다가 아이콘 종류를 쓰면 됩니다.
-        text: "구독중인 서비스가 없습니다.",
-      });
-      return;
+  useEffect(() => {
+    let url = currentPath;
+    const position = currentPath.indexOf("/", 1);
+    if (position !== -1) {
+      url = currentPath.substring(0, position);
     }
-    navi("/today-meal");
-  };
+    if ((currentPath === url || currentPath.includes(url)) && value !== url) {
+      setValue(url);
+    }
+  }, [currentPath, value]);
 
   const handleChange = (e, newValue) => {
+    if (newValue === "/today-meal") {
+      if (!sub) {
+        Swal.fire({
+          icon: "warning",
+          text: "구독중인 서비스가 없습니다.",
+        });
+        return;
+      }
+    }
+
     setValue(newValue);
     navi(newValue);
   };
@@ -67,7 +77,7 @@ function Bottom(props) {
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
-            label="커뮤니티"
+            label="오밀랜드"
             id="community"
             value="/omealland"
             icon={<Diversity3Icon />}
@@ -85,7 +95,7 @@ function Bottom(props) {
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
-            label="오늘의 밀"
+            label="오늘의밀"
             id="omeal"
             value="/today-meal"
             icon={<MopedIcon />}

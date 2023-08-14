@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import items from "../../pages/worldcup/contents";
+import WinnerComp from "./WinnerComp";
 
 const WorldcupComp = () => {
   const [foods, setFoods] = useState([]);
@@ -41,86 +42,91 @@ const WorldcupComp = () => {
   };
 
   return (
-    <Box
-      sx={{
-        backgroundImage: `url("${process.env.PUBLIC_URL}/img/worldcup/worldcup-background.png")`,
-        backgroundSize: "contain",
-        backgroundPosition: "top",
-        backgroundRepeat: "no-repeat",
-
-        height: "500px",
-        pt: "242px",
-        mt: "12px",
-      }}
-    >
-      {round > 1 && (
-        <Typography
-          variant="h3"
+    <>
+      {displays.length === 1 ? (
+        <WinnerComp data={displays} />
+      ) : (
+        <Box
           sx={{
-            mb: "72px",
-            color: round > 2 ? "#EA5C2B" : "black",
-            fontWeight: "bold",
-            textShadow: round > 2 ? "1px 1px 2px #a4a4a4" : "",
+            backgroundImage: `url("${process.env.PUBLIC_URL}/img/worldcup/worldcup-background.png")`,
+            backgroundSize: "contain",
+            backgroundPosition: "top",
+            backgroundRepeat: "no-repeat",
+            height: "500px",
+            pt: "242px",
+            mt: "12px",
           }}
         >
-          {round > 2 ? round + "강" : "【 결 승 전 】"}
-        </Typography>
-      )}
-      <Box
-        sx={{
-          my: 5,
-          display: "flex",
-          width: "100%",
-          height: "auto",
-          justifyContent: "center",
-        }}
-      >
-        {displays.map((d) => {
-          return (
-            <Paper
-              elevation={8}
+          {round > 1 && (
+            <Typography
+              variant="h3"
               sx={{
-                "&:hover": { transform: "scale(1.07)" },
-                transitionProperty: "all",
-                transitionDuration: "0.2s",
-                transitionTimingFunction: "ease-out",
-                cursor: "pointer",
-                mx: "8px",
-                borderRadius: "20px",
-                width: "270px",
-                height: "270px",
-                backgroundColor: "skyblue",
-                backgroundImage: `url("${process.env.PUBLIC_URL}/img/worldcup/food-img/${d.src}.png")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
+                mb: "72px",
+                color: "#EA5C2B",
+                fontWeight: "bold",
+                textShadow: round > 2 ? "1px 1px 2px #a4a4a4" : "",
               }}
-              key={d.name}
-              onClick={clickHandler(d)}
             >
-              <Typography
-                sx={{
-                  fontSize: "24px",
-                  color: "white",
-                  textShadow: "0px 0px 17px #000",
-                }}
-              >
-                {d.name}
-              </Typography>
-            </Paper>
-          );
-        })}
-      </Box>
-      {round > 1 && (
-        <Typography variant="h5">
-          {round > 2 &&
-            "【" + (round - foods.length + 2) / 2 + "/" + round / 2 + "】"}
-        </Typography>
+              {round > 2 ? round + "강" : "【 결 승 전 】"}
+            </Typography>
+          )}
+          <Box
+            sx={{
+              my: 5,
+              display: "flex",
+              width: "100%",
+              height: "auto",
+              justifyContent: "center",
+            }}
+          >
+            {displays.map((d) => {
+              return (
+                <Paper
+                  elevation={8}
+                  sx={{
+                    "&:hover": { transform: "scale(1.07)" },
+                    transitionProperty: "all",
+                    transitionDuration: "0.2s",
+                    transitionTimingFunction: "ease-out",
+                    cursor: "pointer",
+                    mx: "8px",
+                    borderRadius: "20px",
+                    width: "270px",
+                    height: "270px",
+                    backgroundColor: "skyblue",
+                    backgroundImage: `url("${process.env.PUBLIC_URL}/img/worldcup/food-img/${d.src}.png")`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                  }}
+                  key={d.name}
+                  onClick={clickHandler(d)}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "24px",
+                      color: "white",
+                      textShadow: "0px 0px 17px #000",
+                    }}
+                  >
+                    {d.name}
+                  </Typography>
+                </Paper>
+              );
+            })}
+          </Box>
+          {round > 1 && (
+            <Typography variant="h5">
+              {round > 2 &&
+                "【" + (round - foods.length + 2) / 2 + "/" + round / 2 + "】"}
+            </Typography>
+          )}
+        </Box>
       )}
-    </Box>
+    </>
   );
 };
 
