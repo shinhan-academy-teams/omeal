@@ -21,6 +21,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Paper,
   Typography,
 } from "@mui/material";
 import logoImg from "../../assets/img/logo/white_logo.png";
@@ -99,6 +100,10 @@ function Header(props) {
     <Box
       sx={{
         width: "250px",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
@@ -147,6 +152,113 @@ function Header(props) {
         </List>
         <Divider />
       </Box>
+      <Paper
+        elevation={1}
+        sx={{
+          width: "80%",
+          height: "max-content",
+          m: "12px auto",
+          p: 2,
+          backgroundColor: "#eee",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="caption">© 2023 All Rights Reserved.</Typography>
+        <br />
+        <Typography
+          variant="subtitle1"
+          component="a"
+          href="https://github.com/shinhan-academy-teams/omeal"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          omeal
+        </Typography>
+        <Box my={1}>
+          <Divider />
+        </Box>
+        <Typography variant="subtitle1">We're Jomeal !</Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/hee2425"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          임채희
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/ehopaak"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          박성진
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/djdjdddd"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          김용희
+        </Typography>
+        <br />
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/Jennorresothie"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          윤성훈
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/0seony"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          박영선
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/KKangBro"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          김경윤
+        </Typography>
+      </Paper>
     </Box>
   );
 
