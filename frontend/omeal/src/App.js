@@ -101,16 +101,13 @@ const App = () => {
             {/* 커뮤니티 */}
             <Route path="omealland" element={<OmealLand />} />
             <Route path="omealland/sandwich" element={<SandralPark />} />
-            <Route
-              path="omealland/PostView/:no"
-              element={<PostView />}
-            />
             <Route path="omealland/bibimbap" element={<BibimLab />} />
             <Route path="omealland/ricesoup" element={<RiceSoupMinistry />} />
             <Route path="omealland/salad" element={<GreenZone />} />
             <Route path="omealland/noodle" element={<NoodleOffice />} />
             <Route path="omealland/homemeal" element={<KoreaTown />} />
             <Route path="omealland/register" element={<Register />} />
+            <Route path="omealland/PostView/:no" element={<PostView />} />
 
             {/* 오늘의밀 */}
             <Route path="today-meal">
