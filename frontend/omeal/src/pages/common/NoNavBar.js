@@ -8,7 +8,10 @@ function NoNavBar(props) {
 
   return (
     <>
-      <Paper elevation={8} sx={{ margin: "16px 0", height: "95vh" }}>
+      <Paper
+        elevation={8}
+        sx={{ margin: "16px auto", height: "95vh", width: "95%" }}
+      >
         <Box
           sx={{
             width: "100%",
@@ -24,13 +27,11 @@ function NoNavBar(props) {
             alt="color logo"
             src={logoImg}
             style={{
-              marginTop: "5px",
-              height: "15%",
+              marginBottom: "24px",
+              height: "10%",
               cursor: "pointer",
             }}
-            onClick={() => {
-              navi("/");
-            }}
+            onClick={() => navi("/")}
           />
           <Outlet />
         </Box>
