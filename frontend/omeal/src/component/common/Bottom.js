@@ -49,7 +49,12 @@ function Bottom(props) {
       // 구독하지 않은 회원이 오늘의밀 탭을 누르면
       Swal.fire({
         icon: "warning",
-        text: "구독중인 서비스가 없습니다.",
+        title: "현재 구독 중이지 않습니다😭",
+        html: `
+          <div class="swal-my-custom">
+            <a href="/subscription">오밀 구독하기</a>
+          </div>
+        `,
       });
       return;
     }
