@@ -1,9 +1,11 @@
 import {
   Box,
   Button,
+  Divider,
   Grid,
   IconButton,
   Paper,
+  Skeleton,
   TextField,
   Tooltip,
   Typography,
@@ -23,8 +25,14 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 
 function FeedbackComp(props) {
-  const navi = useNavigate();
   const { state } = useLocation();
+  const navi = useNavigate();
+
+  const memberId = useRecoilValue(SignInState);
+
+  const [type, setType] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
   const [menus, setMenus] = useState([
     {
       menuName: state.menu.split("|")[0],
@@ -32,12 +40,10 @@ function FeedbackComp(props) {
       feedbackContent: "",
     },
   ]);
-  const [type, setType] = useState(1);
 
   // 메뉴가 여러개 일때
   useEffect(() => {
     if (state.menu.includes("|")) {
-      setType(2);
       const secondMenu = {
         menuName: state.menu.split("|")[1],
         feedback: null,
@@ -46,10 +52,11 @@ function FeedbackComp(props) {
       const copyMenus = [...menus];
       copyMenus.push(secondMenu);
       setMenus(copyMenus);
+      setType(2);
+    } else {
+      setType(1);
     }
   }, []);
-
-  const memberId = useRecoilValue(SignInState);
 
   // dislike 버튼 클릭
   const thumbDown = (idx) => {
@@ -92,6 +99,7 @@ function FeedbackComp(props) {
           return copyItem;
         });
         setMenus(copyMenus);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -111,10 +119,9 @@ function FeedbackComp(props) {
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => {
-          // console.log(res.data);
           Toast.fire({
             icon: "success",
-            title: "소중한 피드백 감사합니다!",
+            text: "소중한 피드백 감사합니다🫡",
           }).then(() => {
             navi("/today-meal");
           });
@@ -129,7 +136,7 @@ function FeedbackComp(props) {
     toast: true,
     position: "center-center",
     showConfirmButton: false,
-    timer: 1000,
+    timer: 1500,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener("mouseenter", Swal.stopTimer);
@@ -140,7 +147,7 @@ function FeedbackComp(props) {
   return (
     <>
       <Box
-        my={5}
+        my={8}
         sx={{
           width: "80%",
           backgroundColor: "#FEF7ED",
@@ -155,91 +162,98 @@ function FeedbackComp(props) {
           다음 식사부터 반영하겠습니다
         </Typography>
       </Box>
-      <Paper
-        elevation={2}
-        sx={{
-          width: "80%",
-          height: "auto",
-          borderRadius: "20px",
-        }}
-      >
-        {menus.map((item, idx) => (
-          <Grid
-            container
-            spacing={2}
-            py={2}
-            px={4}
-            justify="flex-end"
-            alignItems="center"
-            key={idx}
-          >
-            <Grid item xs={9}>
-              <Typography variant="body2" sx={{ letterSpacing: "0.2em" }}>
-                {item.menuName}
-              </Typography>
+      {isLoading ? (
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          sx={{ width: "80%", height: "144px", borderRadius: "20px" }}
+        />
+      ) : (
+        <Paper
+          elevation={2}
+          sx={{
+            mt: 2,
+            width: "80%",
+            height: "auto",
+            borderRadius: "20px",
+          }}
+        >
+          <Box p={4}>
+            {menus.map((item, idx) => (
+              <Grid
+                container
+                spacing={2}
+                py={2}
+                justify="flex-end"
+                alignItems="center"
+                key={idx}
+              >
+                <Grid item xs={9}>
+                  <Typography variant="body1" sx={{ letterSpacing: "0.2em" }}>
+                    {item.menuName}
+                  </Typography>
+                </Grid>
+                <Grid item xs={1.5}>
+                  <Tooltip title="아쉬워요" arrow placement="top">
+                    <IconButton
+                      aria-label="thumbDown"
+                      onClick={() => thumbDown(idx)}
+                    >
+                      {item.feedback === "dislike" ? (
+                        <ThumbDownAltIcon sx={{ color: "#FF7F3F" }} />
+                      ) : (
+                        <ThumbDownOffAltIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+                <Grid item xs={1.5}>
+                  <Tooltip title="맛있어요" arrow placement="top">
+                    <IconButton
+                      aria-label="thumbUp"
+                      onClick={() => thumbUp(idx)}
+                    >
+                      {item.feedback === "like" ? (
+                        <ThumbUpAltIcon sx={{ color: "#FF7F3F" }} />
+                      ) : (
+                        <ThumbUpOffAltIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              </Grid>
+            ))}
+            <Divider sx={{ mt: 3 }} />
+            <Grid container spacing={2} justify="flex-end" alignItems="center">
+              <Grid item xs>
+                <TextField
+                  id="standard-multiline-static"
+                  multiline
+                  rows={2}
+                  variant="standard"
+                  fullWidth
+                  placeholder="기타 의견을 작성해주세요"
+                  sx={{ mt: 2 }}
+                  onChange={handleContent}
+                  value={menus[0].feedbackContent}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Tooltip title="피드백 제출" arrow placement="top">
+                  <Button
+                    variant="outlined"
+                    aria-label="submitFeedback"
+                    sx={{ mt: "36px" }}
+                    onClick={submitFeedback}
+                  >
+                    <SendIcon />
+                  </Button>
+                </Tooltip>
+              </Grid>
             </Grid>
-            <Grid item xs={1.5}>
-              <Tooltip title="아쉬워요" arrow placement="top">
-                <IconButton
-                  aria-label="thumbDown"
-                  onClick={() => thumbDown(idx)}
-                >
-                  {item.feedback === "dislike" ? (
-                    <ThumbDownAltIcon sx={{ color: "#FF7F3F" }} />
-                  ) : (
-                    <ThumbDownOffAltIcon />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </Grid>
-            <Grid item xs={1.5}>
-              <Tooltip title="맛있어요" arrow placement="top">
-                <IconButton aria-label="thumbUp" onClick={() => thumbUp(idx)}>
-                  {item.feedback === "like" ? (
-                    <ThumbUpAltIcon sx={{ color: "#FF7F3F" }} />
-                  ) : (
-                    <ThumbUpOffAltIcon />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-        ))}
-      </Paper>
-      <Grid
-        container
-        spacing={2}
-        width="80%"
-        p={2}
-        justify="flex-end"
-        alignItems="center"
-      >
-        <Grid item xs>
-          <TextField
-            id="standard-multiline-static"
-            multiline
-            rows={2}
-            variant="standard"
-            fullWidth
-            placeholder="기타 의견을 작성해주세요"
-            sx={{ mt: 2 }}
-            onChange={handleContent}
-            value={menus[0].feedbackContent}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <Tooltip title="피드백 제출" arrow placement="top">
-            <Button
-              variant="outlined"
-              aria-label="submitFeedback"
-              sx={{ mt: "36px" }}
-              onClick={submitFeedback}
-            >
-              <SendIcon />
-            </Button>
-          </Tooltip>
-        </Grid>
-      </Grid>
+          </Box>
+        </Paper>
+      )}
     </>
   );
 }

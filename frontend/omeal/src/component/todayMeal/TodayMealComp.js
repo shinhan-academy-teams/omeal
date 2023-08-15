@@ -55,8 +55,7 @@ function TodayMealComp(props) {
       params: { memberId: memberId },
     })
       .then((response) => {
-        const dto = response.data;
-        setDelivery(dto);
+        setDelivery(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -69,7 +68,11 @@ function TodayMealComp(props) {
     } else {
       Swal.fire({
         icon: "warning",
-        title: "식사가 " + steps[activeStep] + "입니다.",
+        title:
+          "식사가 " +
+          steps[activeStep] +
+          "입니다" +
+          (activeStep === 1 ? "🛵" : "👨‍🍳"),
         text: "배송 완료 후에 피드백을 남길 수 있습니다.",
       });
     }
@@ -103,7 +106,7 @@ function TodayMealComp(props) {
 
   return (
     <>
-      <Box mt={4} sx={{ width: "80%" }}>
+      <Box mt={8} sx={{ width: "80%" }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps = {};
@@ -117,33 +120,30 @@ function TodayMealComp(props) {
         </Stepper>
       </Box>
       <Box
-        my={5}
+        my={10}
         sx={{
           width: "80%",
           backgroundColor: "#FEF7ED",
           borderRadius: "20px",
         }}
       >
-        {activeStep === -1 ? (
-          ""
-        ) : activeStep === 0 || activeStep === 1 ? (
-          <Typography variant="h6" py={3}>
-            조금만 기다려주세요!
-            <br />
-            {memberName} 님의 식사가{" "}
-            <span style={{ color: "#FF7F3F" }}>{steps[activeStep]}</span>
-            입니다.
-          </Typography>
-        ) : (
-          <>
-            <Typography variant="h6" py={3}>
+        {activeStep !== -1 &&
+          (activeStep < 2 ? (
+            <Typography variant="h6" py={4}>
+              조금만 기다려주세요!
+              <br />
+              {memberName} 님의 식사가{" "}
+              <span style={{ color: "#FF7F3F" }}>{steps[activeStep]}</span>
+              입니다.
+            </Typography>
+          ) : (
+            <Typography variant="h6" py={4}>
               식사가 <span style={{ color: "#FF7F3F" }}>{steps[2]}</span>
               되었습니다!
               <br />
               {memberName} 님, 맛있게 드세요
             </Typography>
-          </>
-        )}
+          ))}
       </Box>
       <Tooltip title="피드백 남기기" arrow placement="top">
         <Paper
@@ -187,7 +187,7 @@ function TodayMealComp(props) {
                 <Divider variant="middle" sx={{ borderBottomWidth: 3 }} />
                 <Typography
                   variant="body1"
-                  mt={3}
+                  mt={2}
                   sx={{ letterSpacing: "0.2em" }}
                 >
                   {delivery.menu ? (
@@ -199,6 +199,13 @@ function TodayMealComp(props) {
                     ))
                   ) : (
                     <Skeleton animation="wave" />
+                  )}
+                  {categoryNo >= 4 && (
+                    <>
+                      밥
+                      <br />
+                      김치
+                    </>
                   )}
                 </Typography>
               </Box>
