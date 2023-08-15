@@ -26,7 +26,7 @@ function OmealLand(props) {
           alignContent: "center",
         }}
       >
-        <Box sx={{ width: "100%", aspectRatio: "1 / 1" }}>
+        <Box sx={{ width: "600px", aspectRatio: "1 / 1" }}>
           <img
             alt="오밀랜드"
             src={omealland}
@@ -62,7 +62,7 @@ function OmealLand(props) {
               />
             </Grid>
 
-            <Grid item xs={6} mt="5%">
+            <Grid item xs={6} mt="8%">
               <Button
                 type="button"
                 onClick={() => handleClick("ricesoup")}
@@ -74,7 +74,7 @@ function OmealLand(props) {
                 }}
               />
             </Grid>
-            <Grid item xs={6} mt="5%">
+            <Grid item xs={6} mt="8%">
               <Button
                 type="button"
                 onClick={() => handleClick("salad")}
@@ -87,7 +87,7 @@ function OmealLand(props) {
               />
             </Grid>
 
-            <Grid item xs={6} mt="5%">
+            <Grid item xs={6} mt="10%">
               <Button
                 type="button"
                 onClick={() => handleClick("noodle")}
@@ -99,7 +99,7 @@ function OmealLand(props) {
                 }}
               />
             </Grid>
-            <Grid item xs={6} mt="5%">
+            <Grid item xs={6} mt="10%">
               <Button
                 type="button"
                 onClick={() => handleClick("homemeal")}
