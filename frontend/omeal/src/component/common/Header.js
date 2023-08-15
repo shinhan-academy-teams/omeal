@@ -98,55 +98,55 @@ function Header(props) {
   const list = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        width: "250px",
       }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        <ListItem disablePadding onClick={subscription}>
-          <ListItemButton>
-            <ListItemIcon>
-              <RestaurantIcon />
-            </ListItemIcon>
-            <ListItemText primary="구독신청" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <CampaignIcon />
-            </ListItemIcon>
-            <ListItemText primary="공지사항" onClick={() => navi("/notice")} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <QuizIcon />
-            </ListItemIcon>
-            <ListItemText primary="FAQ" onClick={() => navi("/faq")} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      {isLogin && (
+      <Box>
         <List>
-          <ListItem disablePadding onClick={logout}>
+          <ListItem disablePadding sx={{ py: 1 }} onClick={subscription}>
             <ListItemButton>
               <ListItemIcon>
-                <LogoutIcon />
+                <RestaurantIcon />
               </ListItemIcon>
-              <ListItemText primary="로그아웃" />
+              <ListItemText primary="구독신청" />
             </ListItemButton>
           </ListItem>
+          <ListItem
+            disablePadding
+            sx={{ pb: 1 }}
+            onClick={() => navi("/notice")}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <CampaignIcon />
+              </ListItemIcon>
+              <ListItemText primary="공지사항" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding sx={{ pb: 1 }} onClick={() => navi("/faq")}>
+            <ListItemButton>
+              <ListItemIcon>
+                <QuizIcon />
+              </ListItemIcon>
+              <ListItemText primary="FAQ" />
+            </ListItemButton>
+          </ListItem>
+          {isLogin && (
+            <ListItem disablePadding sx={{ pb: 1 }} onClick={logout}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="로그아웃" />
+              </ListItemButton>
+            </ListItem>
+          )}
         </List>
-      )}
-      <Divider />
+        <Divider />
+      </Box>
     </Box>
   );
 
