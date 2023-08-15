@@ -17,8 +17,8 @@ import logoImg from "../../assets/img/logo/white_logo.png";
 function AdminHeader(props) {
   const navi = useNavigate();
 
-  const memberId = useRecoilValue(SignInState);
   const memberNick = useRecoilValue(MemberNickState);
+
   const resetSignInState = useResetRecoilState(SignInState);
   const resetMemberGradeState = useResetRecoilState(MemberGradeState);
   const resetMemberNameState = useResetRecoilState(MemberNameState);
@@ -26,10 +26,6 @@ function AdminHeader(props) {
   const resetContinuousDaysState = useResetRecoilState(ContinuousDaysState);
   const resetSubCheckState = useResetRecoilState(SubCheckState);
   const resetMemberRoleState = useResetRecoilState(MemberRoleState);
-
-  const main = () => {
-    navi("/manage");
-  };
 
   const logout = () => {
     axios({
@@ -53,17 +49,15 @@ function AdminHeader(props) {
 
   return (
     <>
-      <div className="header" style={{ zIndex: "1" }}>
+      <Box className="header" sx={{ zIndex: "1" }}>
         <img
-          alt="white logo"
+          alt="logo"
           src={logoImg}
           style={{
-            marginTop: "5px",
-            height: "130%",
-            float: "left",
+            height: "80%",
             cursor: "pointer",
           }}
-          onClick={main}
+          onClick={() => navi("/manage")}
         />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography
@@ -87,7 +81,7 @@ function AdminHeader(props) {
               backgroundColor: "white",
               border: "2px solid #FEF7ED",
               ":hover": {
-                color: "white",
+                color: "#FEF7ED",
                 backgroundColor: "#EA5C2B",
                 border: "2px solid #FEF7ED",
               },
@@ -97,7 +91,7 @@ function AdminHeader(props) {
             로그아웃
           </Button>
         </Box>
-      </div>
+      </Box>
     </>
   );
 }
