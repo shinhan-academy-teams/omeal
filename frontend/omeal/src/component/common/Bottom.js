@@ -8,12 +8,15 @@ import MopedIcon from "@mui/icons-material/Moped";
 import EggIcon from "@mui/icons-material/Egg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { MemberGradeState, SubCheckState } from "../../recoil/SignInState";
+import {
+  MemberGradeState,
+  SignInState,
+  SubCheckState,
+} from "../../recoil/SignInState";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
-import "./Bottom.css";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
 
@@ -21,6 +24,7 @@ function Bottom(props) {
   const navi = useNavigate();
   const currentPath = useLocation().pathname;
 
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
   const memberGrade = useRecoilValue(MemberGradeState);
   const isSub = useRecoilValue(SubCheckState);
   const [value, setValue] = useState(currentPath);
@@ -45,7 +49,7 @@ function Bottom(props) {
   }, [currentPath, value]);
 
   const handleChange = (e, newValue) => {
-    if (newValue === "/today-meal" && !isSub) {
+    if (isLogin && newValue === "/today-meal" && !isSub) {
       // 구독하지 않은 회원이 오늘의밀 탭을 누르면
       Swal.fire({
         icon: "warning",
