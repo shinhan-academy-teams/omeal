@@ -1,5 +1,6 @@
 package com.shinhan.omeal.dto.subscription;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class PaymentDTO {
     private LocalDateTime date;
     private LocalDate startDate;
@@ -15,5 +17,4 @@ public class PaymentDTO {
     private SubscriptionCategory category;
     private String status;
     private int amount;
-
 }
