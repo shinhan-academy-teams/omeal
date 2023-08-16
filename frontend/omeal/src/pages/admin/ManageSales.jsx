@@ -1,7 +1,12 @@
+import SalesChart from "component/admin/SalesChart";
 import React from "react";
 
 function ManageSales(props) {
-  return <div></div>;
+  return (
+    <div>
+      <SalesChart />
+    </div>
+  );
 }
 
 export default ManageSales;

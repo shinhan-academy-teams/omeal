@@ -16,7 +16,8 @@ const dislikeColumns = [
 ];
 
 function FeedbackList(props) {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoadingLike, setLoadingLike] = useState(true);
+  const [isLoadingDislike, setLoadingDislike] = useState(true);
   const [likeData, setLikeData] = useState([]);
   const [dislikeData, setDislikeData] = useState([]);
 
@@ -29,8 +30,9 @@ function FeedbackList(props) {
         const like = res.data["like"];
         const dislike = res.data["dislike"];
         setLikeData(like);
+        setLoadingLike(false);
         setDislikeData(dislike);
-        setLoading(false);
+        setLoadingDislike(false);
       })
       .catch((err) => {
         console.log(err);
@@ -40,9 +42,9 @@ function FeedbackList(props) {
   return (
     <div>
       <h1>좋아요 Top 5</h1>
-      <div style={{ height: 400, width: "100%" }}>
-        {isLoading && <CircularProgress />}
-        {!isLoading && (
+      <div>
+        {isLoadingLike && <CircularProgress />}
+        {!isLoadingLike && (
           <DataGrid
             rows={likeData}
             getRowId={(row) => row.menuNo}
@@ -58,9 +60,9 @@ function FeedbackList(props) {
       </div>
       <hr />
       <h1>싫어요 Top 5</h1>
-      <div style={{ height: 400, width: "100%" }}>
-        {isLoading && <CircularProgress />}
-        {!isLoading && (
+      <div>
+        {isLoadingDislike && <CircularProgress />}
+        {!isLoadingDislike && (
           <DataGrid
             rows={dislikeData}
             getRowId={(row) => row.menuNo}
