@@ -1,7 +1,7 @@
 import SelectionMenu from "component/admin/SelectionMenu";
 import React from "react";
 
-function AdminMeun(props) {
+function AdminMenu(props) {
   return (
     <div>
       <SelectionMenu />
@@ -9,4 +9,4 @@ function AdminMeun(props) {
   );
 }
 
-export default AdminMeun;
+export default AdminMenu;

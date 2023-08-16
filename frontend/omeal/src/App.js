@@ -40,7 +40,7 @@ import {
   SignInState,
   SubCheckState,
 } from "./recoil/SignInState";
-import AdminMeun from "pages/admin/AdminMenu";
+import AdminMenu from "pages/admin/AdminMenu";
 import ManageMember from "pages/admin/ManageMember";
 import ManageDishes from "pages/admin/ManageDishes";
 import ManageSales from "pages/admin/ManageSales";
@@ -184,17 +184,17 @@ const App = () => {
             </Route>
 
             {/* 관리자 페이지 */}
-            <Route path="manage">
+            <Route path="/manage" element={<AdminNavBar />}>
               <Route
                 path=""
-                element={isAdmin ? <AdminMeun /> : <Navigate replace to="/" />}
+                element={isAdmin ? <AdminMenu /> : <Navigate replace to="/" />}
               />
               <Route path="member" element={<ManageMember />} />
               <Route path="dishes" element={<ManageDishes />} />
               <Route path="sales" element={<ManageSales />} />
             </Route>
-        </Routes>
-
+          </Routes>
+        )}
       </Container>
     </ThemeProvider>
   );
