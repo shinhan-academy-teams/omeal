@@ -3,7 +3,6 @@ package com.shinhan.omeal.entity;
 import com.shinhan.omeal.dto.delivery.DeliveryHistoryDTO;
 import com.shinhan.omeal.dto.delivery.DeliveryStatus;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,6 +35,7 @@ public class DeliveryHistory {
 
     @Enumerated(EnumType.STRING)
     @Comment("배송 현황")
+    @Builder.Default
     private DeliveryStatus status = DeliveryStatus.배송준비중;
 
     @Column(nullable = false)
@@ -53,12 +53,12 @@ public class DeliveryHistory {
     }
 
     public DeliveryHistoryDTO getDeliveryHistoryDTO() {
-        DeliveryHistoryDTO dto = new DeliveryHistoryDTO();
-        dto.setDate(this.deliveryDate);
-        dto.setMenu(this.menu);
-        dto.setDeliveryAddr(this.deliveryAddr);
-        dto.setStatus(this.status);
-        return dto;
+        return DeliveryHistoryDTO.builder()
+                .date(this.deliveryDate)
+                .menu(this.menu)
+                .deliveryAddr(this.deliveryAddr)
+                .status(this.status)
+                .build();
     }
 
 }

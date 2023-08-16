@@ -4,7 +4,10 @@ import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -66,7 +69,7 @@ public class Subscription {
     private LocalDate endDate;
 
     // 마이페이지 - 구독 정보만 가져오기
-    public List<String> getSubDTO(){
+    public List<String> getSubDTO() {
         List<String> list = new ArrayList<>();
         list.add(String.valueOf(this.subType));
         list.add(String.valueOf(this.category));

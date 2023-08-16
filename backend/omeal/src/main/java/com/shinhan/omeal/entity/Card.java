@@ -9,8 +9,6 @@ import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
-
-
 @Builder
 @Setter
 @NoArgsConstructor
@@ -42,7 +40,7 @@ public class Card {
     @Comment("카드 비밀번호 4자리")
     private Integer cardPwd;
 
-    public static Card toEntity(CardDTO card){
+    public static Card toEntity(CardDTO card) {
         return Card.builder()
                 .serialNumber(card.getSerialNumber())
                 .validate(card.getExpiryDate())
@@ -52,18 +50,17 @@ public class Card {
     }
 
     // card 정보를 cardDTO로 넘길때
-    public CardDTO createDTO(){
-        CardDTO dto = CardDTO.builder().build();
-        dto.setCardPwd(this.cardPwd);
-        dto.setCvc(this.cvc);
-        dto.setExpiryDate(this.validate);
-        dto.setSerialNumber(this.serialNumber);
-
-        return dto;
+    public CardDTO createDTO() {
+        return CardDTO.builder()
+                .cardPwd(this.cardPwd)
+                .cvc(this.cvc)
+                .expiryDate(this.validate)
+                .serialNumber(this.serialNumber)
+                .build();
     }
 
     // card 정보 수정
-    public void updateCardInfo(CardDTO dto){
+    public void updateCardInfo(CardDTO dto) {
         this.cardPwd = dto.getCardPwd();
         this.cvc = dto.getCvc();
         this.validate = dto.getExpiryDate();

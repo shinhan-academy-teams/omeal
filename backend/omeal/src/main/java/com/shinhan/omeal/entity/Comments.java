@@ -1,16 +1,13 @@
 package com.shinhan.omeal.entity;
 
-import javax.persistence.*;
-
-import com.shinhan.omeal.dto.community.BoardDTO;
 import com.shinhan.omeal.dto.community.CommentDTO;
-import com.shinhan.omeal.dto.members.MembersDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -44,26 +41,22 @@ public class Comments {
     private Timestamp regDate;
 
     // 댓글 게시 : dto -> Entity 변경
-    public static Comments toEntity(CommentDTO dto, Members member, Board board){
-        Comments comment = Comments.builder()
+    public static Comments toEntity(CommentDTO dto, Members member, Board board) {
+        return Comments.builder()
                 .post(board)
                 .content(dto.getContent())
                 .member(member)
                 .build();
-
-        return comment;
     }
 
     // 게시글을 조회해서 Entity -> DTO 로 변경
-    public CommentDTO toDTO(){
-        CommentDTO dto = CommentDTO.builder()
+    public CommentDTO toDTO() {
+        return CommentDTO.builder()
                 .cmtNo(this.cmtNo)
                 .content(this.content)
                 .regDate(this.regDate)
                 .memberNick(this.member.getMemberNick())
                 .build();
-
-        return dto;
     }
 
 }
