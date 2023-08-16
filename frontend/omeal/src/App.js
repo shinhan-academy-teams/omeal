@@ -39,6 +39,9 @@ import AdminMeun from "pages/admin/AdminMenu";
 import ManageMember from "pages/admin/ManageMember";
 import ManageDishes from "pages/admin/ManageDishes";
 import ManageSales from "pages/admin/ManageSales";
+import AdminNavBar from "pages/common/AdminNavBar";
+import JSConfetti from "js-confetti";
+export const jsConfetti = new JSConfetti();
 
 const App = () => {
   // 프로젝트 폰트, 메인 컬러 등
@@ -99,7 +102,7 @@ const App = () => {
             <Route path="omealland" element={<OmealLand />} />
             <Route path="omealland/sandwich" element={<SandralPark />} />
             <Route
-              path="omealland/sandwich/PostView/:no"
+              path="omealland/PostView/:no"
               element={<PostView />}
             />
             <Route path="omealland/bibimbap" element={<BibimLab />} />
@@ -125,8 +128,16 @@ const App = () => {
             </Route>
 
             <Route path="food-worldcup" element={<Worldcup />} />
+          </Route>
 
-            {/* 관리자 페이지 */}
+          {/* 회원가입 및 로그인 */}
+          <Route path="/auth" element={<NoNavBar />}>
+            <Route path="sign-in" element={<SignIn />} />
+            <Route path="sign-up" element={<SignUp />} />
+            <Route path="card-register" element={<CardRegister />} />
+          </Route>
+
+          {/* 관리자 페이지 */}
             <Route path="manage">
               <Route
                 path=""
@@ -136,13 +147,6 @@ const App = () => {
               <Route path="dishes" element={<ManageDishes />} />
               <Route path="sales" element={<ManageSales />} />
             </Route>
-          </Route>
-
-          <Route path="/auth" element={<NoNavBar />}>
-            <Route path="sign-in" element={<SignIn />} />
-            <Route path="sign-up" element={<SignUp />} />
-            <Route path="card-register" element={<CardRegister />} />
-          </Route>
         </Routes>
       </Container>
     </ThemeProvider>

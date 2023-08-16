@@ -8,9 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class FeedbackDTO { // from client
+public class FeedbackDTO {
     private String memberId; // 회원 아이디(이메일)
-    private String menuName; // 배송 메뉴 이름
-    private String feedback; // 피드백(싫어요, 좋아요)
-    private String feedbackContent; // 피드백 기타 의견
+    private MenusDTO[] menus; // 메뉴
 }

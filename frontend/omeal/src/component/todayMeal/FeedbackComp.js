@@ -25,90 +25,93 @@ import { useEffect } from "react";
 function FeedbackComp(props) {
   const navi = useNavigate();
   const { state } = useLocation();
+  const [menus, setMenus] = useState([
+    {
+      menuName: state.menu.split("|")[0],
+      feedback: null,
+      feedbackContent: "",
+    },
+  ]);
+  const [type, setType] = useState(1);
+
+  // 메뉴가 여러개 일때
+  useEffect(() => {
+    if (state.menu.includes("|")) {
+      setType(2);
+      const secondMenu = {
+        menuName: state.menu.split("|")[1],
+        feedback: null,
+        feedbackContent: "",
+      };
+      const copyMenus = [...menus];
+      copyMenus.push(secondMenu);
+      setMenus(copyMenus);
+    }
+  }, []);
+
   const memberId = useRecoilValue(SignInState);
 
-  const [dislike, setDislike] = useState(false);
-  const [like, setLike] = useState(false);
-  const [content, setContent] = useState("");
-
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "center-center",
-    showConfirmButton: false,
-    timer: 1000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
-
   // dislike 버튼 클릭
-  const thumbDown = () => {
-    setLike(false);
-    if (dislike) {
-      setDislike(false);
-    } else {
-      setDislike(true);
-    }
+  const thumbDown = (idx) => {
+    const copyMenus = [...menus];
+    copyMenus[idx].feedback = "dislike";
+    setMenus(copyMenus);
   };
 
   // like 버튼 클릭
-  const thumbUp = () => {
-    setDislike(false);
-    if (like) {
-      setLike(false);
-    } else {
-      setLike(true);
-    }
+  const thumbUp = (idx) => {
+    const copyMenus = [...menus];
+    copyMenus[idx].feedback = "like";
+    setMenus(copyMenus);
   };
 
   // 기타 의견 작성
   const handleContent = (e) => {
-    setContent(e.target.value);
+    const copyMenus = [...menus];
+    copyMenus.map((item) => (item.feedbackContent = e.target.value));
+    setMenus(copyMenus);
   };
 
   // 피드백 읽어오기
   useEffect(() => {
     axios({
       url: "/today-meal/feedback",
-      method: "get",
-      params: {
+      method: "post",
+      data: JSON.stringify({
         memberId: memberId,
-        menuName: state.menu,
-      },
+        menus: menus,
+      }),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        if (res.data.feedback === "like") {
-          setDislike(false);
-          setLike(true);
-        } else {
-          setLike(false);
-          setDislike(true);
-        }
-        setContent(res.data.feedbackContent);
+        const arr = res.data;
+        const copyMenus = menus.map((item, idx) => {
+          const copyItem = { ...item };
+          copyItem.feedback = arr[idx]?.feedback;
+          copyItem.feedbackContent = arr[idx]?.feedbackContent;
+          return copyItem;
+        });
+        setMenus(copyMenus);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [type]);
 
   // 피드백 제출
   const submitFeedback = () => {
-    if (dislike || like) {
+    if (menus[0].feedback || menus[1].feedback) {
       axios({
         url: "/today-meal/feedback",
-        method: "post",
+        method: "put",
         data: JSON.stringify({
           memberId: memberId,
-          menuName: state.menu,
-          feedback: dislike ? "dislike" : "like",
-          feedbackContent: content,
+          menus: menus,
         }),
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => {
+          // console.log(res.data);
           Toast.fire({
             icon: "success",
             title: "소중한 피드백 감사합니다!",
@@ -121,6 +124,18 @@ function FeedbackComp(props) {
         });
     }
   };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center-center",
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   return (
     <>
@@ -140,7 +155,6 @@ function FeedbackComp(props) {
           다음 식사부터 반영하겠습니다
         </Typography>
       </Box>
-
       <Paper
         elevation={2}
         sx={{
@@ -149,42 +163,48 @@ function FeedbackComp(props) {
           borderRadius: "20px",
         }}
       >
-        <Grid
-          container
-          spacing={2}
-          py={2}
-          px={4}
-          justify="flex-end"
-          alignItems="center"
-        >
-          <Grid item xs={9}>
-            <Typography variant="body2" sx={{ letterSpacing: "0.2em" }}>
-              {state.menu}
-            </Typography>
+        {menus.map((item, idx) => (
+          <Grid
+            container
+            spacing={2}
+            py={2}
+            px={4}
+            justify="flex-end"
+            alignItems="center"
+            key={idx}
+          >
+            <Grid item xs={9}>
+              <Typography variant="body2" sx={{ letterSpacing: "0.2em" }}>
+                {item.menuName}
+              </Typography>
+            </Grid>
+            <Grid item xs={1.5}>
+              <Tooltip title="아쉬워요" arrow placement="top">
+                <IconButton
+                  aria-label="thumbDown"
+                  onClick={() => thumbDown(idx)}
+                >
+                  {item.feedback === "dislike" ? (
+                    <ThumbDownAltIcon sx={{ color: "#FF7F3F" }} />
+                  ) : (
+                    <ThumbDownOffAltIcon />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item xs={1.5}>
+              <Tooltip title="맛있어요" arrow placement="top">
+                <IconButton aria-label="thumbUp" onClick={() => thumbUp(idx)}>
+                  {item.feedback === "like" ? (
+                    <ThumbUpAltIcon sx={{ color: "#FF7F3F" }} />
+                  ) : (
+                    <ThumbUpOffAltIcon />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </Grid>
           </Grid>
-          <Grid item xs={1.5}>
-            <Tooltip title="아쉬워요" arrow placement="top">
-              <IconButton aria-label="thumbDown" onClick={thumbDown}>
-                {dislike ? (
-                  <ThumbDownAltIcon sx={{ color: "#FF7F3F" }} />
-                ) : (
-                  <ThumbDownOffAltIcon />
-                )}
-              </IconButton>
-            </Tooltip>
-          </Grid>
-          <Grid item xs={1.5}>
-            <Tooltip title="맛있어요" arrow placement="top">
-              <IconButton aria-label="thumbUp" onClick={thumbUp}>
-                {like ? (
-                  <ThumbUpAltIcon sx={{ color: "#FF7F3F" }} />
-                ) : (
-                  <ThumbUpOffAltIcon />
-                )}
-              </IconButton>
-            </Tooltip>
-          </Grid>
-        </Grid>
+        ))}
       </Paper>
       <Grid
         container
@@ -204,7 +224,7 @@ function FeedbackComp(props) {
             placeholder="기타 의견을 작성해주세요"
             sx={{ mt: 2 }}
             onChange={handleContent}
-            value={content}
+            value={menus[0].feedbackContent}
           />
         </Grid>
         <Grid item xs={2}>

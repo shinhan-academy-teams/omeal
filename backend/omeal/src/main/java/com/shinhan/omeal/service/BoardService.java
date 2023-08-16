@@ -21,13 +21,6 @@ public class BoardService {
     private final BoardRepository boardRepo;
     private final CommentService commentService;
 
-    //
-    public BoardDTO getBoardDetail(Long no){
-        Board board = boardRepo.findById(no).get();
-        List<CommentDTO> commentsList = commentService.getComments(no);
-
-        return BoardDTO.toBoardDTO(board, commentsList);
-    }
 
     // 게시판 글 게시
     @Transactional
@@ -50,7 +43,8 @@ public class BoardService {
         Board board = boardRepo.findById(postNo).get();
         board.updateHits();     // 조회 했으니 조회수 증가
         BoardDTO dto = board.toBoardDTO();
-        return dto;
+        List<CommentDTO> commentsList = commentService.getComments(postNo);
+        return BoardDTO.toBoardDTO(board, commentsList);
     }
 
     // 특정 마을 글 목록 요청

@@ -3,7 +3,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CircularProgress,
   Divider,
   Grid,
   RadioGroup,
@@ -13,12 +12,15 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { SubTypeAtom } from "../../../recoil/SubscriptionState";
 import axios from "axios";
+import SmallCircularProgress from "component/common/SmallCircularProgress";
+import { selectedStyle } from "style";
 
 function DeliveryCycle(props) {
   const [subType, setSubType] = useRecoilState(SubTypeAtom);
   const [typeList, setTypeList] = useState({});
 
-  const selectedStyle = "0px 4px 8px rgba(1, 1, 1, 1)";
+  console.log("제발 : " + subType);
+
   const handleCardClick = (value) => {
     setSubType(value);
   };
@@ -41,7 +43,7 @@ function DeliveryCycle(props) {
 
   return (
     <>
-      {isLoading === true && <CircularProgress />}
+      {isLoading === true && <SmallCircularProgress />}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
         <RadioGroup
           color="primary"
@@ -58,11 +60,13 @@ function DeliveryCycle(props) {
                   value={typeList[key]}
                   aria-label={typeList[key]}
                   sx={{
-                    boxShadow: subType === key && selectedStyle,
+                    boxShadow: subType === typeList[key] && selectedStyle,
                     width: "240px",
                   }}
                 >
-                  <CardActionArea onClick={() => handleCardClick(key)}>
+                  <CardActionArea
+                    onClick={() => handleCardClick(typeList[key])}
+                  >
                     <CardContent sx={{ flex: "1 0 auto" }}>
                       <Typography
                         component="div"
@@ -71,8 +75,8 @@ function DeliveryCycle(props) {
                       >
                         {key} {key === "주간구독" ? "(7일)" : "(30일)"}
                       </Typography>
-                      <Divider></Divider>
-                      <br></br>
+                      <Divider />
+                      <br />
                       <Typography>
                         {key === "주간구독" ? "\\ 52,000원" : "\\ 190,000원"}
                       </Typography>

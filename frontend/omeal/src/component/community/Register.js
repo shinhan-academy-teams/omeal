@@ -160,8 +160,7 @@ function Register(props) {
         text: "게시물을 작성해주세요",
       });
     } else {
-      console.log("사진~~~~~~~~~~~~~~~~", photoString);
-      console.log("타운~~~~~~~~~~~~~~~~", selectTownName);
+      
       axios({
         method: "post",
         url: "/board/register",
@@ -178,8 +177,7 @@ function Register(props) {
         .then((r) => {})
         .catch((err) => {
           console.log(err);
-          console.log("사진~~~~~~~~~~~~~~!!", photoString);
-          console.log("타운~~~~~~~~~~~~~~!!", selectTownName);
+          
         });
     }
   };
