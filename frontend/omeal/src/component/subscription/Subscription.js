@@ -26,7 +26,11 @@ import {
   SubTypeAtom,
 } from "../../recoil/SubscriptionState";
 import axios from "axios";
-import { SignInState } from "../../recoil/SignInState";
+import {
+  ContinuousDaysState,
+  SignInState,
+  SubCheckState,
+} from "../../recoil/SignInState";
 import Swal from "sweetalert2";
 
 function Subscription(props) {
@@ -42,6 +46,8 @@ function Subscription(props) {
   const [addr] = useRecoilState(AddrAtom);
   const [subAddr] = useRecoilState(SubAddrAtom);
   const [subTime] = useRecoilState(SubTimeAtom);
+  const [continuousDay, setContinuousDay] = useRecoilState(ContinuousDaysState);
+  const [SubCheck, setSubCheck] = useRecoilState(SubCheckState);
 
   // 회원 아이디
   const memberId = useRecoilValue(SignInState);
@@ -89,6 +95,8 @@ function Subscription(props) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
     } else if (detailStep === 8) {
       setActiveStep((preActiveStep) => preActiveStep + 1);
+      setContinuousDay("1");
+      setSubCheck(true);
 
       const data = {
         memberId: memberId,

@@ -4,10 +4,7 @@ import com.shinhan.omeal.dto.delivery.DeliveryContainer;
 import com.shinhan.omeal.dto.delivery.DeliveryTime;
 import com.shinhan.omeal.dto.subscription.SubscriptionCategory;
 import com.shinhan.omeal.dto.subscription.SubscriptionType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -74,6 +71,7 @@ public class Subscription {
         list.add(String.valueOf(this.subType));
         list.add(String.valueOf(this.category));
         list.add(String.valueOf(this.container));
+        list.add(String.valueOf(this.mealTime));
 
         return list;
     }
