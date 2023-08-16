@@ -22,7 +22,6 @@ function UserInfo(props) {
     })
       .then((res) => {
         setUserInfo(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
