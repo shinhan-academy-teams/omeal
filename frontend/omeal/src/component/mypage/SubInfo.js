@@ -5,7 +5,11 @@ import { Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { SignInState, SubCheckState } from "../../recoil/SignInState";
+import {
+  ContinuousDaysState,
+  SignInState,
+  SubCheckState,
+} from "../../recoil/SignInState";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +20,7 @@ function SubInfo(props) {
   const [subInfo, setSubrInfo] = useState([]);
   const memberId = useRecoilValue(SignInState);
   const resetSubCheckState = useResetRecoilState(SubCheckState);
+  const resetContinuousDaysState = useResetRecoilState(ContinuousDaysState);
 
   useEffect(() => {
     axios({
@@ -50,6 +55,7 @@ function SubInfo(props) {
           })
           .then(function (response) {
             resetSubCheckState();
+            resetContinuousDaysState();
             Swal.fire(
               "구독이 해지되었습니다.",
               "이용해주셔서 감사합니다.",
