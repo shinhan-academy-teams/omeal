@@ -71,10 +71,6 @@ function Register(props) {
       value: "맛집추천",
       label: "맛집추천",
     },
-    {
-      value: "인기글",
-      label: "인기글",
-    },
   ];
 
   const town = {
@@ -206,7 +202,7 @@ function Register(props) {
   return (
     <div>
       <Box sx={{ width: "500px" }}>
-        <FormControl fullWidth sx={{ marginTop: "5px" }}>
+        <FormControl fullWidth sx={{ marginTop: "30px" }}>
           <InputLabel id="demo-simple-select-label">타운 선택</InputLabel>
           <Select
             labelId="demo-simple-select-label"

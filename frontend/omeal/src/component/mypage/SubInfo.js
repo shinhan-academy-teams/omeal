@@ -4,16 +4,18 @@ import TextField from "@mui/material/TextField";
 import { Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
-import { SignInState } from "../../recoil/SignInState";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { SignInState, SubCheckState } from "../../recoil/SignInState";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 function SubInfo(props) {
+  const navi = useNavigate();
+
   const [subInfo, setSubrInfo] = useState([]);
   const memberId = useRecoilValue(SignInState);
-  const navi = useNavigate();
+  const resetSubCheckState = useResetRecoilState(SubCheckState);
 
   useEffect(() => {
     axios({
@@ -46,14 +48,17 @@ function SubInfo(props) {
           .get("/cancel-subscription", {
             params: { memId: memberId },
           })
-          .then(function (response) {})
+          .then(function (response) {
+            resetSubCheckState();
+            Swal.fire(
+              "구독이 해지되었습니다.",
+              "이용해주셔서 감사합니다.",
+              "success"
+            ).then(() => {
+              navi("/");
+            });
+          })
           .catch(function (error) {});
-        Swal.fire(
-          "구독이 해지되었습니다.",
-          "이용해주셔서 감사합니다.",
-          "success"
-        );
-        navi("/");
       }
     });
   };

@@ -32,8 +32,11 @@ import {
   SubCheckState,
 } from "../../recoil/SignInState";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 function Subscription(props) {
+  const navi = useNavigate();
+
   const [activeStep, setActiveStep] = useState(0); //스텝
   const [detailStep, setDetailStep] = useState(1); //페이지
 
@@ -112,7 +115,9 @@ function Subscription(props) {
         data: JSON.stringify(data),
         headers: { "Content-Type": `application/json` },
       })
-        .then(function (response) {})
+        .then(function (response) {
+          navi("/mypage/sub-info");
+        })
         .catch(function (error) {});
     }
   };
