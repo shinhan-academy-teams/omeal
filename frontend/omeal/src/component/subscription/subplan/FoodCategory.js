@@ -37,8 +37,6 @@ function FoodCategory(props) {
     flexDirection: "row",
   };
 
-  console.log(foodCategory);
-
   // 로딩
   const [isLoading, setIsLoading] = useState(true);
 

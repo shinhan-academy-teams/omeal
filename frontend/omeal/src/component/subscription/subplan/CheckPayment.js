@@ -14,8 +14,6 @@ function CheckPayment(props) {
   const [mealFee, setMealFee] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
 
-  console.log(foodCategory);
-
   useEffect(() => {
     axios
       .get("/delivery-info")

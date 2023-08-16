@@ -24,7 +24,6 @@ function CardInfo(props) {
     })
       .then((res) => {
         setCardInfo(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
