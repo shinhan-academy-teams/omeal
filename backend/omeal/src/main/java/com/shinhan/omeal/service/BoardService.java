@@ -2,7 +2,6 @@ package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.community.*;
 import com.shinhan.omeal.entity.Board;
-import com.shinhan.omeal.entity.Comments;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.BoardRepository;
 import com.shinhan.omeal.repository.MembersRepository;
@@ -17,22 +16,21 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
+
     private final MembersRepository memRepo;
     private final BoardRepository boardRepo;
     private final CommentService commentService;
-
 
     // 게시판 글 게시
     @Transactional
     public String post(BoardDTO dto) {
         try {
-            Members member = memRepo.findById(dto.getMember().getMemberId()).get();
+            Members member = memRepo.findById(dto.getMember().getMemberId()).orElse(null);
             dto.setMember(member);
             Board board = Board.toEntity(dto);
             boardRepo.save(board);
             return "postSuccess";
-        }catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return "postFail";
         }
     }
@@ -40,7 +38,8 @@ public class BoardService {
     // 특정 게시글 요청
     @Transactional
     public BoardDTO getContent(Long postNo) {
-        Board board = boardRepo.findById(postNo).get();
+        Board board = boardRepo.findById(postNo).orElse(null);
+        assert board != null;
         board.updateHits();     // 조회 했으니 조회수 증가
         BoardDTO dto = board.toBoardDTO();
         List<CommentDTO> commentsList = commentService.getComments(postNo);
@@ -51,7 +50,7 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getContentsTown(TownName townName) {
         List<Board> boardlist = boardRepo.findAllByTownName(townName);
-        List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<ContentsDTO> contentlist = boardlist.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return contentlist;
     }
 
@@ -59,7 +58,7 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getTitleContentsList(TownName townname, String title) {
         List<Board> boardList = boardRepo.findAllByTownNameAndTitleContainingOrderByRegDateDesc(townname, title);
-        List<ContentsDTO> dto = boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList());
+        List<ContentsDTO> dto = boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return dto;
     }
 
@@ -67,14 +66,13 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getNicknameContentsList(TownName townName, String nickname) {
         List<Members> memlist = memRepo.findAllByMemberNickContaining(nickname);
-        System.out.println(memlist);
-        if(memlist.isEmpty())
+        if (memlist.isEmpty())
             return null;
 
-        List<ContentsDTO> dto = new LinkedList();
-        for(Members mem : memlist){
+        List<ContentsDTO> dto = new LinkedList<>();
+        for (Members mem : memlist) {
             List<Board> boardList = boardRepo.findAllByTownNameAndMemberOrderByRegDateDesc(townName, mem);
-            dto.addAll(boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList()));
+            dto.addAll(boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList()));
         }
 
         return dto;
@@ -84,7 +82,7 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getPostContentsList(TownName townName, String content) {
         List<Board> boardList = boardRepo.findAllByTownNameAndContentContainingOrderByRegDateDesc(townName, content);
-        List<ContentsDTO> dto = boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList());
+        List<ContentsDTO> dto = boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return dto;
     }
 
@@ -92,15 +90,15 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getContentsCategory(TownName townName, BoardCategory category) {
         List<Board> boardlist = boardRepo.findAllByTownNameAndCategory(townName, category);
-        List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<ContentsDTO> contentlist = boardlist.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return contentlist;
     }
 
     // 마을의 인기글 조회
     @Transactional
     public List<ContentsDTO> getBestContentsList(TownName townname) {
-        List<Board> boardList =boardRepo.findTop10ByTownNameOrderByHitsDesc(townname);
-        List<ContentsDTO> dto = boardList.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<Board> boardList = boardRepo.findTop10ByTownNameOrderByHitsDesc(townname);
+        List<ContentsDTO> dto = boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return dto;
     }
 
@@ -108,15 +106,15 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getContentsCategoryTitle(TownName townName, BoardCategory category, String title) {
         List<Board> boardlist = boardRepo.findAllByTownNameAndCategoryAndTitleContainingOrderByRegDateDesc(townName, category, title);
-        List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<ContentsDTO> contentlist = boardlist.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return contentlist;
     }
 
     // 특정 마을의 인기글에 제목으로 조회
     @Transactional
     public List<ContentsDTO> getBestContentsListTitle(TownName townname, String title) {
-        List<Board> boardList =boardRepo.findTop10ByTownNameAndTitleContainingOrderByHitsDesc(townname, title);
-        List<ContentsDTO> dto = boardList.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<Board> boardList = boardRepo.findTop10ByTownNameAndTitleContainingOrderByHitsDesc(townname, title);
+        List<ContentsDTO> dto = boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return dto;
     }
 
@@ -124,14 +122,13 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getContentsCategoryNickname(TownName townName, BoardCategory category, String nickname) {
         List<Members> memlist = memRepo.findAllByMemberNickContaining(nickname);
-        System.out.println(memlist);
-        if(memlist.isEmpty())
+        if (memlist.isEmpty())
             return null;
 
-        List<ContentsDTO> dto = new LinkedList();
-        for(Members mem : memlist){
+        List<ContentsDTO> dto = new LinkedList<>();
+        for (Members mem : memlist) {
             List<Board> boardList = boardRepo.findAllByTownNameAndCategoryAndMemberOrderByRegDateDesc(townName, category, mem);
-            dto.addAll(boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList()));
+            dto.addAll(boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList()));
         }
 
         return dto;
@@ -141,14 +138,13 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getBestContentsListNickname(TownName townname, String nickname) {
         List<Members> memlist = memRepo.findAllByMemberNickContaining(nickname);
-        System.out.println(memlist);
-        if(memlist.isEmpty())
+        if (memlist.isEmpty())
             return null;
 
-        List<ContentsDTO> dto = new LinkedList();
-        for(Members mem : memlist){
+        List<ContentsDTO> dto = new LinkedList<>();
+        for (Members mem : memlist) {
             List<Board> boardList = boardRepo.findTop10ByTownNameAndMemberOrderByHitsDesc(townname, mem);
-            dto.addAll(boardList.stream().map(b->b.toContentsDTO()).collect(Collectors.toList()));
+            dto.addAll(boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList()));
         }
 
         return dto;
@@ -158,17 +154,16 @@ public class BoardService {
     @Transactional
     public List<ContentsDTO> getContentsCategoryPost(TownName townName, BoardCategory category, String content) {
         List<Board> boardlist = boardRepo.findAllByTownNameAndCategoryAndContentContainingOrderByRegDateDesc(townName, category, content);
-        List<ContentsDTO> contentlist = boardlist.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<ContentsDTO> contentlist = boardlist.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return contentlist;
     }
 
     // 특정 마을의 인기글에 내용으로 조회
     @Transactional
     public List<ContentsDTO> getBestContentsListPost(TownName townname, String content) {
-        List<Board> boardList =boardRepo.findTop10ByTownNameAndContentContainingOrderByHitsDesc(townname, content);
-        List<ContentsDTO> dto = boardList.stream().map(board -> board.toContentsDTO()).collect(Collectors.toList());
+        List<Board> boardList = boardRepo.findTop10ByTownNameAndContentContainingOrderByHitsDesc(townname, content);
+        List<ContentsDTO> dto = boardList.stream().map(Board::toContentsDTO).collect(Collectors.toList());
         return dto;
     }
-
 
 }

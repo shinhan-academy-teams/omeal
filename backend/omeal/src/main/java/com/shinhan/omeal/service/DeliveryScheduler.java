@@ -33,7 +33,7 @@ public class DeliveryScheduler {
     */
     @Scheduled(cron = "0 0 12 * * *")
     public void lunchDelivery() {
-        todayMealService.changeDeliveryStatus("저녁","점심");
+        todayMealService.changeDeliveryStatus("저녁", "점심");
     }
 
     /*

@@ -16,7 +16,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    private final CommentRepository commetRepo;
+
+    private final CommentRepository cmtRepo;
     private final MembersRepository memRepo;
     private final BoardRepository boardRepo;
 
@@ -24,21 +25,21 @@ public class CommentService {
     public String register(CommentDTO commentDTO) {
         Members member = memRepo.findByMemberNick(commentDTO.getMemberNick());
         Board board = boardRepo.findById(commentDTO.getBoardNo()).orElse(null);
-        if(member==null || board==null)
+        if (member == null || board == null)
             return "Fail : No member or No board";
 
         Comments comments = Comments.toEntity(commentDTO, member, board);
-        commetRepo.save(comments);
+        cmtRepo.save(comments);
         return "Success";
     }
 
     // 댓글 조회
-    public List<CommentDTO> getComments(Long post_no){
-        try{
-            Board board = boardRepo.findById(post_no).get();
-            List<Comments> commentsList = commetRepo.findAllByPostOrderByRegDateDesc(board);
+    public List<CommentDTO> getComments(Long post_no) {
+        try {
+            Board board = boardRepo.findById(post_no).orElse(null);
+            List<Comments> commentsList = cmtRepo.findAllByPostOrderByRegDateDesc(board);
             List<CommentDTO> dtoList = new LinkedList<>();
-            for(Comments comments : commentsList) {
+            for (Comments comments : commentsList) {
                 CommentDTO dto = comments.toDTO();
                 dto.setBoardNo(post_no);
                 dtoList.add(dto);
@@ -46,11 +47,9 @@ public class CommentService {
 
             return dtoList;
 
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             return null;
         }
-
     }
 
 }

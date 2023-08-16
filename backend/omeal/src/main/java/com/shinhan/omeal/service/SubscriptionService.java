@@ -28,12 +28,13 @@ public class SubscriptionService {
     final MembersRepository memRepo;
     final AllergyRepository allergyRepo;
     final SubscriptionHistoryRepository historyRepo;
-    
+
     public String subscribe(SubscriptionDTO subscriptionInfo) {
         Members member = memRepo.findById(subscriptionInfo.getMemberId()).orElse(null);
         // 멤버 알레르기 정보 입력
-        if(subscriptionInfo.getMemberAllergy().size()!=0){
+        if (!subscriptionInfo.getMemberAllergy().isEmpty()) {
             List<Allergy> allergyData = mappingAllergyData(subscriptionInfo.getMemberAllergy());
+            assert member != null;
             member.updateAllergy(allergyData);
             memRepo.save(member);
         }
@@ -68,9 +69,9 @@ public class SubscriptionService {
     public void updateSubscriptionInfo() {
         LocalDate today = LocalDate.now();
         subRepo.findAll().forEach(subscription -> {
-            if(subscription.getEndDate().isBefore(today)){
+            if (subscription.getEndDate().isBefore(today)) {
                 // 히스토리 업데이트
-                History endSubscription = historyRepo.findByMemberAndStatus(subscription.getMember(),SubscriptionStatus.START);
+                History endSubscription = historyRepo.findByMemberAndStatus(subscription.getMember(), SubscriptionStatus.START);
                 endSubscription.updateEndHistory();
                 historyRepo.save(endSubscription);
                 // 구독정보 갱신
@@ -83,13 +84,12 @@ public class SubscriptionService {
                         .subType(subscription.getSubType())
                         .category(subscription.getCategory())
                         .status(SubscriptionStatus.START)
-                        .amount(calDiscountedAmount(subscription.getMember().getMemberGrade(),subscription.getSubType()))
+                        .amount(calDiscountedAmount(subscription.getMember().getMemberGrade(), subscription.getSubType()))
                         .payDate(subscription.getPayDate())
                         .startDate(subscription.getStartDate())
                         .endDate(subscription.getEndDate())
                         .build();
                 historyRepo.save(history);
-
             }
         });
     }
@@ -99,7 +99,7 @@ public class SubscriptionService {
         Members member = memRepo.findById(memId).orElse(null);
         Subscription subscription = subRepo.findByMember(member);
         // 히스토리 업데이트
-        History history = historyRepo.findByMemberAndStatus(member,SubscriptionStatus.START);
+        History history = historyRepo.findByMemberAndStatus(member, SubscriptionStatus.START);
         history.updateCancelHistory();
         historyRepo.save(history);
         // 구독정보 삭제
@@ -112,9 +112,9 @@ public class SubscriptionService {
         LocalDate today = LocalDate.now();
         LocalDate firstDeliveryDate = today.plusDays(2);
         DayOfWeek week = firstDeliveryDate.getDayOfWeek();
-        if(week.equals(DayOfWeek.SATURDAY)) {
+        if (week.equals(DayOfWeek.SATURDAY)) {
             firstDeliveryDate = firstDeliveryDate.plusDays(2);
-        } else if(week.equals(DayOfWeek.SUNDAY)) {
+        } else if (week.equals(DayOfWeek.SUNDAY)) {
             firstDeliveryDate = firstDeliveryDate.plusDays(1);
         }
         return firstDeliveryDate;
@@ -123,7 +123,7 @@ public class SubscriptionService {
     // 구독 종료일 계산
     private LocalDate calEndDate(SubscriptionType type) {
         LocalDate endDate = LocalDate.now();
-        if(type.equals(SubscriptionType.MONTHLY)) {
+        if (type.equals(SubscriptionType.MONTHLY)) {
             endDate = endDate.plusDays(30);
         } else {
             endDate = endDate.plusDays(6);
@@ -133,27 +133,31 @@ public class SubscriptionService {
 
     // 기본 결제금액 계산
     private int calPaymentAmount(SubscriptionType type) {
-        if(type.equals(SubscriptionType.MONTHLY)) {
+        if (type.equals(SubscriptionType.MONTHLY)) {
             return 190000;
         }
         return 52000;
     }
 
     // 등급별 할인 결제금액 계산
-    private int calDiscountedAmount(MemberGrade grade, SubscriptionType type){
+    private int calDiscountedAmount(MemberGrade grade, SubscriptionType type) {
         int amount = calPaymentAmount(type);
         switch (grade) {
-            case 반숙란: return (int)(amount*0.95);
-            case 완숙란: return (int)(amount*0.90);
-            case 훈제란: return (int)(amount*0.85);
-            default: return amount;
+            case 반숙란:
+                return (int) (amount * 0.95);
+            case 완숙란:
+                return (int) (amount * 0.90);
+            case 훈제란:
+                return (int) (amount * 0.85);
+            default:
+                return amount;
         }
     }
 
     // 입력 받은 알레르기 정보를 DB에 있는 데이터와 매핑
     private List<Allergy> mappingAllergyData(List<String> selectedAllergy) {
         List<Allergy> allergyData = new ArrayList<>();
-        selectedAllergy.stream().forEach(foodName -> {
+        selectedAllergy.forEach(foodName -> {
             Allergy allergy = allergyRepo.findByAllergyFood(foodName);
             allergyData.add(allergy);
         });
@@ -174,7 +178,7 @@ public class SubscriptionService {
     }
 
     // 로그인 시 => 회원등급 업데이트 & Front에 전송까지
-    public Members updateMemberGrade(Members member){
+    public Members updateMemberGrade(Members member) {
         String memberId = member.getMemberId();
 
         // 1. 회원 ID를 이용해서 => 구독 기간 가져오고 (by경윤)
@@ -190,31 +194,19 @@ public class SubscriptionService {
     }
 
     // 2-1. 구독 기간을 이용해서 등급 계산
-    public MemberGrade calMemberGrade(int days){
+    public MemberGrade calMemberGrade(int days) {
         MemberGrade memberGrade = MemberGrade.날계란;
 
         // 3, 6, 12개월 별로 분류
-        if(days >= 365){
+        if (days >= 365) {
             memberGrade = MemberGrade.훈제란;
-        }else if(days < 365 && days >= 180){
+        } else if (days >= 180) {
             memberGrade = MemberGrade.완숙란;
-        }else if(days < 180 && days >= 90){
+        } else if (days >= 90) {
             memberGrade = MemberGrade.반숙란;
         }
 
         return memberGrade;
     }
-
-    // 2-2. 계산한 등급을 DB에 업데이트
-//    public Members updateById(Members member, MemberGrade memberGrade){
-//        // 회원 ID로부터 회원등급 & 구독기간 가져오기
-//        //Members member = memRepo.findById(memberId).orElseThrow(()->new NoSuchElementException());
-//
-//        // 회원등급 update
-//        member.updateMemberGrade(memberGrade);
-//
-//        // 그 member 객체를 return
-//        return member;
-//    }
 
 }
