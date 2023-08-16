@@ -7,13 +7,11 @@ import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.CardRepository;
 import com.shinhan.omeal.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MembersService {
 
     final MembersRepository memRepo;
@@ -25,7 +23,7 @@ public class MembersService {
         int rst = 0;
 
         Members member = memRepo.findByMemberNick(memberNick);
-        if(member == null) { // 아이디 중복 아님. 아이디 사용 가능.
+        if (member == null) { // 아이디 중복 아님. 아이디 사용 가능.
             rst = 1;
         } else { // 아이디 중복. 아이디 사용 불가.
             rst = -1;
@@ -39,7 +37,7 @@ public class MembersService {
         int rst = 0;
 
         Members member = memRepo.findById(memberId).orElse(null);
-        if(member == null) { // 아이디 중복 아님. 아이디 사용 가능.
+        if (member == null) { // 아이디 중복 아님. 아이디 사용 가능.
             rst = 1;
         } else { // 아이디 중복. 아이디 사용 불가.
             rst = -1;
@@ -49,7 +47,7 @@ public class MembersService {
     }
 
     // 로그인
-    public MembersDTO signIn(MembersDTO membersDto){
+    public MembersDTO signIn(MembersDTO membersDto) {
         String loginId = membersDto.getMemberId();
 
         // 유효성 검사
@@ -74,7 +72,7 @@ public class MembersService {
 
     // 회원가입 (카드정보 입력 후 회원가입 버튼 눌렀을 때)
     @Transactional
-    public String signUp(CardDTO dto){
+    public String signUp(CardDTO dto) {
         String answer = "success";
 
         // 카드 저장
@@ -95,4 +93,5 @@ public class MembersService {
 
         return answer;
     }
+
 }

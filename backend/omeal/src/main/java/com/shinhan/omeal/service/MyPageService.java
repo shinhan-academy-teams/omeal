@@ -6,7 +6,6 @@ import com.shinhan.omeal.dto.members.ResultUserInfoDTO;
 import com.shinhan.omeal.dto.subscription.PaymentDTO;
 import com.shinhan.omeal.dto.subscription.UserSubInfoDTO;
 import com.shinhan.omeal.entity.Allergy;
-import com.shinhan.omeal.entity.DeliveryHistory;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.entity.Subscription;
 import com.shinhan.omeal.repository.MembersRepository;
@@ -33,26 +32,27 @@ public class MyPageService {
     public String update(MyPageUserInfoDTO userInfo) {
         try {
             Members mem = memRepo.findById(userInfo.getMemberId()).orElse(null);
+            assert mem != null;
             mem.updateUserInfo(userInfo);
             return "update Success";
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
             return "update Fail";
         }
     }
 
     public ResultUserInfoDTO getUserInfo(String memId) {
-        Members mem = memRepo.findById(memId).get();
+        Members mem = memRepo.findById(memId).orElse(null);
+        assert mem != null;
         ResultUserInfoDTO remem = new ResultUserInfoDTO(mem);
+
         return remem;
     }
 
     @Transactional
     public UserSubInfoDTO getSubInfo(String memId) {  // 마이페이지 - 구독과 알러지 정보 응답
-        Members mem = memRepo.findById(memId).get();
-        try{
+        Members mem = memRepo.findById(memId).orElse(null);
+        try {
+            assert mem != null;
             List<Allergy> allergyList = mem.getMemberAllergy();
             List<String> allergy = allergyList.stream().map(Allergy::getAllergyFood).collect(Collectors.toList());
             Subscription sub = subRepo.findByMember(mem);
@@ -60,8 +60,7 @@ public class MyPageService {
             UserSubInfoDTO dto = new UserSubInfoDTO(sub.getSubDTO(), allergy);
 
             return dto;
-        }catch (NullPointerException e){
-            System.out.println("구독한 내역이 없습니다.");
+        } catch (NullPointerException e) {
             return null;
         }
 
@@ -74,6 +73,7 @@ public class MyPageService {
         tmRepo.findAllByMemberOrderByDeliveryDateDesc(member).forEach(deliveryHistory -> {
             history.add(deliveryHistory.getDeliveryHistoryDTO());
         });
+
         return history;
     }
 
@@ -84,6 +84,7 @@ public class MyPageService {
         pmHistoryRepo.findAllByMemberOrderByPayDateDesc(member).forEach(paymentHistory -> {
             history.add(paymentHistory.getPaymentDTO());
         });
+
         return history;
     }
 

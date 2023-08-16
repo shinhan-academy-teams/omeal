@@ -35,7 +35,7 @@ public class TodayMealService {
         MenusDTO[] result = new MenusDTO[dto.getMenus().length];
 
         Members member = memRepo.findById(dto.getMemberId()).orElse(null);
-        for (int i=0; i<dto.getMenus().length; i++) {
+        for (int i = 0; i < dto.getMenus().length; i++) {
             MenusDTO menuDTO = dto.getMenus()[i];
 
             List<Menu> menuIdList = menuRepo.findByMenuName(menuDTO.getMenuName());
@@ -98,11 +98,11 @@ public class TodayMealService {
     // 하단의 '오늘의 밀' 아이콘 눌렀을 때 뜨는 첫 페이지
     public TodayMealDTO getDeliveryInfo(String memberId) {
         // 그럴리 없겠지만 혹시나 memberId에 해당하는 Members 엔티티가 없다면 RuntimeException 으로 예외처리하게끔 설정 (체크 예외 말고)
-        Members member = memRepo.findById(memberId).orElseThrow(() -> new NoSuchElementException());
+        Members member = memRepo.findById(memberId).orElseThrow(NoSuchElementException::new);
 
         // 배송내역 1건만 보여줘야 하므로
         List<DeliveryHistory> deliveryHistoryList = tmRepo.findByMemberOrderByDeliveryNoDesc(member);
-        if(!deliveryHistoryList.isEmpty()){ // 아직 배송될 메뉴가 없을 때를 대비해서
+        if (!deliveryHistoryList.isEmpty()) { // 아직 배송될 메뉴가 없을 때를 대비해서
             DeliveryHistory deliveryHistory = deliveryHistoryList.get(0);
 
             // TodayMealDTO에 category도 같이 넘겨주기 위해
@@ -120,12 +120,12 @@ public class TodayMealService {
         subRepo.findAll().forEach(subscription -> {
             // 구독 멤버 알레르기 정보 확인
             Set<Menu> allergyMenu = null;
-            if(!subscription.hasNotAllergy()) {
+            if (!subscription.hasNotAllergy()) {
                 allergyMenu = menuRepo.findByAllergyIn(subscription.getMemberAllergyInfo());
             }
             // 메뉴 선정
             String todayMeal = "";
-            if(subscription.getCategory().equals(SubscriptionCategory.애국자)){
+            if (subscription.getCategory().equals(SubscriptionCategory.애국자)) {
                 todayMeal = getHomeMeal(allergyMenu);
             } else {
                 todayMeal = getCommonMeal(allergyMenu, subscription.getCategory());
@@ -138,7 +138,7 @@ public class TodayMealService {
     // 가정식 제외 메뉴 선정
     private String getCommonMeal(Set<Menu> allergyMenu, SubscriptionCategory category) {
         Set<Menu> allMenu = menuRepo.findByCategory(category);
-        if(allergyMenu!=null) {
+        if (allergyMenu != null) {
             allMenu.removeAll(allergyMenu);
         }
         return getRandomMenu(allMenu);
@@ -148,7 +148,7 @@ public class TodayMealService {
     private String getHomeMeal(Set<Menu> allergyMenu) {
         Set<Menu> mainDishList = menuRepo.findBySubcategory("메인반찬");
         Set<Menu> sideDishList = menuRepo.findBySubcategory("밑반찬");
-        if(allergyMenu!=null) {
+        if (allergyMenu != null) {
             mainDishList.removeAll(allergyMenu);
             sideDishList.removeAll(allergyMenu);
         }
@@ -158,9 +158,9 @@ public class TodayMealService {
     }
 
     // 가정식 제외 랜덤으로 오늘의 메뉴 선정
-    private String getRandomMenu(Set<Menu> menu){
+    private String getRandomMenu(Set<Menu> menu) {
         long size = menu.size();
-        int randomNumber = (int)(Math.random()*size);
+        int randomNumber = (int) (Math.random() * size);
         List<Menu> menuList = new ArrayList<>(menu);
         String todayMeal = menuList.get(randomNumber).getMenuName();
         return todayMeal;
@@ -180,11 +180,11 @@ public class TodayMealService {
     // 배송상태 변경
     public void changeDeliveryStatus(String start, String complete) {
         // 배송시작
-        if(start!=null) {
+        if (start != null) {
             inProgressDelivery(checkMealTime(DeliveryTime.valueOf(start)));
         }
         // 배송완료
-        if(complete!=null) {
+        if (complete != null) {
             completeDelivery(checkMealTime(DeliveryTime.valueOf(complete)));
         }
 
@@ -203,7 +203,7 @@ public class TodayMealService {
     private void inProgressDelivery(List<Members> membersByTime) {
         tmRepo.findAllByMemberIn(membersByTime).forEach(history -> {
             LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
-            if(todayDelivery.equals(LocalDate.now())){
+            if (todayDelivery.equals(LocalDate.now())) {
                 history.updateDeliveryStatus(DeliveryStatus.배송중);
                 tmRepo.save(history);
             }
@@ -214,7 +214,7 @@ public class TodayMealService {
     private void completeDelivery(List<Members> membersByTime) {
         tmRepo.findAllByMemberIn(membersByTime).forEach(history -> {
             LocalDate todayDelivery = history.getDeliveryDate().toLocalDate();
-            if(todayDelivery.equals(LocalDate.now())){
+            if (todayDelivery.equals(LocalDate.now())) {
                 history.updateDeliveryStatus(DeliveryStatus.배송완료);
                 tmRepo.save(history);
             }

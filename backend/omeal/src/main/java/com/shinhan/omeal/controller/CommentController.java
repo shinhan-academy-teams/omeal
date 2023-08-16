@@ -11,15 +11,17 @@ import java.util.List;
 @RequestMapping("/reply")
 @RequiredArgsConstructor
 public class CommentController {
+
     private final CommentService commentService;
 
-    @PostMapping(value = "/register",consumes = "application/json")
-    public String register(@RequestBody CommentDTO commentDTO){
+    @PostMapping(value = "/register", consumes = "application/json")
+    public String register(@RequestBody CommentDTO commentDTO) {
         return commentService.register(commentDTO);
     }
 
     @GetMapping("/inquiry")
-    public List<CommentDTO> getComments(Long post_no){
+    public List<CommentDTO> getComments(Long post_no) {
         return commentService.getComments(post_no);
     }
+
 }

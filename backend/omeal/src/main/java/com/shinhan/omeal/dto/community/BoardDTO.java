@@ -5,9 +5,7 @@ import com.shinhan.omeal.entity.Members;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class BoardDTO {
     private Timestamp regDate;
     private List<CommentDTO> commentsList;
 
-    public static BoardDTO toBoardDTO(Board board, List<CommentDTO> commentsList){
+    public static BoardDTO toBoardDTO(Board board, List<CommentDTO> commentsList) {
         return BoardDTO.builder()
                 .postNo(board.getPostNo())
                 .title(board.getTitle())

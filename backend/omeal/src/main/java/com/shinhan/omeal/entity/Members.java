@@ -113,11 +113,11 @@ public class Members {
     }
 
     // 등급 업데이트를 위한 메소드 (No Setter)
-    public void updateMemberGrade(MemberGrade memberGrade){
+    public void updateMemberGrade(MemberGrade memberGrade) {
         this.memberGrade = memberGrade;
     }
 
-    public MembersDTO toDTO(){
+    public MembersDTO toDTO() {
         return MembersDTO.builder()
                 .memberId(this.memberId)
                 .memberGrade(this.memberGrade)
@@ -131,7 +131,7 @@ public class Members {
                 .build();
     }
 
-    public void updateMemberRole(MemberRole role){
+    public void updateMemberRole(MemberRole role) {
         this.memberRole = role;
     }
 

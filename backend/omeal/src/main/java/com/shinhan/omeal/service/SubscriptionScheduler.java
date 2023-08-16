@@ -17,4 +17,5 @@ public class SubscriptionScheduler {
     public void prepareDelivery() {
         subscriptionService.updateSubscriptionInfo();
     }
+
 }

@@ -1,7 +1,6 @@
 package com.shinhan.omeal.entity;
 
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

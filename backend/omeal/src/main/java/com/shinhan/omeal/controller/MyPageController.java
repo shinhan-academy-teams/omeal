@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/mypage")
 public class MyPageController {
+
     private final MyPageService mypageservice;
     private final CardService cardService;
 
@@ -29,20 +30,20 @@ public class MyPageController {
     }
 
     // 회원 정보 수정
-    @PutMapping(value = "/user-info",consumes = "application/json")
+    @PutMapping(value = "/user-info", consumes = "application/json")
     public String userInfoUpdate(@RequestBody MyPageUserInfoDTO dto) {
         return mypageservice.update(dto);
     }
 
     // 회원의 구독과 알러지 정보 응답
     @GetMapping("/sub-info")
-    public ResponseEntity<UserSubInfoDTO> subInfoGet(String memId){
+    public ResponseEntity<UserSubInfoDTO> subInfoGet(String memId) {
         UserSubInfoDTO dto = mypageservice.getSubInfo(memId);
         return ResponseEntity.ok(dto);
     }
 
     // 회원의 카드 정보 요청
-    @GetMapping ("/card-info")
+    @GetMapping("/card-info")
     public ResponseEntity<CardDTO> userCardGet(String memId) {
         CardDTO card = cardService.select(memId);
         return ResponseEntity.ok(card);
@@ -50,7 +51,7 @@ public class MyPageController {
 
     // 회원의 카드 정보 수정
     @PutMapping("/card-info")
-    public String userCardUpdate(@RequestBody CardDTO cardDTO){
+    public String userCardUpdate(@RequestBody CardDTO cardDTO) {
         return cardService.update(cardDTO, cardDTO.getMember().getMemberId());
     }
 

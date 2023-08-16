@@ -12,5 +12,7 @@ public interface MembersRepository extends CrudRepository<Members, String> {
     Members findByMemberNick(String memberNick);
 
     List<Members> findAllByMemberNickContaining(String memberNick);
+
     List<Members> findAll();
+
 }

@@ -60,14 +60,14 @@ public class History {
     private LocalDate endDate;
 
     public PaymentDTO getPaymentDTO() {
-        PaymentDTO dto = new PaymentDTO();
-        dto.setDate(this.payDate);
-        dto.setStartDate(this.startDate);
-        dto.setEndDate(this.endDate);
-        dto.setCategory(this.category);
-        dto.setStatus(convertStatus(this.status));
-        dto.setAmount(this.amount);
-        return dto;
+        return PaymentDTO.builder()
+                .date(this.payDate)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .category(this.category)
+                .status(convertStatus(this.status))
+                .amount(this.amount)
+                .build();
     }
 
     // 만료된 구독 히스토리 업데이트
@@ -82,13 +82,13 @@ public class History {
 
     // 클라이언트에 전송될 구독상태
     private String convertStatus(SubscriptionStatus status) {
-        if(status.equals(SubscriptionStatus.START)){
+        if (status.equals(SubscriptionStatus.START)) {
             return "구독중";
-        }
-        if(status.equals(SubscriptionStatus.CANCEL)){
+        } else if (status.equals(SubscriptionStatus.CANCEL)) {
             return "취소";
+        } else {
+            return "완료";
         }
-        return "완료";
     }
 
 }
