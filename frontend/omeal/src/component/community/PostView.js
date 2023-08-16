@@ -108,7 +108,11 @@ function PostView() {
           <Item>{title}</Item>
           <Item sx={{ height: 300 }}>{content}</Item>
           <Item sx={{ textAlign: "center" }}>
-            <img src={`${photo}`} alt="사진없음"></img>
+            <img
+              style={{ width: 500, height: 500 }}
+              src={`${photo}`}
+              alt="사진없음"
+            ></img>
           </Item>
           <Table aria-label="caption table">
             <TableHead>
