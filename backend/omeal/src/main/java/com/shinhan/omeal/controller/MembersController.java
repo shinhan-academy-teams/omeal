@@ -4,17 +4,14 @@ import com.shinhan.omeal.dto.members.CardDTO;
 import com.shinhan.omeal.dto.members.MembersDTO;
 import com.shinhan.omeal.service.MembersService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@Slf4j
 public class MembersController {
 
     private final MembersService membersService;
@@ -37,14 +34,13 @@ public class MembersController {
         MembersDTO dto = membersService.signIn(membersDto);
 
         // 구독 확인
-        try{
-            dto.setSub(dto.getContinuousDays()>0?true:false);
-        }catch (Exception e){
+        try {
+            dto.setSub(dto.getContinuousDays() > 0);
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("사용자 입력 잘못됨");
         }
 
-        if(dto!=null){ // 로그인 성공 => 세션 생성
+        if (dto != null) { // 로그인 성공 => 세션 생성
             httpServletRequest.getSession().invalidate(); // 세션을 생성하기 전에 기존의 세션 파기
             HttpSession session = httpServletRequest.getSession(true); // Session이 없으면 생성
             session.setAttribute("userDTO", dto); // 세션에 userId를 넣어줌
@@ -57,19 +53,20 @@ public class MembersController {
     // 회원가입
     @PostMapping(value = "/sign-up", consumes = "application/json", produces = "text/plain;charset=utf-8")
     public String signUp(@RequestBody CardDTO cardDto) {
-        log.info("회원 가입 완료 클릭 : " + cardDto.toString());
-        return membersService.signUp(cardDto); // 성공시 "success"
+        return membersService.signUp(cardDto);
     }
 
     // 로그아웃
     @GetMapping("/log-out")
-    public String logOut(HttpServletRequest httpServletRequest){
+    public String logOut(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession(false);
-        if(session==null)
+
+        if (session == null)
             return "Fail";
         else {
             session.invalidate();
             return "Success";
         }
     }
+
 }

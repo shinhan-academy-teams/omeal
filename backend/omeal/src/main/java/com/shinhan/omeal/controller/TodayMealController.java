@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/today-meal")
 public class TodayMealController {
 
-    final TodayMealService tmService;
+    private final TodayMealService tmService;
 
     // 하단의 '오늘의 밀' 아이콘 눌렀을 때 뜨는 첫 페이지
     @GetMapping(value = "/delivery-info")
@@ -31,4 +31,5 @@ public class TodayMealController {
     public String submitFeedback(@RequestBody FeedbackDTO dto) {
         return tmService.submitFeedback(dto);
     }
+
 }
