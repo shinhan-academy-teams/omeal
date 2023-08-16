@@ -77,3 +77,8 @@ div.swal-my-custom:hover {
   background-color: #ea5c2b;
   color: #fef7ed;
 }
+
+div.MuiBottomNavigation-root
+  > button.css-1p34unj-MuiButtonBase-root-MuiBottomNavigationAction-root.Mui-selected {
+  color: #ffce8a;
+}
