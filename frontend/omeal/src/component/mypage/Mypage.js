@@ -74,7 +74,7 @@ function Mypage(props) {
             <img alt="" src={eggImg4} width={50}></img>
           )}
 
-          {continuousDay < 0 ? (
+          {!sub ? (
             <Typography sx={{ ":hover": { textDecoration: "underline" } }}>
               {memberNick}님 구독신청이 필요합니다.
             </Typography>
@@ -156,7 +156,6 @@ function Mypage(props) {
       </div>
       <hr></hr>
       <Typography variant="h5">연결하신 카드 정보</Typography>
-      {/* <img alt="" src={CardImg} width={"60%"} onClick={cardInfo}></img> */}
       <img
         alt=""
         src="https://www.shinhancard.com/pconts/images/contents/card/plate/cdCheckBJBBE4.png"
