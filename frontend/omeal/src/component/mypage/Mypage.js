@@ -61,7 +61,7 @@ function Mypage(props) {
     <>
       <div style={{ width: "100%" }}>
         <div
-          style={{ display: "flex", alignItems: "center" }}
+          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
           onClick={userInfo}
         >
           {memberGrade === "날계란" ? (
@@ -75,7 +75,9 @@ function Mypage(props) {
           )}
 
           {continuousDay < 0 ? (
-            <Typography>{memberNick}님 구독안하고있음</Typography>
+            <Typography sx={{ ":hover": { textDecoration: "underline" } }}>
+              {memberNick}님 구독신청이 필요합니다.
+            </Typography>
           ) : (
             <Typography>
               <span style={{ color: "#FF7F3F" }}>{memberNick}</span>님{" "}
@@ -152,8 +154,8 @@ function Mypage(props) {
           </ListItem>
         </List>
       </div>
-
-      <h3>연결하신 카드 정보</h3>
+      <hr></hr>
+      <Typography variant="h5">연결하신 카드 정보</Typography>
       {/* <img alt="" src={CardImg} width={"60%"} onClick={cardInfo}></img> */}
       <img
         alt=""
