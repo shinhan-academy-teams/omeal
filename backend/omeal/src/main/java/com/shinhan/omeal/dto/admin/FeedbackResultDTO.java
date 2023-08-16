@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @ToString
 public class FeedbackResultDTO {
+    private Long menuNo;
     private String menuName; // 배송 메뉴 이름
     private Long count; // 싫어요 수
 }
