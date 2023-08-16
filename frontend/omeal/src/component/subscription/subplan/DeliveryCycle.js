@@ -19,8 +19,6 @@ function DeliveryCycle(props) {
   const [subType, setSubType] = useRecoilState(SubTypeAtom);
   const [typeList, setTypeList] = useState({});
 
-  console.log("제발 : " + subType);
-
   const handleCardClick = (value) => {
     setSubType(value);
   };

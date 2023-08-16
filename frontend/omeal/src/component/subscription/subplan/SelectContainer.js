@@ -35,7 +35,6 @@ function SelectContainer(props) {
     } else if (value === "다회용기") {
       setContainerType(value);
     }
-    console.log("카드 클릭함 : " + value);
   };
 
   // 로딩

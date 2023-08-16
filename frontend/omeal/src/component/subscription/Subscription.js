@@ -51,7 +51,6 @@ function Subscription(props) {
 
   // 회원 아이디
   const memberId = useRecoilValue(SignInState);
-  console.log("페이지 넘버 : " + detailStep);
   const steps = ["오밀플랜", "배송 정보", "결제"];
 
   const handleNext = () => {
@@ -113,9 +112,7 @@ function Subscription(props) {
         data: JSON.stringify(data),
         headers: { "Content-Type": `application/json` },
       })
-        .then(function (response) {
-          console.log(response.data);
-        })
+        .then(function (response) {})
         .catch(function (error) {});
     }
   };

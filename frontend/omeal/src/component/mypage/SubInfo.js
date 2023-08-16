@@ -23,7 +23,6 @@ function SubInfo(props) {
     })
       .then((res) => {
         setSubrInfo(res.data);
-        console.log(subInfo);
       })
       .catch((error) => {
         console.log(error);
@@ -47,9 +46,7 @@ function SubInfo(props) {
           .get("/cancel-subscription", {
             params: { memId: memberId },
           })
-          .then(function (response) {
-            console.log(response.data);
-          })
+          .then(function (response) {})
           .catch(function (error) {});
         Swal.fire(
           "구독이 해지되었습니다.",

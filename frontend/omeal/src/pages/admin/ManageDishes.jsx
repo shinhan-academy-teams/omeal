@@ -3,7 +3,7 @@ import React from "react";
 
 function ManageDishes(props) {
   return (
-    <div>
+    <div style={{ overflowY: "auto", width: "100%", height: "100%" }}>
       <FeedbackList />
     </div>
   );

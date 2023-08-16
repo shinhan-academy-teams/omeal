@@ -1,13 +1,16 @@
 package com.shinhan.omeal.service;
 
 import com.shinhan.omeal.dto.admin.FeedbackResultDTO;
+import com.shinhan.omeal.dto.admin.PaymentResultDTO;
 import com.shinhan.omeal.dto.members.MemberRole;
 import com.shinhan.omeal.dto.members.MembersDTO;
 import com.shinhan.omeal.entity.Members;
 import com.shinhan.omeal.repository.FeedbackRepository;
+import com.shinhan.omeal.repository.HistoryRepository;
 import com.shinhan.omeal.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ public class AdminService {
 
     private final MembersRepository membersRepository;
     private final FeedbackRepository feedbackRepository;
+    private final HistoryRepository historyRepository;
     List<FeedbackResultDTO> like = new ArrayList<>(); // 좋아요
     List<FeedbackResultDTO> dislike = new ArrayList<>(); // 싫어요
 
@@ -62,7 +66,7 @@ public class AdminService {
 
         // 만약 값이 없으면 값을 가져옴
         if (dislike.isEmpty()) {
-            dislike = feedbackRepository.getTop5FeedbackDislike();
+            dislike = feedbackRepository.getTop5FeedbackDislike(PageRequest.of(0, 5));
         }
 
         return dislike;
@@ -73,9 +77,19 @@ public class AdminService {
 
         // 만약 값이 없으면 값을 가져옴
         if (like.isEmpty()) {
-            like = feedbackRepository.getTop5FeedbackLike();
+            like = feedbackRepository.getTop5FeedbackLike(PageRequest.of(0, 5));
         }
 
         return like;
+    }
+
+    // 월별 MONTHLY 매출
+    public List<PaymentResultDTO> getMonthlyPaymentResult(String year) {
+        return historyRepository.getMonthlyPaymentResult(year);
+    }
+
+    // 주별 WEEKLY 매출
+    public List<PaymentResultDTO> getWeeklyPaymentResult(String year) {
+        return historyRepository.getWeeklyPaymentResult(year);
     }
 }

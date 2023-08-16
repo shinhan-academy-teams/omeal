@@ -1,6 +1,7 @@
 package com.shinhan.omeal.controller;
 
 import com.shinhan.omeal.dto.admin.FeedbackResultDTO;
+import com.shinhan.omeal.dto.admin.PaymentResultDTO;
 import com.shinhan.omeal.dto.members.MemberRole;
 import com.shinhan.omeal.dto.members.MembersDTO;
 import com.shinhan.omeal.service.AdminService;
@@ -47,4 +48,14 @@ public class AdminController {
         return ResponseEntity.ok(feedbackResultDTOMap);
     }
 
+    // 매출 조회
+    @GetMapping("total-sales")
+    public ResponseEntity<HashMap<String, List<PaymentResultDTO>>> getPaymentResult(String year){
+        HashMap<String, List<PaymentResultDTO>> paymentResultDTOMap = new HashMap<>();
+
+        paymentResultDTOMap.put("monthly", adminService.getMonthlyPaymentResult(year));
+        paymentResultDTOMap.put("weekly", adminService.getWeeklyPaymentResult(year));
+
+        return ResponseEntity.ok(paymentResultDTOMap);
+    }
 }
