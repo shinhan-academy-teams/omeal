@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function CardComp(props) {
   const { state } = useLocation();
   const navi = useNavigate();
 
-  const [buttonActive, setButtonActive] = useState(false);
-
   const [serialNumber, setSerialNumber] = useState(""); // 카드번호
   const [expiryDate, setExpiryDate] = useState("");
   const [cvc, setCvc] = useState("");
   const [cardPwd, setCardPwd] = useState("");
+
+  const [buttonActive, setButtonActive] = useState(false);
 
   // 모든 입력창이 입력됐는지
   useEffect(() => {
@@ -86,9 +86,7 @@ function CardComp(props) {
     setCardPwd("");
   };
 
-  const signup = () => {
-    // if 유효성 체크 (생략?)
-
+  const signUp = () => {
     axios({
       url: "sign-up",
       method: "post",
@@ -99,10 +97,14 @@ function CardComp(props) {
         cvc: cvc,
         cardPwd: cardPwd, // Number(cardPwd) 하지 않은 이유 : 0이 생략된 채로 Back으로 넘어감;
       }),
-      headers: { "Content-Type": `application/json` },
+      headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        navi("/auth/sign-in");
+        Swal.fire({
+          icon: "success",
+          title: "가입이 완료되었습니다!",
+          text: "오밀과 함께 새로운 경험을 시작해보세요.",
+        }).then(() => navi("/auth/sign-in"));
       })
       .catch((err) => {
         console.log(err);
@@ -112,7 +114,7 @@ function CardComp(props) {
 
   return (
     <>
-      <Typography variant="h5">CARD REGISTER</Typography>
+      <Typography variant="h5"> CARD REGISTER </Typography>
       <Grid container spacing={2} my={2} sx={{ width: "60%" }}>
         <Grid item xs={12}>
           <TextField
@@ -198,10 +200,10 @@ function CardComp(props) {
         </Grid>
       </Grid>
       <Button
-        sx={{ mt: 3 }}
-        type="button"
+        ype="button"
+        sx={{ mt: 3, width: "20%", lineHeight: "27px" }}
         variant="outlined"
-        onClick={signup}
+        onClick={signUp}
         disabled={!buttonActive}
       >
         회원 가입

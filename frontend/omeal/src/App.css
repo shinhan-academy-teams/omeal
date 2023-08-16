@@ -23,6 +23,7 @@
   flex-direction: column;
   align-items: center;
   height: calc(100vh - 112px);
+  overflow-y: auto;
 }
 
 .header {
@@ -44,6 +45,40 @@
   overflow-y: auto;
 }
 
-tr:hover {
+tbody tr:hover {
   background-color: lightgray;
+}
+
+h2#swal2-title,
+div#swal2-html-container,
+div#swal2-html-container > * {
+  font-family: "GmarketSansMedium";
+}
+
+div.swal-my-custom {
+  margin: 0 auto;
+  padding: 4px 12px;
+  width: max-content;
+  background-color: #fef7ed;
+  color: #ea5c2b;
+  border: 2px solid #ea5c2b;
+  border-radius: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+div.swal-my-custom > a {
+  text-decoration: none;
+  font-size: 24px;
+  color: inherit;
+}
+
+div.swal-my-custom:hover {
+  background-color: #ea5c2b;
+  color: #fef7ed;
+}
+
+div.MuiBottomNavigation-root
+  > button.css-1p34unj-MuiButtonBase-root-MuiBottomNavigationAction-root.Mui-selected {
+  color: #ffce8a;
 }

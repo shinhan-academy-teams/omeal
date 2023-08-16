@@ -154,7 +154,13 @@ function Mypage(props) {
       </div>
 
       <h3>연결하신 카드 정보</h3>
-      <img alt="" src={CardImg} width={"60%"} onClick={cardInfo}></img>
+      {/* <img alt="" src={CardImg} width={"60%"} onClick={cardInfo}></img> */}
+      <img
+        alt=""
+        src="https://www.shinhancard.com/pconts/images/contents/card/plate/cdCheckBJBBE4.png"
+        width={"60%"}
+        onClick={cardInfo}
+      ></img>
     </>
   );
 }

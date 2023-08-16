@@ -16,7 +16,6 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-// import moment from "moment/moment";
 import { useRecoilValue } from "recoil";
 import { MemberNickState } from "../../recoil/SignInState";
 
@@ -35,6 +34,7 @@ function PostView() {
     setReply(e.target.value);
   };
 
+  // 게시글&댓글 읽어오기
   useEffect(() => {
     axios({
       method: "get",
@@ -45,7 +45,6 @@ function PostView() {
     })
       .then((res) => {
         const dto = res.data;
-        console.log(dto);
         setTitle(dto.title);
         setContent(dto.content);
         setMemberNick(dto.memberNick);
@@ -62,9 +61,9 @@ function PostView() {
         }
       })
       .catch((err) => {
-        console.log("error", err);
+        console.log(err);
       });
-  }, []);
+  }, [reply]);
 
   const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -72,6 +71,7 @@ function PostView() {
     color: theme.palette.text.secondary,
   }));
 
+  // 댓글 작성
   const btnClick = (e) => {
     axios({
       method: "post",
@@ -84,7 +84,7 @@ function PostView() {
       headers: { "Content-Type": `application/json` },
     })
       .then((res) => {
-        window.location.reload();
+        setReply("");
       })
       .catch((err) => {
         console.log(err);
@@ -139,8 +139,9 @@ function PostView() {
             <Input
               sx={{ width: "80%" }}
               placeholder="댓글을 입력해주세요"
+              value={reply}
               onChange={handleInputChange}
-            ></Input>
+            />
             <Button
               sx={{ width: 20, marginLeft: 2 }}
               variant="contained"

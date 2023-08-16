@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import {
   ContinuousDaysState,
   MemberGradeState,
@@ -21,6 +21,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Paper,
   Typography,
 } from "@mui/material";
 import logoImg from "../../assets/img/logo/white_logo.png";
@@ -33,21 +34,22 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 function Header(props) {
   const navi = useNavigate();
 
-  const [memberGrade, setMemberGrade] = useRecoilState(MemberGradeState);
-  const [memberNick, setMemberNick] = useRecoilState(MemberNickState);
-  const [memberName, setMemberName] = useRecoilState(MemberNameState);
-  const [continuousDaysState, setContinuousDaysState] =
-    useRecoilState(ContinuousDaysState);
-  const [subCheckState, setSubCheckState] = useRecoilState(SubCheckState);
-  const [memberRoleState, setMemberRoleState] = useRecoilState(MemberRoleState);
-  const [memberId, setMemberId] = useRecoilState(SignInState);
+  const memberId = useRecoilValue(SignInState);
+  const memberNick = useRecoilValue(MemberNickState);
+  const subCheckState = useRecoilValue(SubCheckState);
+
+  const resetSignInState = useResetRecoilState(SignInState);
+  const resetMemberGradeState = useResetRecoilState(MemberGradeState);
+  const resetMemberNameState = useResetRecoilState(MemberNameState);
+  const resetMemberNickState = useResetRecoilState(MemberNickState);
+  const resetContinuousDaysState = useResetRecoilState(ContinuousDaysState);
+  const resetSubCheckState = useResetRecoilState(SubCheckState);
+  const resetMemberRoleState = useResetRecoilState(MemberRoleState);
+
   const [state, setState] = useState({
     right: false,
   });
 
-  const signIn = () => {
-    navi("/auth/sign-in");
-  };
   const isLogin = useRecoilValue(SignInState) === "" ? false : true;
   const isSub = subCheckState;
 
@@ -62,18 +64,25 @@ function Header(props) {
       navi("/auth/sign-in");
     }
   };
-  const main = () => {
-    navi("/");
-  };
 
-  const notice = () => {
-    navi("/notice");
-  };
-  const faq = () => {
-    navi("/faq");
-  };
-  const mypage = () => {
-    navi("/mypage");
+  const logout = () => {
+    axios({
+      method: "GET",
+      url: "/auth/log-out",
+    })
+      .then((response) => {
+        resetSignInState();
+        resetMemberGradeState();
+        resetMemberNameState();
+        resetMemberNickState();
+        resetContinuousDaysState();
+        resetSubCheckState();
+        resetMemberRoleState();
+        navi("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -87,95 +96,183 @@ function Header(props) {
     setState({ state, [anchor]: open });
   };
 
-  const logout = () => {
-    axios({
-      method: "GET",
-      url: "/auth/log-out",
-    })
-      .then((response) => {
-        setMemberId("");
-        setContinuousDaysState("");
-        setMemberGrade("");
-        setMemberName("");
-        setMemberNick("");
-        setMemberRoleState("");
-        setSubCheckState("");
-        navi("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   const list = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        width: "250px",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        <ListItem disablePadding onClick={subscription}>
-          <ListItemButton>
-            <ListItemIcon>
-              <RestaurantIcon />
-            </ListItemIcon>
-            <ListItemText primary="구독신청" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <CampaignIcon />
-            </ListItemIcon>
-            <ListItemText primary="공지사항" onClick={notice} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <QuizIcon />
-            </ListItemIcon>
-            <ListItemText primary="FAQ" onClick={faq} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-
-      <List>
-        <ListItem disablePadding onClick={logout}>
-          <ListItemButton>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="로그아웃" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Divider />
+      <Box>
+        <List>
+          <ListItem disablePadding sx={{ py: 1 }} onClick={subscription}>
+            <ListItemButton>
+              <ListItemIcon>
+                <RestaurantIcon />
+              </ListItemIcon>
+              <ListItemText primary="구독신청" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            disablePadding
+            sx={{ pb: 1 }}
+            onClick={() => navi("/notice")}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <CampaignIcon />
+              </ListItemIcon>
+              <ListItemText primary="공지사항" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding sx={{ pb: 1 }} onClick={() => navi("/faq")}>
+            <ListItemButton>
+              <ListItemIcon>
+                <QuizIcon />
+              </ListItemIcon>
+              <ListItemText primary="FAQ" />
+            </ListItemButton>
+          </ListItem>
+          {isLogin && (
+            <ListItem disablePadding sx={{ pb: 1 }} onClick={logout}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="로그아웃" />
+              </ListItemButton>
+            </ListItem>
+          )}
+        </List>
+        <Divider />
+      </Box>
+      <Paper
+        elevation={1}
+        sx={{
+          width: "80%",
+          height: "max-content",
+          m: "12px auto",
+          p: 2,
+          backgroundColor: "#eee",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="caption">© 2023 All Rights Reserved.</Typography>
+        <br />
+        <Typography
+          variant="subtitle1"
+          component="a"
+          href="https://github.com/shinhan-academy-teams/omeal"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          omeal
+        </Typography>
+        <Box my={1}>
+          <Divider />
+        </Box>
+        <Typography variant="subtitle1">We're Jomeal !</Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/hee2425"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          임채희
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/ehopaak"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          박성진
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/djdjdddd"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          김용희
+        </Typography>
+        <br />
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/Jennorresothie"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          윤성훈
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/0seony"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          박영선
+        </Typography>
+        <Typography variant="caption"> | </Typography>
+        <Typography
+          variant="caption"
+          component="a"
+          href="https://github.com/KKangBro"
+          sx={{
+            color: "rgba(0, 0, 0, 0.87)",
+            textDecoration: "none",
+            ":hover": { textDecoration: "underline" },
+          }}
+        >
+          김경윤
+        </Typography>
+      </Paper>
     </Box>
   );
 
   return (
     <>
-      <div className="header" style={{ zIndex: "1" }}>
+      <Box className="header" sx={{ zIndex: "1" }}>
         <img
-          alt="white logo"
+          alt="logo"
           src={logoImg}
           style={{
-            marginTop: "5px",
-            height: "130%",
-            float: "left",
+            height: "80%",
             cursor: "pointer",
           }}
-          onClick={main}
+          onClick={() => navi("/")}
         />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {memberId ? (
@@ -187,7 +284,7 @@ function Header(props) {
                 cursor: "pointer",
                 ":hover": { textDecoration: "underline" },
               }}
-              onClick={mypage}
+              onClick={() => navi("/mypage")}
             >
               {memberNick} 님
             </Typography>
@@ -202,17 +299,18 @@ function Header(props) {
                 backgroundColor: "white",
                 border: "2px solid #FEF7ED",
                 ":hover": {
-                  color: "white",
+                  color: "#FEF7ED",
                   backgroundColor: "#EA5C2B",
                   border: "2px solid #FEF7ED",
                 },
               }}
-              onClick={signIn}
+              onClick={() => navi("/auth/sign-in")}
             >
               로그인
             </Button>
           )}
 
+          {/* 햄버거 메뉴 */}
           {["right"].map((anchor) => (
             <React.Fragment key={anchor}>
               <DehazeIcon
@@ -231,7 +329,7 @@ function Header(props) {
             </React.Fragment>
           ))}
         </Box>
-      </div>
+      </Box>
     </>
   );
 }

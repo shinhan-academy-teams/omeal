@@ -1,5 +1,4 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -45,10 +44,6 @@ function SignInComp(props) {
     if (e.keyCode === 13) {
       signIn();
     }
-  };
-
-  const signUp = () => {
-    navi("/auth/sign-up");
   };
 
   const signIn = () => {
@@ -103,7 +98,7 @@ function SignInComp(props) {
 
   return (
     <>
-      <Typography variant="h5">SIGN IN</Typography>
+      <Typography variant="h5"> SIGN IN </Typography>
       <Grid container spacing={4} my={2} sx={{ width: "60%" }}>
         <Grid item xs={12}>
           <TextField
@@ -145,12 +140,22 @@ function SignInComp(props) {
           />
         </Grid>
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={signIn} variant="outlined" sx={{ width: "30%" }}>
+          <Button
+            type="button"
+            variant="outlined"
+            sx={{ width: "40%", lineHeight: "27px" }}
+            onClick={signIn}
+          >
             로그인
           </Button>
         </Grid>
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={signUp} variant="text" sx={{ width: "30%" }}>
+          <Button
+            type="button"
+            variant="text"
+            sx={{ width: "40%", lineHeight: "27px" }}
+            onClick={() => navi("/auth/sign-up")}
+          >
             회원가입
           </Button>
         </Grid>

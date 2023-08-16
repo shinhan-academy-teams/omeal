@@ -8,24 +8,35 @@ import MopedIcon from "@mui/icons-material/Moped";
 import EggIcon from "@mui/icons-material/Egg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { MemberGradeState, SubCheckState } from "../../recoil/SignInState";
+import {
+  MemberGradeState,
+  SignInState,
+  SubCheckState,
+} from "../../recoil/SignInState";
 import eggImg1 from "../../assets/img/egg1.png";
 import eggImg2 from "../../assets/img/egg2.png";
 import eggImg3 from "../../assets/img/egg3.png";
 import eggImg4 from "../../assets/img/egg4.png";
-import "./Bottom.css";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
 
 function Bottom(props) {
-  const location = useLocation();
-  const currentPath = location.pathname;
-
   const navi = useNavigate();
-  const [value, setValue] = useState(currentPath);
-  const memberGrade = useRecoilValue(MemberGradeState);
-  const sub = useRecoilValue(SubCheckState);
+  const currentPath = useLocation().pathname;
 
+  const isLogin = useRecoilValue(SignInState) === "" ? false : true;
+  const memberGrade = useRecoilValue(MemberGradeState);
+  const isSub = useRecoilValue(SubCheckState);
+  const [value, setValue] = useState(currentPath);
+
+  const eggImgs = {
+    날계란: eggImg1,
+    반숙란: eggImg2,
+    완숙란: eggImg3,
+    훈제란: eggImg4,
+  };
+
+  // url로 접근해도 하단탭이 작동되도록
   useEffect(() => {
     let url = currentPath;
     const position = currentPath.indexOf("/", 1);
@@ -38,25 +49,22 @@ function Bottom(props) {
   }, [currentPath, value]);
 
   const handleChange = (e, newValue) => {
-    if (newValue === "/today-meal") {
-      if (!sub) {
-        Swal.fire({
-          icon: "warning",
-          text: "구독중인 서비스가 없습니다.",
-        });
-        return;
-      }
+    if (isLogin && newValue === "/today-meal" && !isSub) {
+      // 구독하지 않은 회원이 오늘의밀 탭을 누르면
+      Swal.fire({
+        icon: "warning",
+        title: "현재 구독 중이지 않습니다😭",
+        html: `
+          <div class="swal-my-custom">
+            <a href="/subscription">오밀 구독하기</a>
+          </div>
+        `,
+      });
+      return;
     }
 
     setValue(newValue);
     navi(newValue);
-  };
-
-  const eggImgs = {
-    날계란: eggImg1,
-    반숙란: eggImg2,
-    완숙란: eggImg3,
-    훈제란: eggImg4,
   };
 
   return (
@@ -71,14 +79,12 @@ function Bottom(props) {
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="홈"
-            id="home"
             value="/"
             icon={<HomeIcon />}
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="오밀랜드"
-            id="community"
             value="/omealland"
             icon={<Diversity3Icon />}
           />
@@ -96,14 +102,12 @@ function Bottom(props) {
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="오늘의밀"
-            id="omeal"
             value="/today-meal"
             icon={<MopedIcon />}
           />
           <BottomNavigationAction
             sx={{ color: "white" }}
             label="마이페이지"
-            id="mypage"
             value="/mypage"
             icon={<EggIcon />}
           />

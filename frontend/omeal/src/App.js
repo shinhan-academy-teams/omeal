@@ -1,6 +1,11 @@
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider, createTheme } from "@mui/material";
+import {
+  LinearProgress,
+  Paper,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import NavBar from "./pages/common/NavBar";
 import NoNavBar from "./pages/common/NoNavBar";
 import Main from "./pages/Main";
@@ -41,9 +46,16 @@ import ManageDishes from "pages/admin/ManageDishes";
 import ManageSales from "pages/admin/ManageSales";
 import AdminNavBar from "pages/common/AdminNavBar";
 import JSConfetti from "js-confetti";
+import { useState } from "react";
+import { useEffect } from "react";
+import splash from "./assets/img/logo/splash.png";
 export const jsConfetti = new JSConfetti();
 
 const App = () => {
+  const location = useLocation();
+
+  const [loading, setLoading] = useState(true);
+
   // 프로젝트 폰트, 메인 컬러 등
   const theme = createTheme({
     palette: {
@@ -61,83 +73,117 @@ const App = () => {
   const isSub = useRecoilValue(SubCheckState);
   const isAdmin = useRecoilValue(MemberRoleState) === "ADMIN" ? true : false;
 
-  const location = useLocation();
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="sm" disableGutters>
-        <Routes location={location}>
-          <Route path="/" element={<NavBar />}>
-            <Route index element={<Main />} />
-            <Route path="notice" element={<Notice />} />
-            <Route path="faq" element={<FAQ />} />
-
-            {/* 구독신청 */}
-            <Route
-              path="subscription"
-              element={
-                isSub ? (
-                  <Navigate replace to="/mypage/sub-info" />
-                ) : (
-                  <Subscription />
-                )
-              }
+        {loading ? (
+          <Paper
+            elevation={17}
+            sx={{
+              boxSizing: "border-box",
+              margin: "16px auto",
+              height: "95vh",
+              width: "95%",
+              backgroundColor: "#FEF7ED",
+              backgroundImage: `url("${splash}")`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <LinearProgress
+              sx={{
+                mt: "100%",
+                width: "70%",
+                height: "17px",
+                borderRadius: "12px",
+              }}
             />
+          </Paper>
+        ) : (
+          <Routes location={location}>
+            <Route path="/" element={<NavBar />}>
+              <Route index element={<Main />} />
+              <Route path="notice" element={<Notice />} />
+              <Route path="faq" element={<FAQ />} />
 
-            {/* 마이페이지 */}
-            <Route path="mypage">
+              {/* 구독신청 */}
               <Route
-                path=""
+                path="subscription"
                 element={
-                  isLogin ? <Mypage /> : <Navigate replace to="/auth/sign-in" />
-                }
-              />
-              <Route path="card-info" element={<CardInfo />} />
-              <Route path="sub-info" element={<SubInfo />} />
-              <Route path="user-info" element={<UserInfo />} />
-              <Route path="delivery-info" element={<DeliveryInfo />} />
-              <Route path="payment-info" element={<PayInfo />} />
-            </Route>
-
-            {/* 커뮤니티 */}
-            <Route path="omealland" element={<OmealLand />} />
-            <Route path="omealland/sandwich" element={<SandralPark />} />
-            <Route
-              path="omealland/PostView/:no"
-              element={<PostView />}
-            />
-            <Route path="omealland/bibimbap" element={<BibimLab />} />
-            <Route path="omealland/ricesoup" element={<RiceSoupMinistry />} />
-            <Route path="omealland/salad" element={<GreenZone />} />
-            <Route path="omealland/noodle" element={<NoodleOffice />} />
-            <Route path="omealland/homemeal" element={<KoreaTown />} />
-            <Route path="omealland/register" element={<Register />} />
-
-            {/* 오늘의밀 */}
-            <Route path="today-meal">
-              <Route
-                path=""
-                element={
-                  isLogin ? (
-                    <TodayMeal />
+                  isSub ? (
+                    <Navigate replace to="/mypage/sub-info" />
                   ) : (
-                    <Navigate replace to="/auth/sign-in" />
+                    <Subscription />
                   )
                 }
               />
-              <Route path="feedback" element={<Feedback />} />
+
+              {/* 마이페이지 */}
+              <Route path="mypage">
+                <Route
+                  path=""
+                  element={
+                    isLogin ? (
+                      <Mypage />
+                    ) : (
+                      <Navigate replace to="/auth/sign-in" />
+                    )
+                  }
+                />
+                <Route path="card-info" element={<CardInfo />} />
+                <Route path="sub-info" element={<SubInfo />} />
+                <Route path="user-info" element={<UserInfo />} />
+                <Route path="delivery-info" element={<DeliveryInfo />} />
+                <Route path="payment-info" element={<PayInfo />} />
+              </Route>
+
+              {/* 커뮤니티 */}
+              <Route path="omealland" element={<OmealLand />} />
+              <Route path="omealland/sandwich" element={<SandralPark />} />
+              <Route path="omealland/bibimbap" element={<BibimLab />} />
+              <Route path="omealland/ricesoup" element={<RiceSoupMinistry />} />
+              <Route path="omealland/salad" element={<GreenZone />} />
+              <Route path="omealland/noodle" element={<NoodleOffice />} />
+              <Route path="omealland/homemeal" element={<KoreaTown />} />
+              <Route path="omealland/register" element={<Register />} />
+              <Route path="omealland/PostView/:no" element={<PostView />} />
+
+              {/* 오늘의밀 */}
+              <Route path="today-meal">
+                <Route
+                  path=""
+                  element={
+                    isLogin ? (
+                      <TodayMeal />
+                    ) : (
+                      <Navigate replace to="/auth/sign-in" />
+                    )
+                  }
+                />
+                <Route path="feedback" element={<Feedback />} />
+              </Route>
+
+              <Route path="food-worldcup" element={<Worldcup />} />
             </Route>
 
-            <Route path="food-worldcup" element={<Worldcup />} />
-          </Route>
+            {/* 회원가입 및 로그인 */}
+            <Route path="/auth" element={<NoNavBar />}>
+              <Route path="sign-in" element={<SignIn />} />
+              <Route path="sign-up" element={<SignUp />} />
+              <Route path="card-register" element={<CardRegister />} />
+            </Route>
 
-          {/* 회원가입 및 로그인 */}
-          <Route path="/auth" element={<NoNavBar />}>
-            <Route path="sign-in" element={<SignIn />} />
-            <Route path="sign-up" element={<SignUp />} />
-            <Route path="card-register" element={<CardRegister />} />
-          </Route>
-
-          {/* 관리자 페이지 */}
+            {/* 관리자 페이지 */}
             <Route path="manage">
               <Route
                 path=""
@@ -148,6 +194,7 @@ const App = () => {
               <Route path="sales" element={<ManageSales />} />
             </Route>
         </Routes>
+
       </Container>
     </ThemeProvider>
   );

@@ -24,11 +24,8 @@ function SignUpComp(props) {
   const [samePwd, setSamePwd] = useState(true);
 
   const [nickAvailable, setNickAvailable] = useState(false);
-
   const [telRegexBool, setTelRegexBool] = useState(true);
-
   const [allInputFilled, setAllInputFilled] = useState(false);
-
   const [buttonActive, setButtonActive] = useState(false);
 
   const [member, setMember] = useState({
@@ -158,14 +155,9 @@ function SignUpComp(props) {
     allInputFilled,
   ]);
 
-  // 카드 등록으로 이동
-  const next = () => {
-    navi("/auth/card-register", { state: member });
-  };
-
   return (
     <>
-      <Typography variant="h5">SIGN UP</Typography>
+      <Typography variant="h5"> SIGN UP </Typography>
       <Grid container spacing={2} my={2} sx={{ width: "60%" }}>
         <Grid item xs>
           <TextField
@@ -200,7 +192,7 @@ function SignUpComp(props) {
                   <CheckCircleIcon sx={{ fontSize: 32, color: "#EA5C2B" }} />
                 ) : (
                   <CheckCircleOutlineIcon
-                    sx={{ fontSize: 32, color: "black" }}
+                    sx={{ fontSize: 32, color: "rgba(0, 0, 0, 0.87)" }}
                   />
                 )}
               </IconButton>
@@ -316,7 +308,7 @@ function SignUpComp(props) {
                   <CheckCircleIcon sx={{ fontSize: 32, color: "#EA5C2B" }} />
                 ) : (
                   <CheckCircleOutlineIcon
-                    sx={{ fontSize: 32, color: "black" }}
+                    sx={{ fontSize: 32, color: "rgba(0, 0, 0, 0.87)" }}
                   />
                 )}
               </IconButton>
@@ -368,13 +360,13 @@ function SignUpComp(props) {
         </Grid>
       </Grid>
       <Button
-        sx={{ mt: 3 }}
         type="button"
+        sx={{ mt: 3, width: "20%", lineHeight: "27px" }}
         variant="outlined"
-        onClick={next}
+        onClick={() => navi("/auth/card-register", { state: member })} // 카드 등록으로 이동
         disabled={!buttonActive}
       >
-        Next
+        next
       </Button>
     </>
   );

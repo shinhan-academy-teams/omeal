@@ -1,6 +1,7 @@
 import React from "react";
-import omealland from "../../assets/img/omalland.png";
-import { Box } from "@mui/material";
+import omealland from "../../assets/img/omealland/omalland-map.png";
+import background from "../../assets/img/omealland/omealland-background.png";
+import { Box, Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function OmealLand(props) {
@@ -11,124 +12,109 @@ function OmealLand(props) {
   };
 
   return (
-    <div className="top">
+    <>
       <Box
-        component="form"
         sx={{
-          width: 600,
-          height: 840,
-          backgroundColor: "#fef7ed",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#83D9F2",
+          backgroundImage: `url(${background})`,
+          backgroundSize: "contain",
+          backgroundPosition: "top",
+          backgroundRepeat: "no-repeat",
+          display: "grid",
+          alignContent: "center",
         }}
-        noValidate
-        autoComplete="off"
       >
-        <img
-          src={omealland}
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
-          }}
-          alt="오밀랜드"
-        />
-        <button
-          name="test"
-          type="button"
-          onClick={() => {
-            handleClick("sandwich");
-          }}
-          style={{
-            width: "100px",
-            height: "100px",
-            cursor: "pointer",
-            position: "fixed",
-            top: "18%",
-            left: "41.2%",
-            opacity: 0,
-          }}
-        ></button>
-        <button
-          name="test"
-          type="button"
-          onClick={() => {
-            handleClick("bibimbap");
-          }}
-          style={{
-            width: "100px",
-            height: "100px",
-            cursor: "pointer",
-            position: "fixed",
-            top: "18%",
-            left: "53%",
-            opacity: 0,
-          }}
-        ></button>
-        <button
-          name="test"
-          type="button"
-          onClick={() => {
-            handleClick("ricesoup");
-          }}
-          style={{
-            width: "100px",
-            height: "100px",
-            cursor: "pointer",
-            position: "fixed",
-            top: "47%",
-            left: "35.3%",
-            opacity: 0,
-          }}
-        ></button>
-        <button
-          name="test"
-          type="button"
-          onClick={() => {
-            handleClick("salad");
-          }}
-          style={{
-            width: "100px",
-            height: "100px",
-            cursor: "pointer",
-            position: "fixed",
-            top: "47%",
-            left: "59%",
-            opacity: 0,
-          }}
-        ></button>
-        <button
-          name="test"
-          type="button"
-          onClick={() => {
-            handleClick("noodle");
-          }}
-          style={{
-            width: "100px",
-            height: "100px",
-            cursor: "pointer",
-            position: "fixed",
-            top: "77%",
-            left: "41.2%",
-            opacity: 0,
-          }}
-        ></button>
-        <button
-          name="test"
-          type="button"
-          onClick={() => {
-            handleClick("homemeal");
-          }}
-          style={{
-            width: "100px",
-            height: "100px",
-            cursor: "pointer",
-            position: "fixed",
-            top: "77%",
-            left: "53%",
-            opacity: 0,
-          }}
-        ></button>
+        <Box sx={{ width: "600px", aspectRatio: "1 / 1" }}>
+          <img
+            alt="오밀랜드"
+            src={omealland}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+
+          <Grid container spacing={2} mt="-600px" sx={{ height: "600px" }}>
+            <Grid item xs={6} mt="8%">
+              <Button
+                type="button"
+                onClick={() => handleClick("sandwich")}
+                sx={{
+                  ml: 9,
+                  width: "120px",
+                  height: "100px",
+                  opacity: 0,
+                }}
+              />
+            </Grid>
+            <Grid item xs={6} mt="8%">
+              <Button
+                type="button"
+                onClick={() => handleClick("bibimbap")}
+                sx={{
+                  mr: 11,
+                  width: "120px",
+                  height: "100px",
+                  opacity: 0,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={6} mt="8%">
+              <Button
+                type="button"
+                onClick={() => handleClick("ricesoup")}
+                sx={{
+                  ml: -20,
+                  width: "120px",
+                  height: "100px",
+                  opacity: 0,
+                }}
+              />
+            </Grid>
+            <Grid item xs={6} mt="8%">
+              <Button
+                type="button"
+                onClick={() => handleClick("salad")}
+                sx={{
+                  ml: 17,
+                  width: "120px",
+                  height: "100px",
+                  opacity: 0,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={6} mt="10%">
+              <Button
+                type="button"
+                onClick={() => handleClick("noodle")}
+                sx={{
+                  ml: 9,
+                  width: "120px",
+                  height: "100px",
+                  opacity: 0,
+                }}
+              />
+            </Grid>
+            <Grid item xs={6} mt="10%">
+              <Button
+                type="button"
+                onClick={() => handleClick("homemeal")}
+                sx={{
+                  mr: 11,
+                  width: "120px",
+                  height: "100px",
+                  opacity: 0,
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Box>
       </Box>
-    </div>
+    </>
   );
 }
 
