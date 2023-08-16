@@ -17,10 +17,12 @@ import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { SignInState } from "../../recoil/SignInState";
 import AWS from "aws-sdk";
-import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function Register(props) {
+  const navi = useNavigate();
+
   const memberId = useRecoilValue(SignInState);
   const [inputTitle, setInputTitle] = useState("");
   const [inputContents, setInputContents] = useState("");
@@ -43,14 +45,15 @@ function Register(props) {
   const handleInputTitle = (e) => {
     setInputTitle(e.target.value);
   };
+
   const handleInputContents = (e) => {
     setInputContents(e.target.value);
   };
 
   const changeOption = (value) => {
     setSelectedOption(value);
-    console.log(selectedOption);
   };
+
   const radioOptions = [
     {
       value: "자유게시판",
@@ -73,6 +76,15 @@ function Register(props) {
       label: "인기글",
     },
   ];
+
+  const town = {
+    코리아타운: "homemeal",
+    비빔연구소: "bibimbap",
+    녹색지대: "salad",
+    샌드럴파크: "sandwich",
+    국밥부: "ricesoup",
+    면사무소: "noodle",
+  };
 
   //AWS 연결
   AWS.config.update({
@@ -104,13 +116,8 @@ function Register(props) {
     }
   };
 
-  useEffect(() => {
-    console.log("사진", selectedPhoto);
-  }, [selectedPhoto]);
-
   var photoString = "";
   for (var i = 0; i < selectedPhoto.length; i++) {
-    console.log("사진이름", selectedPhoto[i].name);
     photoString += "picture/" + selectedPhoto[i].name + "@";
   }
 
@@ -134,7 +141,9 @@ function Register(props) {
         }, 3000);
       })
       .send((err) => {
-        if (err) console.log("에러", err);
+        if (err) {
+          console.log(err);
+        }
       });
   };
 
@@ -160,7 +169,6 @@ function Register(props) {
         text: "게시물을 작성해주세요",
       });
     } else {
-      
       axios({
         method: "post",
         url: "/board/register",
@@ -174,17 +182,25 @@ function Register(props) {
         }),
         headers: { "Content-Type": "application/json" },
       })
-        .then((r) => {})
+        .then((res) => {
+          if (res.data === "postSuccess") {
+            navi(`/omealland/${town[selectTownName]}`);
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "글 작성 실패😭",
+              text: "다시 등록해주세요.",
+            }).then(() => window.location.reload());
+          }
+        })
         .catch((err) => {
           console.log(err);
-          
         });
     }
   };
 
   const handleTown = (event) => {
     setSelectTownName(event.target.value);
-    console.log("타운명 : ", selectTownName);
   };
 
   return (
